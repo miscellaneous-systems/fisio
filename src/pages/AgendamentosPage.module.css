@@ -1,0 +1,224 @@
+/* ====================================================================== */
+/* LAYOUT E ESTRUTURA DA PÁGINA (AgendamentosPage.module.css) */
+/* ====================================================================== */
+
+.pageContainer {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Controles de Novo Agendamento */
+.addControls {
+    display: flex;
+    gap: 10px;
+}
+
+.addButtonService {
+    padding: 10px 15px;
+    background-color: #2980b9; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    font-size: 14px;
+}
+
+.addButtonService:hover {
+    background-color: #2471a3;
+}
+
+/* Barra de Filtros (Data e Status) */
+.controlsBar {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.statusLabel {
+    margin-left: 20px;
+}
+
+/* Estilos para inputs e selects que eram 'comuns' */
+.formInput, .formSelect {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.formInput:focus, .formSelect:focus {
+    border-color: #2980b9;
+    outline: none;
+}
+
+/* Mensagens de erro/carregamento */
+.centeredMessage {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2em;
+}
+
+.errorMsg {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+
+/* ====================================================================== */
+/* ESTILOS DE TABELA */
+/* ====================================================================== */
+
+.agendaTable {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    margin-top: 15px;
+}
+
+.tableHeader {
+    background-color: #34495e; 
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.tableData {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ecf0f1;
+    vertical-align: middle;
+}
+
+.agendaTable tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+
+/* ====================================================================== */
+/* BADGES DE STATUS */
+/* ====================================================================== */
+
+.statusBadge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    display: inline-block;
+}
+
+/* Variações de cor do status (usando composes para herança) */
+.statusPendente {
+    composes: statusBadge;
+    background-color: #f39c12; /* Laranja */
+}
+.statusConfirmado {
+    composes: statusBadge;
+    background-color: #3498db; /* Azul */
+}
+.statusRealizado {
+    composes: statusBadge;
+    background-color: #2ecc71; /* Verde */
+}
+.statusCancelado {
+    composes: statusBadge;
+    background-color: #e74c3c; /* Vermelho */
+}
+
+/* ====================================================================== */
+/* BOTÕES DE AÇÃO NA TABELA */
+/* ====================================================================== */
+
+.actionButton {
+    padding: 6px 10px;
+    margin-right: 8px;
+    background-color: #3498db; 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.actionButton:hover {
+    background-color: #2980b9;
+}
+
+.concludeButton {
+    padding: 6px 10px;
+    background-color: #2ecc71; 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.concludeButton:hover {
+    background-color: #27ae60;
+}
+
+.finalizedText {
+    color: #95a5a6;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+/* Ajustes para telas intermediárias (Tablets/Laptops pequenos - 1000px para baixo) */
+@media (max-width: 1000px) {
+    .controlsBar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .formInput, .formSelect {
+        width: 100%;
+    }
+
+    .statusLabel {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}
+
+/* Ajustes para mobile */
+@media (max-width: 768px) {
+     .pageHeader {
+        flex: 1;
+        font-size: 0.8rem;
+    }
+
+    .controlsBar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .formInput, .formSelect {
+        width: 100%;
+    }
+    
+    .tableDataActions {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }}

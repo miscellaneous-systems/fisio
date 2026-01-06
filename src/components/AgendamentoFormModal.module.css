@@ -1,0 +1,105 @@
+/* As classes .modalOverlay e .modalContent foram movidas para o index.css para serem globais */
+/* Você pode usar .modalContent para estilizações específicas se necessário, mas a base já está definida */
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem; /* Espaçamento do header reduzido */
+}
+
+.modalHeader h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    cursor: pointer;
+    color: #888;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.closeButton:hover {
+    color: #333;
+}
+.formGroup {
+    margin-bottom: 0.6rem; /* Espaçamento entre campos ainda mais reduzido */
+} /* 💡 AJUSTE: Aumentado para 1rem para melhor espaçamento */
+
+.formLabel {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.formInput {
+    width: 100%;
+    padding: 0.75rem; /* 💡 CORREÇÃO: Padding unificado e consistente */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.textarea {
+    composes: formInput;
+    min-height: 80px; /* 💡 CORREÇÃO: Altura mínima ajustada para um tamanho mais usual */
+    resize: vertical;
+}
+
+.submitButton {
+    margin-top: 0.8rem; /* Margem superior do botão reduzida */
+    padding: 0.75rem;
+    background-color: #3498db; /* Cor primária de ação (pode ser ajustada para o verde institucional) */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem; /* Fonte ajustada */
+    font-weight: 600;
+    transition: background-color 0.3s, opacity 0.3s;
+    width: 100%;
+}
+
+.submitButton:hover:not(:disabled) {
+    background-color: #2980b9;
+}
+
+.submitButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.errorMsg {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #c62828;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.warning {
+    color: #e67e22; /* Laranja de aviso */
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+/* Media Query para telas maiores (desktops) */
+@media (min-width: 768px) {
+    .modalContent {
+        padding: 2rem;
+    }
+    .submitButton {
+        width: auto; /* Largura automática */
+        padding: 0.75rem 1.5rem; /* Padding maior para desktop */
+    }
+}

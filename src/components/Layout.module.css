@@ -1,0 +1,228 @@
+/* ====================================================================== */
+/* 1. LAYOUT GERAL (GRID) */
+/* ====================================================================== */
+
+.appContainer {
+    display: flex; /* Define o container principal como flex (Sidebar + Main) */
+    min-height: 100vh; /* Garante que ocupe a altura total da viewport */
+    width: 100%;
+}
+
+/* ====================================================================== */
+/* 2. SIDEBAR (Navegação Lateral) */
+/* ====================================================================== */
+
+.sidebar {
+    width: 250px;
+    background-color: #007A4D; /* Cor primaryGreen */
+    color: #ffffff;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    position: fixed; /* Sidebar fixa na lateral */
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 50; /* Z-index para a sidebar */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out; /* Transição para o mobile */
+}
+
+/* Logo */
+.logo {
+    font-size: 1.8em;
+    font-weight: 800;
+    text-align: center;
+    padding: 0 20px 20px;
+    margin: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.logoHighlight {
+    font-weight: 400;
+}
+
+/* Navegação */
+.nav {
+    flex-grow: 1; /* Ocupa o espaço central */
+    padding: 20px 0;
+}
+
+.navLink {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.05em;
+    font-weight: 500;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    /* A estilização de :hover e :active está sendo tratada via JSX/style attribute, mas vamos adicionar um hover simples de fallback */
+}
+
+/* Sidebar Footer (Informações do usuário) */
+.sidebarFooter {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.9em;
+}
+
+.userInfoSidebar {
+    color: #c0c0c0;
+}
+
+/* Ícone do Link */
+.navIcon {
+    margin-right: 12px;
+    font-size: 1.2em;
+}
+
+
+/* ====================================================================== */
+/* 3. CONTEÚDO PRINCIPAL (Main Content) */
+/* ====================================================================== */
+
+.mainContent {
+    /* Offset pela largura da sidebar. MANTÉM ESPAÇO NO LAYOUT FIXO */
+    margin-left: 250px; 
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 250px);
+}
+
+/* Header (Barra superior do Conteúdo Principal) */
+.header {
+    height: 60px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    padding: 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky; /* Fixa o header no topo da rolagem do mainContent */
+    top: 0;
+    z-index: 10;
+}
+
+.userInfo {
+    color: #777;
+    font-size: 0.9em;
+}
+
+/* Botão de Sair */
+.logoutButton {
+    background-color: #c0392b; /* Cor dangerRed */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+.logoutButton:hover {
+    background-color: #a93226;
+}
+
+/* Área onde o Outlet é renderizado */
+.pageContent {
+    padding: 30px;
+    flex-grow: 1;
+}
+
+/* ====================================================================== */
+/* 4. RESPONSIVIDADE E MENU MOBILE */
+/* ====================================================================== */
+
+/* Botão Hambúrguer (Aparece apenas em mobile) */
+.hamburgerButton {
+    display: none; /* Escondido por padrão */
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 80; /* 💡 CORREÇÃO: Z-index reduzido para ficar ABAIXO do menu aberto (que tem z-index 90) */
+    background-color: #007A4D;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+/* Overlay (Fundo escuro quando o menu mobile está aberto) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 40; /* Abaixo da sidebar (z-index: 50) */
+    display: none; /* Escondido por padrão */
+}
+
+/* Botão de Fechar no Mobile (no canto superior da sidebar) */
+.closeButton {
+    display: none; /* Escondido por padrão */
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    color: white;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+}
+
+/* Mídia Query para telas menores (Celulares e Tablets) */
+@media (max-width: 900px) {
+    
+    /* 1. Esconde a Sidebar e remove o offset do Main */
+    .sidebar {
+        transform: translateX(-100%); /* Move para fora da tela */
+        box-shadow: none; /* Remove a sombra na transição */
+        width: 85%; /* LARGURA RESPONSIVA: Ocupa 85% da tela no mobile */
+        max-width: 280px; /* Garante que não fique excessivamente largo */
+        z-index: 90; /* Aumenta o z-index para garantir que esteja acima do conteúdo principal */
+    }
+
+    /* 2. Mostra a Sidebar quando 'mobileOpen' é adicionado via JSX */
+    .mobileOpen {
+        transform: translateX(0);
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* 3. O Conteúdo Principal ocupa a largura total */
+    .mainContent {
+        margin-left: 0; /* Remove o offset */
+        width: 100%;
+    }
+    
+    /* 4. Mostra o botão Hambúrguer */
+    .hamburgerButton {
+        display: block;
+    }
+    
+    /* 5. Mostra o Overlay quando o menu está aberto (Controlado pelo JSX) */
+    .overlay {
+        display: block;
+    }
+
+    /* 6. Mostra o botão de fechar no menu mobile */
+    .closeButton {
+        display: block;
+    }
+    
+    /* 7. Ajustes menores no padding */
+    .header {
+        /* Aumenta o padding lateral e adiciona um padding para o botão hamburguer */
+        padding: 0 15px 0 75px; /* 💡 AJUSTE: Aumentado o padding para dar mais espaço ao título */
+    }
+    .pageContent {
+        padding: 20px;
+    }
+    .logo {
+        display: none; /* Oculta o logo dentro do menu mobile para dar mais espaço aos links */
+    }
+}

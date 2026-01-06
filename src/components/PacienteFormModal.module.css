@@ -1,0 +1,142 @@
+/* O fundo escuro (Overlay) */
+/* As classes .modalOverlay e .modalContent foram movidas para o index.css */
+
+/* O Container do Formulário (Content) */
+
+/* Animação para o modal aparecer de forma mais agradável */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Estilo do Cabeçalho dentro do Modal */
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+.modalHeader h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+/* Botão de Fechar (x) */
+.closeBtn {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    cursor: pointer;
+    color: #888;
+    line-height: 1;
+    transition: color 0.2s;
+}
+.closeBtn:hover {
+    color: #333;
+}
+
+.formGroup {
+    margin-bottom: 1.25rem;
+}
+
+.formLabel {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.formInput {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formInput:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.errorMsg {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #c62828;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* Container dos botões de ação */
+.actions {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.saveButton,
+.cancelButton {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border-radius: 4px;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.saveButton {
+    background-color: #28a745;
+    color: white;
+    font-weight: 600;
+}
+.saveButton:hover:not(:disabled) {
+    background-color: #218838;
+}
+
+.cancelButton {
+    background-color: #f1f1f1;
+    color: #333;
+    border: 1px solid #ccc;
+}
+.cancelButton:hover:not(:disabled) {
+    background-color: #e0e0e0;
+}
+
+.saveButton:disabled,
+.cancelButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (min-width: 768px) {
+    .modalContent {
+        padding: 2rem;
+    }
+    .actions {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+    .saveButton,
+    .cancelButton {
+        width: auto;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+}

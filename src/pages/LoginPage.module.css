@@ -1,0 +1,84 @@
+/* src/pages/LoginPage.css */
+
+/* --- Container Principal --- */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+}
+
+/* --- Cartão de Login --- */
+.login-card {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-card h2 {
+    color: #094601ff; /* Cor principal da clínica */
+    margin-bottom: 5px;
+}
+
+.login-card h3 {
+    color: #555;
+    font-weight: normal;
+    font-size: 1.1em;
+    margin-bottom: 25px;
+}
+
+/* --- Formulário --- */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.login-input {
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.login-input:focus {
+    border-color: #094601ff;
+    outline: none;
+    box-shadow: 0 0 0 1px #094601ff;
+}
+
+/* --- Botão --- */
+.login-button {
+    padding: 12px;
+    border-radius: 4px;
+    border: none;
+    background-color: #094601ff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+}
+
+.login-button:hover:not(:disabled) {
+    background-color: #052c00; 
+}
+
+.login-button:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+}
+
+/* --- Mensagem de Erro --- */
+.login-error {
+    color: #e74c3c; /* Vermelho forte para erro */
+    font-size: 14px;
+    margin: -5px 0 0; /* Ajusta o espaçamento */
+}

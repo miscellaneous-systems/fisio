@@ -1,0 +1,136 @@
+/* src/components/VenderPacoteModal.module.css */
+
+/* Conteúdo do Modal */
+
+.modalContent h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: #333;
+    text-align: center;
+}
+
+/* Estilos do Formulário */
+.formGroup {
+    margin-bottom: 1.25rem;
+}
+
+.formLabel {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.formInput {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formInput:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.formInput:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.textarea {
+    composes: formInput;
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Mensagens de feedback e erro */
+.errorMsg {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #c62828;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.feedbackText {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #0056b3;
+}
+
+.noticeText {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+/* Container dos botões de ação */
+.actions {
+    display: flex;
+    flex-direction: column-reverse; /* Botão principal aparece primeiro em mobile */
+    gap: 0.75rem; /* Espaço entre os botões */
+    margin-top: 2rem;
+}
+
+/* Estilos dos botões */
+.saveButton,
+.cancelButton {
+    width: 100%;
+    padding: 0.65rem 1rem; /* Padding vertical reduzido */
+    border-radius: 4px;
+    border: none;
+    font-size: 0.95rem; /* Tamanho da fonte reduzido */
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.saveButton {
+    background-color: #28a745;
+    color: white;
+}
+.saveButton { font-weight: 600; } /* Mantém o botão principal com mais destaque */
+.saveButton:hover:not(:disabled) {
+    background-color: #218838;
+}
+
+.cancelButton {
+    background-color: #f1f1f1;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.cancelButton:hover:not(:disabled) {
+    background-color: #e0e0e0;
+}
+
+.saveButton:disabled,
+.cancelButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Media Query para telas maiores (desktops) */
+@media (min-width: 768px) {
+    .actions {
+        flex-direction: row; /* Botões lado a lado */
+        justify-content: flex-end; /* Alinha à direita */
+    }
+
+    .saveButton,
+    .cancelButton {
+        width: auto; /* Largura automática baseada no conteúdo */
+        padding: 0.75rem 1.5rem; /* Retorna a um padding maior em desktop */
+        font-size: 1rem; /* Retorna ao tamanho de fonte padrão */
+    }
+}

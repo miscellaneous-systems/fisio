@@ -1,0 +1,729 @@
+.agendamento-container {
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  max-width: 100%;
+}
+
+.header-agenda {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.controles-navegacao {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.btn-nav {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  color: #444;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  position: relative; /* Necessário para o efeito ripple */
+  overflow: hidden;   /* Garante que a onda não saia do botão */
+}
+
+.btn-nav:hover {
+  background-color: #f8f9fa;
+  border-color: #ccc;
+  color: #1565c0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-nav:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.loading-badge {
+  font-size: 0.8rem;
+  color: #666;
+  background: #eee;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.tabela-responsiva {
+  overflow-x: auto; /* Mágica da responsividade: permite rolar horizontalmente em mobile */
+  -webkit-overflow-scrolling: touch;
+}
+
+.tabela-agendamento {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela-agendamento th,
+.tabela-agendamento td {
+  border: 1px solid #ccc;
+  padding: 12px;
+  text-align: center;
+  vertical-align: middle;
+  position: relative; /* Para posicionar o contador de vagas */
+}
+
+.tabela-agendamento th {
+  background-color: #f8f9fa;
+  color: #444;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+/* Sticky Header para Desktop */
+.tabela-agendamento thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 2px -1px rgba(0,0,0,0.1);
+}
+
+.coluna-horario {
+  font-weight: bold;
+  color: #555;
+  background-color: #fafafa;
+  width: 80px;
+  min-width: 60px;
+}
+
+.celula-agendamento {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  height: 80px; /* Altura fixa para acomodar até 3 nomes */
+  vertical-align: top;
+}
+
+.celula-agendamento:hover {
+  background-color: #f5f5f5;
+}
+
+/* Status: Livre */
+.celula-agendamento.livre {
+  color: #aaa;
+}
+
+.celula-agendamento.livre:hover {
+  background-color: #e8f5e9; /* Verde claro ao passar o mouse */
+  color: #2e7d32;
+}
+
+/* Status: Parcial (1 ou 2 pessoas) */
+.celula-agendamento.parcial {
+  background-color: #e3f2fd;
+}
+
+/* Status: Lotado (3 pessoas) */
+.celula-agendamento.lotado {
+  background-color: #ffebee; /* Vermelho claro */
+}
+
+.lista-pacientes-celula {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.paciente-tag {
+  background: rgba(255,255,255,0.7);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid rgba(0,0,0,0.1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Cores das tags na tabela */
+.paciente-tag.status-concluido {
+  background-color: #dcedc8; /* Verde claro */
+  color: #33691e;
+  border-color: #c5e1a5;
+  text-decoration: line-through; /* Riscado levemente */
+}
+
+.vagas-restantes {
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* Estilos do Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.modal-info {
+  color: #666;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Garante que o padding não estoure a largura */
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.right-actions {
+  display: flex;
+  gap: 10px;
+  margin-left: auto; /* Empurra para a direita se não houver botão de excluir */
+}
+
+.btn-salvar, .btn-cancelar, .btn-excluir {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.btn-salvar {
+  background-color: #1565c0;
+  color: white;
+}
+.btn-salvar:hover { background-color: #0d47a1; }
+
+.btn-cancelar {
+  background-color: #e0e0e0;
+  color: #333;
+}
+.btn-cancelar:hover { background-color: #d5d5d5; }
+
+.btn-excluir {
+  background-color: #ffebee;
+  color: #c62828;
+}
+.btn-excluir:hover { background-color: #ffcdd2; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Novos estilos para lista no modal */
+.lista-modal {
+  margin-bottom: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 10px;
+  background: #fafafa;
+}
+
+.item-paciente-modal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.item-paciente-modal:last-child {
+  border-bottom: none;
+}
+
+.info-p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-status {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.badge-status.agendado { background: #e3f2fd; color: #1565c0; }
+.badge-status.concluido { background: #e8f5e9; color: #2e7d32; }
+
+.actions-p {
+  display: flex;
+  gap: 5px;
+}
+
+.btn-icon {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 1rem;
+}
+.btn-icon:hover { background: #f5f5f5; }
+.btn-check:hover { background: #e8f5e9; color: green; border-color: green; }
+
+.btn-remove-sm {
+  background: none;
+  color: #999;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 5px;
+}
+.btn-remove-sm:hover { color: red; }
+
+/* Tabs de Criação */
+.novo-agendamento-box {
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+.tabs-criacao {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.tabs-criacao button {
+  flex: 1;
+  padding: 8px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.tabs-criacao button.active {
+  background: #1565c0;
+  color: white;
+  font-weight: 600;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mb-2 { margin-bottom: 8px; }
+
+/* Autocomplete / Sugestões */
+.sugestoes-lista {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 0 0 6px 6px;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 10;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.sugestoes-lista li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.sugestoes-lista li:hover {
+  background-color: #f0f7ff;
+  color: #1565c0;
+}
+
+/* ========================================= */
+/* ESTILOS MOBILE (RESPONSIVIDADE AVANÇADA) */
+/* ========================================= */
+
+.mobile-day-controls {
+  display: none; /* Escondido em Desktop */
+}
+
+@media (min-width: 769px) {
+  .tabela-agendamento {
+    min-width: 800px; /* Mantém comportamento original em telas grandes */
+  }
+}
+
+@media (max-width: 768px) {
+  .agendamento-container {
+    padding: 10px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    padding: 24px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+    }
+    
+    .agendamento-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+    }
+    
+    .agendamento-table th, .agendamento-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #eaeaea;
+    }
+    
+    .agendamento-table th {
+      background: #f5f5f5;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .agendamento-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .agendamento-table tr:hover {
+      background: #f0f8ff;
+    }
+    
+    .agendamento-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .agendamento-btn {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .agendamento-btn:hover {
+      background: #1565c0;
+    }
+    
+    .agendamento-btn.today {
+      background: #43a047;
+    }
+    
+    .agendamento-btn.today:hover {
+      background: #388e3c;
+    }
+    
+    /* Responsividade */
+    @media (max-width: 600px) {
+      .agendamento-container {
+        padding: 10px;
+        border-radius: 8px;
+      }
+      .agendamento-table th, .agendamento-table td {
+        padding: 8px 6px;
+        font-size: 0.95rem;
+      }
+      .agendamento-btn {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+      }
+      .agendamento-actions {
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
+    @media (max-width: 450px) {
+      .agendamento-container {
+        padding: 4px;
+        border-radius: 6px;
+      }
+      .agendamento-table th, .agendamento-table td {
+        padding: 4px 2px;
+        font-size: 0.85rem;
+      }
+      .agendamento-btn {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+      }
+    }
+  
+  /* Exibe os controles de dia no mobile */
+  .mobile-day-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    gap: 10px;
+  }
+
+  .mobile-day-select {
+    flex: 1;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    text-align: center;
+    background-color: white;
+  }
+
+  .btn-mobile-nav {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 50%; /* Botão circular */
+    width: 32px; /* Tamanho reduzido */
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: #555;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    position: relative; /* Necessário para o efeito ripple */
+    overflow: hidden;   /* Garante que a onda não saia do botão */
+  }
+
+  .btn-mobile-nav:hover {
+    background-color: #f0f0f0;
+    color: #1565c0;
+  }
+
+  /* Lógica de Exibição de Colunas */
+  .tabela-agendamento th.coluna-dia,
+  .tabela-agendamento td.celula-agendamento {
+    display: none; /* Esconde todos os dias por padrão */
+  }
+
+  .tabela-agendamento th.coluna-dia.mobile-active,
+  .tabela-agendamento td.celula-agendamento.mobile-active {
+    display: table-cell; /* Mostra apenas o dia ativo */
+    width: auto;
+  }
+
+  /* Ajustes na coluna de horário para mobile */
+  .coluna-horario, .coluna-horario-header {
+    width: 60px;
+    font-size: 0.8rem;
+  }
+  
+  .tabela-responsiva {
+    display: none; /* Esconde a tabela no mobile para usar a view de lista */
+  }
+
+  /* --- Nova Visualização Mobile (Lista de Cards) --- */
+  .mobile-agenda-view {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  @keyframes slideInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .mobile-card-slot {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    animation: slideInUp 0.4s ease-out forwards;
+    opacity: 0; /* Garante que comece invisível para a animação */
+  }
+
+  /* Efeito cascata (stagger) para os itens da lista */
+  .mobile-card-slot:nth-child(1) { animation-delay: 0.05s; }
+  .mobile-card-slot:nth-child(2) { animation-delay: 0.1s; }
+  .mobile-card-slot:nth-child(3) { animation-delay: 0.15s; }
+  .mobile-card-slot:nth-child(4) { animation-delay: 0.2s; }
+  .mobile-card-slot:nth-child(5) { animation-delay: 0.25s; }
+  .mobile-card-slot:nth-child(n+6) { animation-delay: 0.3s; }
+  
+  .mobile-card-slot:active {
+    background-color: #f9f9f9;
+    transform: scale(0.98);
+  }
+
+  .mobile-card-slot.lotado {
+    background-color: #fff5f5;
+    border-left: 4px solid #ef5350;
+  }
+
+  .mobile-card-time {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #444;
+    min-width: 65px;
+  }
+
+  .mobile-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .mobile-card-names {
+    font-weight: 600;
+    color: #1565c0;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+  
+  /* Estilos para linhas de pacientes com indicador de serviço */
+  .mobile-patient-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .service-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .service-indicator.fisioterapia { background-color: #1976d2; } /* Azul */
+  .service-indicator.pilates { background-color: #e91e63; } /* Rosa/Magenta */
+  .service-indicator.avaliacao { background-color: #ff9800; } /* Laranja */
+  .service-indicator.outro { background-color: #9e9e9e; } /* Cinza */
+
+  .mobile-card-vagas {
+    font-size: 0.85rem;
+    color: #777;
+  }
+  
+  .text-muted {
+    color: #aaa;
+    font-weight: 400;
+    font-style: italic;
+  }
+}
+
+/* Garante que a view mobile não apareça no desktop */
+.mobile-agenda-view {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-agenda-view {
+    display: flex; /* Ativa no mobile */
+  }
+}
+
+/* Ajuste do Header e Botões de Navegação para telas menores */
+@media (max-width: 650px) {
+@media (max-width: 550px) {
+  .header-agenda {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .titulo-secao {
+    text-align: center;
+  }
+
+  .controles-navegacao {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .btn-nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 8px 4px;
+  }
+}
+
+/* --- Animação Ripple (Efeito de Onda) --- */
+@keyframes ripple-effect {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 0;
+  }
+}
+
+.btn-nav:active::after,
+.btn-mobile-nav:active::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  padding-bottom: 100%; /* Cria um quadrado baseado na largura para manter a proporção */
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple-effect 0.4s linear;
+  pointer-events: none;
+}

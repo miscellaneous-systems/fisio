@@ -1,0 +1,354 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"); /* ====================================================================== */ /* RESET E TIPOGRAFIA GLOBAL */ /* ====================================================================== */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+button,
+input,
+select {
+  font-family: inherit; /* Garante que os elementos herdem Poppins */
+} /* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+} /* ====================================================================== */ /* ESTILOS DE MODAL (Globais) */ /* ====================================================================== */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Escurecido para maior contraste */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem; /* Garante que o modal não cole nas bordas em telas pequenas */
+}
+.modalContent {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-sizing: border-box; /* Garante que padding não aumente o tamanho total */
+}
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+  transition: color 0.2s;
+}
+.closeBtn:hover {
+  color: #333;
+} /* ====================================================================== */ /* ESTILOS DE FORMULÁRIO (Globais) */ /* ====================================================================== */
+.formInput {
+  padding: 10px;
+  padding: 0.75rem; /* Unidade relativa para melhor escalabilidade */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem; /* Unidade relativa */
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+.formInput:focus {
+  border-color: #3498db;
+  outline: none;
+}
+.formLabel {
+  font-weight: 600; /* Aumenta o peso para melhor legibilidade */
+  margin-bottom: 5px;
+  display: block;
+  color: #555;
+}
+.errorMsg {
+  color: #e74c3c;
+  font-size: 0.9em;
+  margin-top: 5px; /* Ajuste para não sobrepor o campo */
+} /* ====================================================================== */ /* ESTILOS DE BOTÃO (Globais) */ /* ====================================================================== */
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+} /* Estilo Azul */
+.button-primary {
+  background-color: #3498db;
+  color: white;
+}
+.button-primary:hover {
+  background-color: #2980b9;
+} /* Estilo Laranja */
+.button-secondary {
+  background-color: #e67e22;
+  color: white;
+}
+.button-secondary:hover {
+  background-color: #d35400;
+}
+/* ====================================================================== */
+/* RESPONSIVIDADE GLOBAL */
+/* ====================================================================== */
+
+/* Containers principais */
+.container, .modalContent, .main-content {
+  max-width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Botões */
+button, .button, .btn {
+  font-size: 1rem;
+  padding: 0.5em 1em;
+  min-width: 80px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Tabelas responsivas */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.5em;
+  text-align: left;
+  word-break: break-word;
+}
+
+/* Media queries para telas pequenas */
+@media (max-width: 600px) {
+  .container, .modalContent, .main-content {
+    padding: 0.5rem;
+  }
+
+  button, .button, .btn {
+    font-size: 0.9rem;
+    padding: 0.4em 0.8em;
+  }
+
+  th, td {
+    padding: 0.3em;
+    font-size: 0.9em;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 400px;
+  }
+}
+
+/* ====================================================================== */
+/* BOTÕES DA TABELA RESPONSIVOS */
+/* ====================================================================== */
+
+/* Grupo de botões na tabela */
+.table-actions {
+  display: flex;
+  gap: 0.5em;
+}
+
+/* Media query para telas pequenas */
+@media (max-width: 600px) {
+  .table-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.3em;
+  }
+  .table-actions .button,
+  .table-actions button {
+    font-size: 0.85em;
+    padding: 0.3em 0.6em;
+    min-width: unset;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  /* Textos da tabela menores */
+  table,
+  th,
+  td {
+    font-size: 0.9em;
+  }
+}
+
+/* Responsividade extra forte para telas até 450px */
+@media (max-width: 450px) {
+  /* Topo/Header */
+  header, .header, .top-bar {
+    flex-direction: column !important;
+    align-items: center !important;
+    font-size: 1.4rem !important;
+    padding: 8px 4px !important;
+  }
+  .header-title, .top-title {
+    font-size: 1.4rem !important;
+    text-align: center !important;
+  }
+  .header button, .top-bar button {
+    font-size: 0.85rem !important;
+    padding: 6px 10px !important;
+    margin: 4px 0 !important;
+    width: 100% !important;
+  }
+
+  /* 1. Ajuste Geral de Fontes e Espaçamentos */
+  html, body {
+    font-size: 12px; /* Reduz a base da fonte */
+  }
+
+  /* Tabelas */
+  table, .table-responsive {
+    font-size: 0.85rem !important;
+    min-width: 0px !important;
+    overflow-x: auto !important;
+    display: block !important;
+  }
+
+  h1 { font-size: 1.4rem !important; }
+  h2 { font-size: 1.2rem !important; }
+  h3 { font-size: 1.1rem !important; }
+
+  .container, .modalContent, .main-content, .pageContainer {
+    padding: 10px !important;
+  }
+  th, td {
+    padding: 4px 6px !important;
+    white-space: nowrap !important;
+  }
+
+  /* 2. Botões e Inputs Menores */
+  button, .button, .btn {
+    font-size: 0.65rem !important;
+    padding: 8px 12px !important;
+  }
+
+  @media (max-width: 450px) {
+    input, select, textarea, .formInput {
+      font-size: 0.95rem !important;
+      padding: 8px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      margin-bottom: 8px !important;
+    }
+  }
+
+  /* Botões nas tabelas */
+  /* 3. Transformação da Tabela em Cards (Dividir para caber) */
+  /* Força a tabela a se comportar como blocos empilhados */
+  table, thead, tbody, th, td, tr {
+    display: block !important;
+    width: 90% !important;
+    align-items: center !important;
+    margin: 10px auto 10px auto!important;
+  }
+
+  /* Esconde o cabeçalho da tabela (pois os dados ficarão verticais) */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  /* Cada linha vira um "Card" */
+  tr {
+    margin-bottom: 15px !important;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 5px; 
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+
+  /* As células viram linhas dentro do card */
+  td {
+    border: none !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    position: relative;
+    padding: 3px 0 !important;
+    text-align: left !important;
+    white-space: normal !important; /* Permite quebra de texto */
+  }
+
+  td:last-child {
+    border-bottom: none !important;
+  }
+
+  /* Ajuste dos botões de ação dentro da tabela */
+  .table-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+  .table-actions button {
+    font-size: 0.8rem !important;
+    padding: 5px 8px !important;
+    width: 100% !important;
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* Textos e Inputs */
+  h1, h2, h3 {
+    font-size: 1.1rem !important;
+    margin: 8px 0 !important;
+  }
+  input, select {
+    font-size: 0.8rem !important;
+    padding: 6px 8px !important;
+  }
+  label {
+    font-size: 0.9rem !important;
+    display: flex;
+    flex-direction: row; /* Mantém botões lado a lado se couberem */
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    width: 100%;
+  }
+}
+
+  /* Cards e Containers */
+  .container, .card, .section {
+    padding: 8px 4px !important;
+    margin: 8px 0 !important;
+  }

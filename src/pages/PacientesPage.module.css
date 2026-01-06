@@ -1,0 +1,189 @@
+/* ====================================================================== */
+/* LAYOUT E ESTRUTURA DA PÁGINA (PacientesPage.module.css) */
+/* ====================================================================== */
+
+.pageContainer {
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    font-family: Arial, sans-serif;
+}
+
+.pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Botão de Adicionar Paciente */
+.addButton {
+    padding: 10px 20px;
+    background-color: #2ecc71; /* Verde - Sucesso/Adicionar */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.addButton:hover {
+    background-color: #27ae60;
+}
+
+/* ====================================================================== */
+/* BARRA DE PESQUISA E FILTROS 🔍 */
+/* ====================================================================== */
+
+.searchBar {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaço entre a pesquisa e possíveis filtros futuros */
+}
+
+/* O container principal do campo de busca para estilizar a "caixa da lupa" */
+.searchInputContainer {
+    position: relative; /* Essencial para posicionar o ícone da lupa */
+    width: 350px; /* Largura definida para a caixa de pesquisa */
+}
+
+/* O ícone da Lupa (Para usar com <span> ou <i> no HTML) */
+.searchIcon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: #95a5a6; /* Cor do ícone cinza */
+    font-size: 18px; /* Tamanho do ícone */
+}
+
+/* O campo de input de texto em si */
+.searchInput {
+    width: 100%;
+    padding: 10px 10px 10px 40px; /* Padding esquerdo aumentado para acomodar o ícone */
+    border: 1px solid #bdc3c7; /* Cor cinza claro */
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.searchInput:focus {
+    border-color: #3498db; /* Azul ao focar */
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5); /* Sombra suave ao focar */
+    outline: none;
+}
+
+@media (max-width: 450px) {
+  .searchBar {
+    gap: 6px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .searchInputContainer {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .searchIcon {
+    position: absolute;
+    top: 38% !important;   /* Sobe a lupinha */
+    left: 8px !important;
+    font-size: 16px !important;
+    color: #95a5a6;
+    transform: translateY(-50%);
+  }
+
+  .searchInput {
+    font-size: 12px !important;
+    padding: 8px 8px 8px 32px !important;
+    border-radius: 5px !important;
+  }
+}
+
+/* ====================================================================== */
+/* ESTILOS DE TABELA */
+/* ====================================================================== */
+
+.pacientesTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tableHeader {
+    padding: 12px;
+    text-align: left;
+    background-color: #34495e; /* Cinza escuro/Azul Marinho */
+    color: white;
+    border-bottom: 2px solid #2c3e50;
+}
+
+.tableData {
+    padding: 12px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+/* Impede que os botões de ação quebrem linha */
+.tableDataActions {
+    composes: tableData;
+    white-space: nowrap;
+}
+
+.pacientesTable tbody tr:hover {
+    background-color: #f8f8f8;
+}
+
+/* ====================================================================== */
+/* BOTÕES DE AÇÃO NA TABELA */
+/* ====================================================================== */
+
+/* Botão Base */
+.actionButton {
+    padding: 6px 10px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: background-color 0.2s;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* Variações de cor (composes) */
+.viewButton {
+    composes: actionButton;
+    background-color: #3498db; /* Azul - Prontuário */
+}
+
+.viewButton:hover {
+    background-color: #2980b9;
+}
+
+.editButton {
+    composes: actionButton;
+    background-color: #f39c12; /* Laranja - Editar */
+}
+
+.editButton:hover {
+    background-color: #e67e22;
+}
+
+.inactivateButton {
+    composes: actionButton;
+    background-color: #e74c3c; /* Vermelho - Inativar */
+    margin-right: 0; /* Remove a margem do último botão */
+}
+
+.inactivateButton:hover {
+    background-color: #c0392b;
+}
