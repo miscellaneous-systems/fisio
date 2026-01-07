@@ -677,7 +677,6 @@
 
 /* Ajuste do Header e Botões de Navegação para telas menores */
 @media (max-width: 650px) {
-@media (max-width: 550px) {
   .header-agenda {
     flex-direction: column;
     align-items: stretch;
