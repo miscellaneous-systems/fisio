@@ -20,6 +20,9 @@ const PacientesPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar o MODAL
     const [searchTerm, setSearchTerm] = useState('');
     const [pacienteToEdit, setPacienteToEdit] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+    const [sortConfig, setSortConfig] = useState({ key: 'nome', direction: 'asc' });
 
     const navigate = useNavigate();
     const { signOut } = useAuth();
@@ -91,6 +94,14 @@ const PacientesPage = () => {
         }
     };
 
+    const handleSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
+    };
+
     const handlePatientFormClosed = () => {
         setIsModalOpen(false);
         setPacienteToEdit(null);
@@ -105,6 +116,11 @@ const PacientesPage = () => {
         fetchPacientes();
     }, []);
 
+    // Reseta para a primeira página quando a pesquisa muda
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
+
     if (loading) {
         return <h2 className={commonClasses.loading}>Carregando lista de pacientes...</h2>;
     }
@@ -117,6 +133,34 @@ const PacientesPage = () => {
     const filteredPacientes = pacientes.filter(paciente =>
         paciente.nome.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    // Lógica de Ordenação
+    const sortedPacientes = [...filteredPacientes].sort((a, b) => {
+        let valueA = a[sortConfig.key];
+        let valueB = b[sortConfig.key];
+
+        // Tratamento para evitar erros com null/undefined
+        if (valueA == null) valueA = '';
+        if (valueB == null) valueB = '';
+
+        // Tratamento para strings (case insensitive)
+        if (typeof valueA === 'string') valueA = valueA.toLowerCase();
+        if (typeof valueB === 'string') valueB = valueB.toLowerCase();
+
+        if (valueA < valueB) {
+            return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (valueA > valueB) {
+            return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+    });
+
+    // Lógica de Paginação
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentPacientes = sortedPacientes.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(sortedPacientes.length / itemsPerPage);
 
     return (
         <div className={styles.pageContainer}>
@@ -148,15 +192,23 @@ const PacientesPage = () => {
                 <table className={styles.pacientesTable}>
                     <thead>
                         <tr>
-                            <th className={styles.tableHeader}>ID</th>
-                            <th className={styles.tableHeader}>Nome</th>
-                            <th className={styles.tableHeader}>Telefone</th>
-                            <th className={styles.tableHeader}>Data Cadastro</th>
+                            <th className={styles.tableHeader} onClick={() => handleSort('id')} style={{cursor: 'pointer'}}>
+                                ID {sortConfig.key === 'id' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                            </th>
+                            <th className={styles.tableHeader} onClick={() => handleSort('nome')} style={{cursor: 'pointer'}}>
+                                Nome {sortConfig.key === 'nome' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                            </th>
+                            <th className={styles.tableHeader} onClick={() => handleSort('telefone')} style={{cursor: 'pointer'}}>
+                                Telefone {sortConfig.key === 'telefone' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                            </th>
+                            <th className={styles.tableHeader} onClick={() => handleSort('criado_em')} style={{cursor: 'pointer'}}>
+                                Data Cadastro {sortConfig.key === 'criado_em' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                            </th>
                             <th className={styles.tableHeader}>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredPacientes.map((paciente) => (
+                        {currentPacientes.map((paciente) => (
                             <tr key={paciente.id}>
                                 <td className={styles.tableData}>{paciente.id}</td>
                                 <td className={styles.tableData}>{paciente.nome}</td>
@@ -164,15 +216,53 @@ const PacientesPage = () => {
                                 <td className={styles.tableData}>{formatarData(paciente.criado_em)}</td>
                                 <td className={styles.tableDataActions}>
                                     <div className="table-actions">
-                                        <button className={styles.viewButton}>Prontuário</button>
-                                        <button className={styles.editButton}>Editar</button>
-                                        <button className={styles.inactivateButton}>Inativar</button>
+                                        <button 
+                                            onClick={() => handleViewPaciente(paciente.id)} 
+                                            className={styles.viewButton}
+                                        >
+                                            Prontuário
+                                        </button>
+                                        <button 
+                                            onClick={() => handleEditPaciente(paciente)} 
+                                            className={styles.editButton}
+                                        >
+                                            Editar
+                                        </button>
+                                        <button 
+                                            onClick={() => handleInativarPaciente(paciente.id, paciente.nome)} 
+                                            className={styles.inactivateButton}
+                                        >
+                                            Inativar
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+            )}
+
+            {/* CONTROLES DE PAGINAÇÃO */}
+            {filteredPacientes.length > itemsPerPage && (
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', gap: '10px' }}>
+                    <button 
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        style={{ padding: '8px 16px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+                    >
+                        &larr; Anterior
+                    </button>
+                    <span style={{ alignSelf: 'center', fontWeight: 'bold' }}>
+                        Página {currentPage} de {totalPages}
+                    </span>
+                    <button 
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        style={{ padding: '8px 16px', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}
+                    >
+                        Próxima &rarr;
+                    </button>
+                </div>
             )}
 
             {/* CHAMADA CORRETA DO MODAL - ÚNICA INSTÂNCIA DO FORMULÁRIO */}
