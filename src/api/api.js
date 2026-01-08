@@ -13,7 +13,10 @@ api.interceptors.request.use(config => {
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     } else {
-        console.warn('⚠️ Token não encontrado no localStorage. Verifique se fez login.');
+        // Não exibe o aviso se for a rota de login
+        if (!config.url.includes('/login')) {
+            console.warn('⚠️ Token não encontrado no localStorage. Verifique se fez login.');
+        }
     }
     return config;
 }, error => {
