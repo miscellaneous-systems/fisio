@@ -151,8 +151,9 @@
     }
 
     .statusBadge {
-        align-self: flex-end; /* Joga o status para a direita */
-        margin-top: -25px;    /* Ajuste para ficar na linha do nome */
+        display: flex;
+        align-items: flex-end; /* Joga o status para a direita */
+        margin-top: 0px;    /* Ajuste para ficar na linha do nome */
     }
 }
 
