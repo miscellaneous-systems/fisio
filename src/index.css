@@ -1,53 +1,69 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"); /* ====================================================================== */ /* RESET E TIPOGRAFIA GLOBAL */ /* ====================================================================== */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* ====================================================================== */
+/* 1. RESET E BASE */
+/* ====================================================================== */
+* {
+  box-sizing: border-box; /* Garante que padding não aumente a largura total */
+}
+
 body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   font-family: "Poppins", sans-serif;
   background-color: #f9f9f9;
   color: #333;
+  font-size: 16px; /* Tamanho base padrão */
 }
+
 a {
   text-decoration: none;
   color: inherit;
 }
-button,
-input,
-select {
-  font-family: inherit; /* Garante que os elementos herdem Poppins */
-} /* Scrollbar Customization */
+
+/* Herança de fonte para elementos de formulário */
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Customização da Barra de Rolagem */
 ::-webkit-scrollbar {
   width: 8px;
 }
 ::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
-} /* ====================================================================== */ /* ESTILOS DE MODAL (Globais) */ /* ====================================================================== */
+}
+
+/* ====================================================================== */
+/* 2. COMPONENTES: MODAL */
+/* ====================================================================== */
 .modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6); /* Escurecido para maior contraste */
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  padding: 1rem; /* Garante que o modal não cole nas bordas em telas pequenas */
+  padding: 1rem;
 }
+
 .modalContent {
   background-color: #fff;
   padding: 25px;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  max-width: 500px;
-  width: 50%;
+  width: 100%;       /* Ocupa o que der... */
+  max-width: 500px;  /* ...até 500px */
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  box-sizing: border-box; /* Garante que padding não aumente o tamanho total */
 }
+
 .modalHeader {
   display: flex;
   justify-content: space-between;
@@ -56,6 +72,7 @@ select {
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
 }
+
 .closeBtn {
   background: none;
   border: none;
@@ -64,78 +81,69 @@ select {
   color: #999;
   transition: color 0.2s;
 }
+
 .closeBtn:hover {
   color: #333;
-} /* ====================================================================== */ /* ESTILOS DE FORMULÁRIO (Globais) */ /* ====================================================================== */
+}
+
+/* ====================================================================== */
+/* 3. COMPONENTES: FORMULÁRIOS */
+/* ====================================================================== */
 .formInput {
-  padding: 10px;
-  padding: 0.75rem; /* Unidade relativa para melhor escalabilidade */
+  padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 1rem; /* Unidade relativa */
+  font-size: 1rem;
   width: 100%;
-  box-sizing: border-box;
   transition: border-color 0.3s;
+  margin-bottom: 10px; /* Espaçamento padrão entre inputs */
 }
+
 .formInput:focus {
   border-color: #3498db;
   outline: none;
 }
+
 .formLabel {
-  font-weight: 600; /* Aumenta o peso para melhor legibilidade */
+  font-weight: 600;
   margin-bottom: 5px;
   display: block;
   color: #555;
 }
+
 .errorMsg {
   color: #e74c3c;
   font-size: 0.9em;
-  margin-top: 5px; /* Ajuste para não sobrepor o campo */
-} /* ====================================================================== */ /* ESTILOS DE BOTÃO (Globais) */ /* ====================================================================== */
-.button {
+  margin-top: -5px; /* Puxa um pouco pra cima perto do input */
+  margin-bottom: 10px;
+}
+
+/* ====================================================================== */
+/* 4. COMPONENTES: BOTÕES */
+/* ====================================================================== */
+.button, .btn {
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: bold;
   transition: background-color 0.3s;
-} /* Estilo Azul */
-.button-primary {
-  background-color: #3498db;
-  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
-.button-primary:hover {
-  background-color: #2980b9;
-} /* Estilo Laranja */
-.button-secondary {
-  background-color: #e67e22;
-  color: white;
-}
-.button-secondary:hover {
-  background-color: #d35400;
-}
+
+/* Variantes de cores */
+.button-primary { background-color: #3498db; color: white; }
+.button-primary:hover { background-color: #2980b9; }
+
+.button-secondary { background-color: #e67e22; color: white; }
+.button-secondary:hover { background-color: #d35400; }
+
 /* ====================================================================== */
-/* RESPONSIVIDADE GLOBAL */
+/* 5. TABELAS (Estilo Base Desktop) */
 /* ====================================================================== */
-
-/* Containers principais */
-.container, .modalContent, .main-content {
-  max-width: 100%;
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
-/* Botões */
-button, .button, .btn {
-  font-size: 1rem;
-  padding: 0.5em 1em;
-  min-width: 80px;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-/* Tabelas responsivas */
 .table-responsive {
   width: 100%;
   overflow-x: auto;
@@ -147,208 +155,116 @@ table {
 }
 
 th, td {
-  padding: 0.5em;
+  padding: 0.75rem;
   text-align: left;
-  word-break: break-word;
+  border-bottom: 1px solid #eee;
 }
 
-/* Media queries para telas pequenas */
-@media (max-width: 600px) {
+/* Grupo de botões dentro da tabela */
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ====================================================================== */
+/* 6. RESPONSIVIDADE (MEDIA QUERIES) */
+/* ====================================================================== */
+
+/* --- TABLETS E TELAS MÉDIAS (até 768px ou 600px) --- */
+@media (max-width: 768px) {
   .container, .modalContent, .main-content {
     padding: 0.5rem;
   }
-
-  button, .button, .btn {
+  
+  /* Botões um pouco menores */
+  .button, .btn {
     font-size: 0.9rem;
-    padding: 0.4em 0.8em;
-  }
-
-  th, td {
-    padding: 0.3em;
-    font-size: 0.9em;
-  }
-
-  .table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  table {
-    min-width: 400px;
+    padding: 8px 16px;
   }
 }
 
-/* ====================================================================== */
-/* BOTÕES DA TABELA RESPONSIVOS */
-/* ====================================================================== */
-
-/* Grupo de botões na tabela */
-.table-actions {
-  display: flex;
-  gap: 0.5em;
-}
-
-/* Media query para telas pequenas */
-@media (max-width: 600px) {
-  .table-actions {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.3em;
-  }
-  .table-actions .button,
-  .table-actions button {
-    font-size: 0.85em;
-    padding: 0.3em 0.6em;
-    min-width: unset;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  /* Textos da tabela menores */
-  table,
-  th,
-  td {
-    font-size: 0.9em;
-  }
-}
-
-/* Responsividade extra forte para telas até 450px */
+/* --- MOBILE (até 450px) - AQUI OCORRE A MÁGICA DOS CARDS --- */
 @media (max-width: 450px) {
-  /* Topo/Header */
-  header, .header, .top-bar {
-    flex-direction: column !important;
-    align-items: center !important;
-    font-size: 1.4rem !important;
-    padding: 8px 4px !important;
-  }
-  .header-title, .top-title {
-    font-size: 1.4rem !important;
-    text-align: center !important;
-  }
-  .header button, .top-bar button {
-    font-size: 0.85rem !important;
-    padding: 6px 10px !important;
-    margin: 4px 0 !important;
-    width: 100% !important;
-  }
-
-  /* 1. Ajuste Geral de Fontes e Espaçamentos */
+  
+  /* 1. Ajuste Geral de Texto */
   html, body {
-    font-size: 12px; /* Reduz a base da fonte */
+    font-size: 14px; /* Reduz fonte base */
   }
 
-  /* Tabelas */
-  table, .table-responsive {
-    font-size: 0.85rem !important;
-    min-width: 0px !important;
-    overflow-x: auto !important;
-    display: block !important;
+  h1 { font-size: 1.4rem; }
+  h2 { font-size: 1.2rem; }
+  h3 { font-size: 1.1rem; }
+
+  /* 2. Formulários no Mobile */
+  .formInput, select, input {
+    font-size: 16px; /* Evita zoom automático no iOS */
+    padding: 10px;
   }
 
-  h1 { font-size: 1.4rem !important; }
-  h2 { font-size: 1.2rem !important; }
-  h3 { font-size: 1.1rem !important; }
-
-  .container, .modalContent, .main-content, .pageContainer {
-    padding: 10px !important;
-  }
-  th, td {
-    padding: 4px 6px !important;
-    white-space: nowrap !important;
-  }
-
-  /* 2. Botões e Inputs Menores */
-  button, .button, .btn {
-    font-size: 0.65rem !important;
-    padding: 8px 12px !important;
-  }
-
-  @media (max-width: 450px) {
-    input, select, textarea, .formInput {
-      font-size: 0.95rem !important;
-      padding: 8px !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-      margin-bottom: 8px !important;
-    }
-  }
-
-  /* Botões nas tabelas */
-  /* 3. Transformação da Tabela em Cards (Dividir para caber) */
-  /* Força a tabela a se comportar como blocos empilhados */
+  /* 3. Transformação da Tabela em Cards (Estilo "Empilhado") */
+  /* Remove comportamento de tabela nativo */
   table, thead, tbody, th, td, tr {
-    display: block !important;
-    width: 90% !important;
-    align-items: center !important;
-    margin: 10px auto 10px auto!important;
+    display: block;
+    width: 100%;
   }
 
-  /* Esconde o cabeçalho da tabela (pois os dados ficarão verticais) */
+  /* Esconde o cabeçalho original (Nome, Data, etc) */
   thead tr {
     position: absolute;
     top: -9999px;
-    left: -9999px;
+    left: -9999px; 
   }
 
-  /* Cada linha vira um "Card" */
+  /* O card (antiga linha 'tr') */
   tr {
-    margin-bottom: 15px !important;
+    margin-bottom: 15px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 5px; 
     background: #fff;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    padding: 10px;
   }
 
-  /* As células viram linhas dentro do card */
+  /* As linhas do card (antigas células 'td') */
   td {
-    border: none !important;
-    border-bottom: 1px solid #f0f0f0 !important;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
     position: relative;
-    padding: 3px 0 !important;
-    text-align: left !important;
-    white-space: normal !important; /* Permite quebra de texto */
+    padding: 8px 0;
+    text-align: left;
+    display: flex;           /* Flex para alinhar conteúdo */
+    justify-content: space-between;
+    align-items: center;
   }
 
   td:last-child {
-    border-bottom: none !important;
+    border-bottom: none;
+    display: block; /* A última célula (ações) fica em bloco */
   }
 
-  /* Ajuste dos botões de ação dentro da tabela */
+  /* Botões de ação da tabela no mobile */
   .table-actions {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 4px !important;
-  }
-  .table-actions button {
-    font-size: 0.8rem !important;
-    padding: 5px 8px !important;
-    width: 100% !important;
-    flex: 1;
-    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 5px;
   }
 
-  /* Textos e Inputs */
-  h1, h2, h3 {
-    font-size: 1.1rem !important;
-    margin: 8px 0 !important;
-  }
-  input, select {
-    font-size: 0.8rem !important;
-    padding: 6px 8px !important;
-  }
-  label {
-    font-size: 0.9rem !important;
-    display: flex;
-    flex-direction: row; /* Mantém botões lado a lado se couberem */
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
+  .table-actions .button, 
+  .table-actions button {
     width: 100%;
+    margin-bottom: 5px;
+    padding: 8px;
+  }
+
+  /* 4. Header do Mobile */
+  header, .header, .top-bar {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px ;
+  }
+  
+  .header-title {
+    margin-bottom: 10px;
   }
 }
-
-  /* Cards e Containers */
-  .container, .card, .section {
-    padding: 8px 4px !important;
-    margin: 8px 0 !important;
-  }

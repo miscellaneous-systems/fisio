@@ -1,285 +1,205 @@
 /* ====================================================================== */
-/* 1. LAYOUT GERAL (GRID) */
+/* 1. VARIÁVEIS E RESET */
 /* ====================================================================== */
+:root {
+    --primary-green: #007A4D;
+    --secondary-green: #00B050;
+    --danger-red: #c0392b;
+    --danger-hover: #a93226;
+    --text-main: #333;
+    --text-muted: #777;
+    --white: #ffffff;
+    --sidebar-width: 250px;
+}
 
 .appContainer {
     display: flex;
     min-height: 100vh;
     width: 100%;
+    background-color: #f9f9f9;
 }
 
 /* ====================================================================== */
-/* 2. SIDEBAR (Navegação Lateral) */
+/* 2. SIDEBAR (Navegação) */
 /* ====================================================================== */
-
 .sidebar {
-    width: 250px;
-    background-color: #007A4D;
-    color: #ffffff;
-    padding: 20px 0;
-
+    width: var(--sidebar-width);
+    background-color: var(--primary-green);
+    color: var(--white);
     display: flex;
     flex-direction: column;
-
     position: fixed;
     top: 0;
     left: 0;
     height: 100%;
-
-    z-index: 50;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
     transition: transform 0.3s ease-in-out;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Logo */
 .logo {
-    font-size: 1.8em;
+    font-size: 1.8rem;
     font-weight: 800;
     text-align: center;
-    padding: 0 20px 20px;
+    padding: 25px 20px;
     margin: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-.logoHighlight {
-    font-weight: 400;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Navegação */
+.logoHighlight { font-weight: 300; }
+
 .nav {
     flex-grow: 1;
-    padding: 20px 0;
+    padding: 15px 0;
+    overflow-y: auto;
 }
 
 .navLink {
     display: flex;
     align-items: center;
     padding: 12px 20px;
-
-    color: #ffffff;
+    color: var(--white);
     text-decoration: none;
-    font-size: 1.05em;
     font-weight: 500;
-
-    transition: background-color 0.2s, box-shadow 0.2s;
+    transition: all 0.2s;
 }
 
-/* Ícone do Link */
 .navIcon {
     margin-right: 12px;
-    font-size: 1.2em;
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
 }
 
-/* Sidebar Footer */
 .sidebarFooter {
     padding: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: 0.9em;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.85rem;
+    background: rgba(0,0,0,0.05);
 }
 
-.userInfoSidebar {
-    color: #c0c0c0;
+/* --- BOTÃO FECHAR (X) CORRIGIDO --- */
+.closeButton {
+    display: none; /* Oculto no Desktop */
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 2.5rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 1010;
 }
 
 /* ====================================================================== */
-/* 3. CONTEÚDO PRINCIPAL */
+/* 3. ÁREA PRINCIPAL */
 /* ====================================================================== */
-
 .mainContent {
-    margin-left: 250px;
-    width: calc(100% - 250px);
-
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    transition: all 0.3s ease;
 }
 
-/* Header */
 .header {
-    height: 60px;
-    background-color: #ffffff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-
-    padding: 0 30px;
-
+    height: 65px;
+    background-color: var(--white);
+    padding: 0 25px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    gap: 12px;
-    flex-wrap: nowrap;   /* 🔑 NÃO DEIXA QUEBRAR */
-    min-width: 0;
-
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 900;
 }
 
-/* Texto do usuário */
 .userInfo {
-    color: #777;
-    font-size: 0.9em;
-
+    color: var(--text-muted);
+    font-size: 0.9rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-width: 0;
+    flex: 1;
+    margin: 0 15px;
 }
 
-/* Botão de sair */
 .logoutButton {
-    background-color: #c0392b;
-    color: white;
+    background-color: var(--danger-red);
+    color: var(--white);
     border: none;
-
-    padding: 8px 14px;
-    border-radius: 5px;
-
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
     cursor: pointer;
-    font-weight: bold;
-
-    white-space: nowrap; /* 🔑 nunca quebra */
-    flex-shrink: 0;      /* 🔑 nunca encolhe */
-
-    transition: background-color 0.2s;
-}
-.logoutButton:hover {
-    background-color: #a93226;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.2s;
 }
 
-/* Conteúdo das páginas */
+.logoutButton:hover { background-color: var(--danger-hover); }
+
 .pageContent {
     padding: 30px;
     flex-grow: 1;
 }
 
 /* ====================================================================== */
-/* 4. MENU MOBILE */
-/* ====================================================================== */
-
-/* Botão hambúrguer */
-.hamburgerButton {
-    display: none;
-    position: fixed;
-    top: 15px;
-    left: 15px;
-
-    z-index: 80;
-    background-color: #007A4D;
-    color: white;
-
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-
-    font-size: 1.5em;
-    cursor: pointer;
-}
-
-/* Overlay */
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 40;
-
-    display: none;
-}
-
-/* Botão fechar menu */
-.closeButton {
-    display: none;
-    position: absolute;
-    top: 15px;
-    right: 15px;
-
-    background: none;
-    color: white;
-    border: none;
-
-    font-size: 2em;
-    cursor: pointer;
-}
-
-/* ====================================================================== */
-/* 5. RESPONSIVIDADE */
+/* 4. RESPONSIVIDADE (TABLETS E MOBILE) */
 /* ====================================================================== */
 
 @media (max-width: 900px) {
-
-    /* Sidebar */
     .sidebar {
         transform: translateX(-100%);
-        width: 85%;
-        max-width: 280px;
-        box-shadow: none;
-        z-index: 90;
+        width: 280px;
     }
 
-    .mobileOpen {
-        transform: translateX(0);
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    }
+    .mobileOpen { transform: translateX(0); }
 
-    /* Main */
     .mainContent {
         margin-left: 0;
         width: 100%;
     }
 
-    /* Header */
-    .header {
-        padding: 0 15px 0 70px;
-        gap: 8px;
-    }
+    .header { padding-left: 70px; } /* Espaço para o botão hambúrguer */
 
-    .userInfo {
-        font-size: 0.8em;
-        max-width: 140px;
-    }
-
-    .logoutButton {
-        padding: 6px 10px;
-        font-size: 0.85em;
-    }
-
-    /* Conteúdo */
-    .pageContent {
-        padding: 20px;
-    }
-
-    /* Botões mobile */
-    .hamburgerButton {
-        display: block;
-    }
+    .closeButton { display: block; }
 
     .overlay {
-        display: block;
-    }
-
-    .closeButton {
-        display: block;
-    }
-
-    .logo {
-        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 950;
+        backdrop-filter: blur(2px);
     }
 }
 
 @media (max-width: 450px) {
-  .header {
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-  }
+    .header {
+        height: 60px;
+        padding: 0 15px;
+        display: flex;
+        flex-direction: row !important; /* Garante que fiquem na mesma linha */
+        align-items: center;
+        justify-content: space-between; /* Um em cada ponta */
+    }
 
-  .header .logoutButton {
-    width: auto !important;
-    margin: 0 !important;
-    flex-shrink: 0 !important;
-  }
+    .userInfo { display: none; } /* Esconde o texto longo no mobile para não apertar o botão */
+
+    .pageContent { padding: 15px; }
+
+    /* Estilização para o Select Centralizado */
+    .mobileDaySelect {
+        width: auto;
+        text-align: center;
+        text-align-last: center;
+        padding: 6px 12px;
+        border-radius: 8px;
+    }
 }
