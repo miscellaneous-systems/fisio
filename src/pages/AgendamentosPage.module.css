@@ -1,5 +1,5 @@
 /* ====================================================================== */
-/* LAYOUT E ESTRUTURA DA PÁGINA (AgendamentosPage.module.css) */
+/* LAYOUT E ESTRUTURA */
 /* ====================================================================== */
 
 .pageContainer {
@@ -13,212 +13,214 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
-/* Controles de Novo Agendamento */
 .addControls {
     display: flex;
     gap: 10px;
 }
 
 .addButtonService {
-    padding: 10px 15px;
-    background-color: #2980b9; 
+    padding: 10px 18px;
+    background-color: #007A4D; /* Verde principal do seu app */
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
+    font-weight: 600;
+    transition: all 0.2s;
     font-size: 14px;
 }
 
 .addButtonService:hover {
-    background-color: #2471a3;
+    background-color: #005f3c;
+    transform: translateY(-1px);
 }
 
-/* Barra de Filtros (Data e Status) */
+/* ====================================================================== */
+/* BARRA DE FILTROS (Organizada em Grupos) */
+/* ====================================================================== */
+
 .controlsBar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
     margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.filterGroup {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.statusLabel {
-    margin-left: 20px;
+.filterGroup label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #000000;
+    text-transform: uppercase;
 }
 
-/* Estilos para inputs e selects que eram 'comuns' */
+/* Container para Input + Botões de Atalho */
+.dateActions {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+}
+
 .formInput, .formSelect {
-    padding: 8px;
-    border-radius: 4px;
+    padding: 10px;
+    border-radius: 6px;
     border: 1px solid #ccc;
-    font-size: 16px;
-    transition: border-color 0.3s;
+    font-size: 15px;
+    width: 100%;
+    background-color: #fff;
 }
 
-.formInput:focus, .formSelect:focus {
-    border-color: #2980b9;
-    outline: none;
+/* Botões de atalho (Hoje / Ver Todos) */
+.clearBtn, .allBtn {
+    flex: 1;
+    padding: 6px;
+    font-size: 12px;
+    border: 1px solid #ddd;
+    background: #026028;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.2s;
+    color: white;
 }
 
-/* Mensagens de erro/carregamento */
-.centeredMessage {
-    text-align: center;
-    padding: 40px;
-    font-size: 1.2em;
+.clearBtn:hover, .allBtn:hover:not(:disabled) {
+    background: #27ae60;
 }
 
-.errorMsg {
-    color: #e74c3c;
-    font-weight: bold;
+.allBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
-
 
 /* ====================================================================== */
-/* ESTILOS DE TABELA */
+/* ESTILOS DE TABELA E BADGES */
 /* ====================================================================== */
+
+.tableResponsive {
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
 
 .agendaTable {
     width: 100%;
     border-collapse: collapse;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     background-color: white;
-    margin-top: 15px;
 }
 
-.tableHeader {
-    background-color: #34495e; 
-    color: white;
-    padding: 12px 15px;
+.agendaTable th {
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 15px;
     text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #eee;
 }
 
-.tableData {
-    padding: 12px 15px;
-    border-bottom: 1px solid #ecf0f1;
-    vertical-align: middle;
+.tableRow td {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
 }
 
-.agendaTable tbody tr:hover {
-    background-color: #f2f2f2;
-}
-
-
-/* ====================================================================== */
-/* BADGES DE STATUS */
-/* ====================================================================== */
-
+/* Status Badges */
 .statusBadge {
-    padding: 4px 8px;
-    border-radius: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
     color: white;
     font-weight: bold;
-    font-size: 12px;
-    display: inline-block;
+    font-size: 11px;
+    text-transform: uppercase;
 }
 
-/* Variações de cor do status (usando composes para herança) */
-.statusPendente {
-    composes: statusBadge;
-    background-color: #f39c12; /* Laranja */
-}
-.statusConfirmado {
-    composes: statusBadge;
-    background-color: #3498db; /* Azul */
-}
-.statusRealizado {
-    composes: statusBadge;
-    background-color: #2ecc71; /* Verde */
-}
-.statusCancelado {
-    composes: statusBadge;
-    background-color: #e74c3c; /* Vermelho */
-}
+.statusPendente { background-color: #f39c12; }
+.statusConfirmado { background-color: #3498db; }
+.statusRealizado { background-color: #2ecc71; }
+.statusCancelado { background-color: #e74c3c; }
 
-/* ====================================================================== */
-/* BOTÕES DE AÇÃO NA TABELA */
-/* ====================================================================== */
+/* Ações */
+.tableActions {
+    display: flex;
+    gap: 8px;
+}
 
 .actionButton {
-    padding: 6px 10px;
-    margin-right: 8px;
-    background-color: #3498db; 
-    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s;
 }
 
-.actionButton:hover {
-    background-color: #2980b9;
-}
+.detailButton { background: #eee; color: #444; }
+.concludeButton { background: #2ecc71; color: white; }
 
-.concludeButton {
-    padding: 6px 10px;
-    background-color: #2ecc71; 
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
+.detailButton:hover { background: #ddd; }
+.concludeButton:hover { background: #27ae60; }
 
-.concludeButton:hover {
-    background-color: #27ae60;
-}
+/* ====================================================================== */
+/* RESPONSIVIDADE MOBILE (CARDS) */
+/* ====================================================================== */
 
-.finalizedText {
-    color: #95a5a6;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-
-/* Ajustes para telas intermediárias (Tablets/Laptops pequenos - 1000px para baixo) */
-@media (max-width: 1000px) {
-    .controlsBar {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .formInput, .formSelect {
-        width: 100%;
-    }
-
-    .statusLabel {
-        margin-left: 0;
-        margin-top: 10px;
-    }
-}
-
-/* Ajustes para mobile */
 @media (max-width: 768px) {
-     .pageHeader {
-        flex: 1;
-        font-size: 0.8rem;
-    }
-
-    .controlsBar {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .formInput, .formSelect {
-        width: 100%;
-    }
+    /* Transforma Tabela em "Lista de Cards" */
+    .agendaTable thead { display: none; } /* Esconde o cabeçalho da tabela */
     
-    .tableDataActions {
+    .tableRow {
+        display: block;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        padding: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .tableRow td {
         display: flex;
-        flex-direction: column;
-        gap: 5px;
-    }}
+        justify-content: flex-start; /* MUDAR DE space-between PARA flex-start */
+        gap: 10px;                   /* Adiciona um espaço entre o rótulo e o dado */
+        text-align: left;            /* MUDAR DE right PARA left */
+        border: none;
+        padding: 8px 10px;
+    }
+    /* Adiciona labels antes do conteúdo no mobile */
+    .tableRow td::before {
+        content: attr(data-label); /* Requer ajuste no JSX: <td data-label="Hora"> */
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: #888;
+    }
+
+    .tableActions {
+        width: 100%;
+        margin-top: 10px;
+        border-top: 1px solid #eee;
+        padding-top: 15px !important;
+        justify-content: center;
+    }
+
+    .actionButton {
+        flex: 1;
+        padding: 12px;
+    }
+}
