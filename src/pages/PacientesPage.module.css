@@ -187,3 +187,68 @@
 .inactivateButton:hover {
     background-color: #c0392b;
 }
+
+@media (max-width: 725px) {
+    /* 1. Ajuste Geral */
+    html, body { font-size: 14px; }
+
+    /* 2. Barra de Busca Mobile */
+    .searchInputContainer { width: 100% !important; }
+    .searchInput { font-size: 16px !important; }
+
+    /* 3. Transformação da Tabela em Cards */
+    .pacientesTable, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        margin-bottom: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    td {
+        border: none;
+        border-bottom: 1px solid #f0f0f0;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    td:last-child {
+        border-bottom: none;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 15px;
+    }
+
+    /* 4. Botões de Ação no Mobile (Estilo Empilhado) */
+    .actionButton {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 12px !important;
+        text-align: center;
+    }
+
+    /* 5. Modal e Botões de Salvar/Cancelar */
+    .actions {
+        flex-direction: column !important; /* Empilha botões no mobile */
+    }
+
+    .saveButton, .cancelButton {
+        width: 100% !important;
+        padding: 12px !important;
+    }
+}

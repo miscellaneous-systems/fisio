@@ -179,7 +179,7 @@
   padding: 24px;
   border-radius: 12px;
   width: 90%;
-  max-width: 400px;
+  max-width: 600px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   animation: fadeIn 0.2s ease-out;
 }
@@ -242,6 +242,7 @@
 .btn-salvar:hover { background-color: #0d47a1; }
 
 .btn-cancelar {
+  margin: 8px;
   background-color: #e0e0e0;
   color: #333;
 }
@@ -258,69 +259,118 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Novos estilos para lista no modal */
+/* Container principal da lista */
 .lista-modal {
   margin-bottom: 20px;
-  max-height: 200px;
+  max-height: 250px; /* Aumentado levemente para melhor visualização */
   overflow-y: auto;
-  border: 1px solid #eee;
-  border-radius: 6px;
-  padding: 10px;
-  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  padding: 8px;
+  background: #ffffff; /* Fundo branco para contraste com o modal */
 }
 
+/* Item individual da lista */
 .item-paciente-modal {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  flex-direction: column; /* Conteúdo em cima, ações embaixo */
+  align-items: stretch;
+  padding: 12px;
+  margin-bottom: 8px;
+  background-color: #fcfcfc;
+  border: 1px solid #f1f1f1;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.item-paciente-modal:hover {
+  border-color: #3498db;
+  background-color: #f0f7ff;
 }
 
 .item-paciente-modal:last-child {
-  border-bottom: none;
+  margin-bottom: 0;
 }
 
+/* Container de Informações (Nome e Status) */
 .info-p {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  justify-content: space-between; /* Nome na esquerda, Status na direita */
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
-.badge-status {
-  font-size: 0.7rem;
-  padding: 2px 6px;
-  border-radius: 4px;
-  text-transform: uppercase;
+/* Estilo do Nome do Paciente */
+.info-p strong {
+  color: #2c3e50;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  flex: 1;
+  padding-right: 10px;
 }
-.badge-status.agendado { background: #e3f2fd; color: #1565c0; }
-.badge-status.concluido { background: #e8f5e9; color: #2e7d32; }
 
+/* Container de Ações (Botões) */
 .actions-p {
   display: flex;
-  gap: 5px;
+  justify-content: flex-end; /* Botões alinhados à direita */
+  gap: 12px;
+  border-top: 1px dashed #eee; /* Linha sutil separando as ações */
+  padding-top: 8px;
 }
 
+/* Botões de Ícone */
 .btn-icon {
-  background: none;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: white;
+  border: 1px solid #dcdde1;
+  border-radius: 6px;
+  color: #57606f;
   cursor: pointer;
-  padding: 4px 8px;
-  font-size: 1rem;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
 }
-.btn-icon:hover { background: #f5f5f5; }
-.btn-check:hover { background: #e8f5e9; color: green; border-color: green; }
 
+.btn-icon:hover {
+  background: #f1f2f6;
+  border-color: #2f3542;
+  color: #2f3542;
+}
+
+/* Botão de Check/Concluir específico */
+.btn-check:hover {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-color: #2e7d32;
+}
+
+/* Botão de Remover */
 .btn-remove-sm {
   background: none;
-  color: #999;
   border: none;
-  font-size: 1.1rem;
+  color: #a4b0be;
   cursor: pointer;
+  font-size: 1.2rem;
   padding: 0 5px;
+  transition: color 0.2s;
 }
-.btn-remove-sm:hover { color: red; }
+
+.btn-remove-sm:hover {
+  color: #e74c3c;
+}
+
+/* Badges de Status */
+.badge-status {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 9px 0px 0px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
 
 /* Tabs de Criação */
 .novo-agendamento-box {

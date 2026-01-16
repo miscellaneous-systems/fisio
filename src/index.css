@@ -172,8 +172,12 @@ th, td {
 
 /* --- TABLETS E TELAS MÉDIAS (até 768px ou 600px) --- */
 @media (max-width: 768px) {
-  .container, .modalContent, .main-content {
+  .container, .main-content {
     padding: 0.5rem;
+  }
+
+  .modalContent {
+    padding: 25px !important;
   }
   
   /* Botões um pouco menores */

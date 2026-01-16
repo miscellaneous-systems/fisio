@@ -127,16 +127,17 @@
 
 @media (min-width: 768px) {
     .modalContent {
-        padding: 2rem;
+        
+        padding: 20px !important;
     }
     .actions {
-        flex-direction: row;
-        justify-content: flex-end;
+        flex-direction: row !important;
+        justify-content: flex-end !important;
     }
     .saveButton,
     .cancelButton {
-        width: auto;
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
+        width: auto !important;
+        padding: 0.75rem 1.5rem !important;
+        font-size: 1rem !important;
     }
 }
