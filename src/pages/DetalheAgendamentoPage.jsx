@@ -291,7 +291,6 @@ const DetalheAgendamentoPage = () => {
                         >
                             <option value="Fisioterapia">Fisioterapia</option>
                             <option value="Pilates">Pilates</option>
-                            <option value="Avaliacao">Avaliação</option>
                         </select>
                     </div>
 

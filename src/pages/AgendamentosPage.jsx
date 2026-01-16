@@ -7,7 +7,7 @@ import styles from './AgendamentosPage.module.css';
 
 // Opções de status disponíveis para o filtro
 const statusOptions = ['Todos', 'Pendente', 'Confirmado', 'Realizado', 'Cancelado'];
-const servicoOptions = ['Fisioterapia', 'Pilates', 'Avaliacao'];
+const servicoOptions = ['Fisioterapia', 'Pilates'];
 
 // ===================================
 // FUNÇÕES AUXILIARES DE FORMATAÇÃO
