@@ -24,7 +24,7 @@
     margin: 0;
 }
 
-/* KPI Cards - Grid Responsivo */
+/* KPI Cards */
 .kpiGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -40,14 +40,8 @@
     border-left: 5px solid #ccc;
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s;
 }
 
-.kpiCard:hover {
-    transform: translateY(-3px);
-}
-
-/* Cores dos Cards */
 .kpiCard.blue { border-left-color: #3498db; }
 .kpiCard.green { border-left-color: #2ecc71; }
 .kpiCard.orange { border-left-color: #f39c12; }
@@ -59,7 +53,6 @@
     color: #95a5a6;
     font-weight: bold;
     margin-bottom: 10px;
-    letter-spacing: 0.5px;
 }
 
 .kpiValue {
@@ -68,11 +61,12 @@
     color: #2c3e50;
 }
 
-/* Seção de Gráficos */
+/* Gráficos */
 .chartsSection {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
+    align-items: stretch;
 }
 
 .chartContainer {
@@ -80,6 +74,7 @@
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    min-height: 360px;
 }
 
 .chartHeader {
