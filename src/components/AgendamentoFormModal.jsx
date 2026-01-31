@@ -45,6 +45,19 @@ const AgendamentoFormModal = ({ isOpen, onClose, onAgendamentoAdded }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validação: Impedir agendamento em dias passados
+        if (dataHora) {
+            const dataSelecionada = new Date(dataHora);
+            const hoje = new Date();
+            dataSelecionada.setHours(0, 0, 0, 0);
+            hoje.setHours(0, 0, 0, 0);
+            if (dataSelecionada < hoje) {
+                setErro("Não é permitido realizar agendamentos em datas passadas.");
+                return;
+            }
+        }
+
         setLoading(true);
         setErro(null);
         try {

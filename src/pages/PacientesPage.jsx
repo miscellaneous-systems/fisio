@@ -130,9 +130,13 @@ const PacientesPage = () => {
     }
 
     // Filtra os pacientes
-    const filteredPacientes = pacientes.filter(paciente =>
-        paciente.nome.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredPacientes = pacientes.filter(paciente => {
+        const term = searchTerm.toLowerCase();
+        const nome = paciente.nome ? paciente.nome.toLowerCase() : '';
+        const telefone = paciente.telefone ? paciente.telefone.toLowerCase() : '';
+        const email = paciente.email ? paciente.email.toLowerCase() : '';
+        return nome.includes(term) || telefone.includes(term) || email.includes(term);
+    });
 
     // Lógica de Ordenação
     const sortedPacientes = [...filteredPacientes].sort((a, b) => {

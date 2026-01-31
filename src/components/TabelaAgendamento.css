@@ -18,6 +18,22 @@
   align-items: center;
 }
 
+.intervalo-datas {
+  font-size: 16px;
+  font-weight: 600;
+
+  background-color: #dcedc8;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin: 5px 0px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 👈 isso aqui */
+  gap: 4px;
+}
+
+
 .btn-nav {
   background-color: #fff;
   border: 1px solid #e0e0e0;
@@ -46,6 +62,25 @@
   box-shadow: none;
 }
 
+.input-data-nav {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  color: #444;
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-data-nav:hover, .input-data-nav:focus {
+  border-color: #ccc;
+  background-color: #f8f9fa;
+}
+
 .loading-badge {
   font-size: 0.8rem;
   color: #666;
@@ -66,7 +101,7 @@
 
 .tabela-agendamento th,
 .tabela-agendamento td {
-  border: 1px solid #ccc;
+  border: 1px solid #e2e8f0;
   padding: 12px;
   text-align: center;
   vertical-align: middle;
@@ -74,8 +109,8 @@
 }
 
 .tabela-agendamento th {
-  background-color: #f8f9fa;
-  color: #444;
+  background-color: #007A4D;
+  color: #ffffff;
   font-weight: 600;
   text-transform: uppercase;
   font-size: 0.85rem;
@@ -89,10 +124,17 @@
   box-shadow: 0 2px 2px -1px rgba(0,0,0,0.1);
 }
 
+.data-cabecalho {
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin-top: 2px;
+  opacity: 0.9; /* Leve transparência para ficar elegante, mas mantendo a cor branca */
+}
+
 .coluna-horario {
-  font-weight: bold;
-  color: #555;
-  background-color: #fafafa;
+  font-weight: 600;
+  color: #005f3c;
+  background-color: #f1f8e9;
   width: 80px;
   min-width: 60px;
 }
@@ -346,6 +388,13 @@
   background: #e8f5e9;
   color: #2e7d32;
   border-color: #2e7d32;
+}
+
+/* Botão de Cancelar específico */
+.btn-cancel:hover {
+  background: #ffebee;
+  color: #c62828;
+  border-color: #c62828;
 }
 
 /* Botão de Remover */

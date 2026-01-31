@@ -5,8 +5,8 @@ import api from '../api/api'; // Importação da instância do Axios configurada
 import AtendimentoModal from './AtendimentoModal';
 
 const HORARIOS_PADRAO = [
-  '08:00', '09:00', '10:00', '11:00', 
-  '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'
+  '07:00', '08:00', '09:00', '10:00', '11:00', 
+  '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'
 ];
 
 const DIAS_SEMANA = [
@@ -70,13 +70,16 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
       }
 
       // Executa todas as requisições em paralelo
-      const responses = await Promise.all(promessas);
+      const results = await Promise.allSettled(promessas);
       
       const mapaAgendamentos = {};
       
       // Processa a resposta de cada dia
-      responses.forEach(response => {
-        const listaDoDia = response.data.agendamentos || [];
+      results.forEach(result => {
+        // Se a requisição falhou, ignoramos apenas aquele dia, mantendo o resto da agenda
+        if (result.status !== 'fulfilled') return;
+
+        const listaDoDia = result.value.data.agendamentos || [];
         listaDoDia.forEach(agendamento => {
           const dataObj = new Date(agendamento.data_hora);
           
@@ -96,7 +99,8 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
             paciente_id: agendamento.paciente_id || agendamento.paciente?.id || agendamento.pacienteId,
             nome_paciente: agendamento.nome_paciente || 'Sem Nome',
             servico_tipo: agendamento.servico_tipo, 
-            status: agendamento.status || 'Pendente'
+            status: agendamento.status || 'Pendente',
+            observacoes: agendamento.observacoes
           });
         });
       });
@@ -141,7 +145,55 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
     setDataReferencia(new Date());
   };
 
+  // Função para mudar a data via input (Date Picker)
+  const handleDataChange = (e) => {
+    const dataValue = e.target.value;
+    if (dataValue) {
+      const [ano, mes, dia] = dataValue.split('-').map(Number);
+      // Cria a data preservando o dia selecionado (evita problemas de fuso horário)
+      const novaData = new Date(ano, mes - 1, dia);
+      setDataReferencia(novaData);
+    }
+  };
+
+  // Helper para formatar a data atual para o value do input (YYYY-MM-DD)
+  const getDataISO = () => {
+    const d = new Date(dataReferencia);
+    const offset = d.getTimezoneOffset();
+    const local = new Date(d.getTime() - (offset * 60 * 1000));
+    return local.toISOString().split('T')[0];
+  };
+
+  // Helper para calcular a data correta baseada no dia da semana da tabela
+  const getDataParaDiaSemana = (diaKey, horarioStr) => {
+    const diasMap = { 'dom': 0, 'seg': 1, 'ter': 2, 'qua': 3, 'qui': 4, 'sex': 5, 'sab': 6 };
+    const targetDiaIndex = diasMap[diaKey];
+    
+    // Usa dataReferencia em vez de new Date() para respeitar a semana visualizada
+    const hoje = new Date(dataReferencia);
+    hoje.setHours(0, 0, 0, 0); // Zera a hora para evitar erros de cálculo de dias
+    const diaAtualIndex = hoje.getDay();
+    
+    const diff = targetDiaIndex - diaAtualIndex; // Diferença de dias
+    const dataAlvo = new Date(hoje);
+    dataAlvo.setDate(hoje.getDate() + diff); // Ajusta para o dia da semana correto na semana atual
+    const [horas, minutos] = horarioStr.split(':').map(Number);
+    dataAlvo.setHours(horas, minutos, 0, 0);
+    return dataAlvo;
+  };
+
   const abrirModal = (diaKey, horario) => {
+    // Validação: Impedir agendamento em dias passados
+    const dataAlvo = getDataParaDiaSemana(diaKey, horario);
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    const dataComparacao = new Date(dataAlvo);
+    dataComparacao.setHours(0, 0, 0, 0);
+    if (dataComparacao < hoje) {
+      alert("Não é permitido realizar agendamentos em datas passadas.");
+      return;
+    }
+
     const key = `${diaKey}-${horario}`;
     setSlotSelecionado({ key, diaKey, horario });
     setNomePaciente('');
@@ -193,22 +245,20 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
     setSugestoes([]);
   };
 
-  // Helper para calcular a data correta baseada no dia da semana da tabela
-  const getDataParaDiaSemana = (diaKey, horarioStr) => {
+  // Função para formatar a data no cabeçalho (ex: 02/02/2026)
+  const formatarDataCabecalho = (diaKey) => {
     const diasMap = { 'dom': 0, 'seg': 1, 'ter': 2, 'qua': 3, 'qui': 4, 'sex': 5, 'sab': 6 };
     const targetDiaIndex = diasMap[diaKey];
     
-    // Usa dataReferencia em vez de new Date() para respeitar a semana visualizada
     const hoje = new Date(dataReferencia);
-    hoje.setHours(0, 0, 0, 0); // Zera a hora para evitar erros de cálculo de dias
+    hoje.setHours(0, 0, 0, 0);
     const diaAtualIndex = hoje.getDay();
     
-    const diff = targetDiaIndex - diaAtualIndex; // Diferença de dias
+    const diff = targetDiaIndex - diaAtualIndex;
     const dataAlvo = new Date(hoje);
-    dataAlvo.setDate(hoje.getDate() + diff); // Ajusta para o dia da semana correto na semana atual
-    const [horas, minutos] = horarioStr.split(':').map(Number);
-    dataAlvo.setHours(horas, minutos, 0, 0);
-    return dataAlvo;
+    dataAlvo.setDate(hoje.getDate() + diff);
+    
+    return dataAlvo.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
   };
 
   // Adicionar Agendamento (Paciente Existente ou Novo)
@@ -267,13 +317,29 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
   };
 
   // Atualizar Status (Ex: Realizado, Cancelado)
-  const handleStatusChange = async (agendamentoId, novoStatus) => {
+  const handleStatusChange = async (agendamentoId, novoStatus, motivo = '') => {
     try {
       // Se for concluir, usa a rota específica para garantir débito de pacote e consistência
       if (novoStatus === 'Realizado') {
         await api.put(`/agendamentos/${agendamentoId}/concluir`, { status: 'Realizado' });
       } else {
-        await api.put(`/agendamentos/${agendamentoId}`, { status: novoStatus });
+        // Busca os dados completos antes de atualizar para evitar erro de campos obrigatórios
+        const response = await api.get(`/agendamentos/${agendamentoId}`);
+        const agendamentoAtual = response.data.agendamento;
+
+        const payload = { 
+          ...agendamentoAtual, 
+          status: novoStatus 
+        };
+
+        // Se for um cancelamento e um motivo foi fornecido, adiciona nas observações
+        if (novoStatus === 'Cancelado' && motivo) {
+          // Prepend o motivo para não sobrescrever observações existentes
+          const obsOriginal = agendamentoAtual.observacoes ? ` | Obs. Original: ${agendamentoAtual.observacoes}` : '';
+          payload.observacoes = `Cancelado: ${motivo}${obsOriginal}`;
+        }
+
+        await api.put(`/agendamentos/${agendamentoId}`, payload);
       }
       carregarAgendamentos();
     } catch (error) {
@@ -381,17 +447,104 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
     return `${formatarData(inicio)} a ${formatarData(fim)}`;
   };
 
+  // Função para gerar e imprimir a visualização da semana
+  const handlePrint = () => {
+    const printWindow = window.open('', '_blank');
+    
+    // Prepara os cabeçalhos com datas
+    const headers = dias.map(dia => ({
+      label: dia.label,
+      data: formatarDataCabecalho(dia.key)
+    }));
+
+    const intervalo = getIntervaloExibicao();
+
+    let htmlContent = `
+      <html>
+        <head>
+          <title>Agenda Semanal - ${intervalo}</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 20px; color: #333; }
+            h1 { text-align: center; margin-bottom: 10px; font-size: 1.5rem; }
+            .subtitle { text-align: center; margin-bottom: 20px; color: #666; }
+            table { width: 100%; border-collapse: collapse; font-size: 12px; }
+            th, td { border: 1px solid #ccc; padding: 6px; text-align: center; vertical-align: top; }
+            th { background-color: #f5f5f5; font-weight: bold; }
+            .time-col { background-color: #fafafa; font-weight: bold; width: 50px; }
+            .paciente-card { 
+              background: #e3f2fd; border: 1px solid #90caf9; 
+              border-radius: 4px; padding: 4px; margin-bottom: 4px; text-align: left; 
+            }
+            .paciente-card.cancelado { background: #ffebee; border-color: #ef9a9a; text-decoration: line-through; color: #c62828; }
+            .paciente-card.realizado { background: #e8f5e9; border-color: #a5d6a7; }
+            .p-nome { font-weight: bold; display: block; }
+            .p-servico { font-size: 0.9em; color: #555; }
+            @media print { @page { size: landscape; } }
+          </style>
+        </head>
+        <body>
+          <h1>Agenda Semanal</h1>
+          <div class="subtitle">${intervalo}</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Horário</th>
+                ${headers.map(h => `<th>${h.label}<br><small>${h.data}</small></th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${horarios.map(horario => `
+                <tr>
+                  <td class="time-col">${horario}</td>
+                  ${dias.map(dia => {
+                    const key = `${dia.key}-${horario}`;
+                    const lista = agendamentos[key] || [];
+                    return `<td>${lista.map(p => `
+                      <div class="paciente-card ${p.status === 'Cancelado' ? 'cancelado' : p.status === 'Realizado' ? 'realizado' : ''}">
+                        <span class="p-nome">${p.nome_paciente}</span>
+                        <span class="p-servico">${p.servico_tipo}</span>
+                      </div>
+                    `).join('')}</td>`;
+                  }).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <script>window.onload = function() { window.print(); }</script>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+  };
+
   return (
     <div className="agendamento-container">
       <div className="header-agenda">
         <div className="titulo-secao">
-          <h2>Agenda de Sessões</h2>
+          <h2>Agenda Semanal</h2>
           <span className="intervalo-datas">{getIntervaloExibicao()}</span>
         </div>
         <div className="controles-navegacao">
           <button onClick={semanaAnterior} className="btn-nav" aria-label="Semana anterior">&lt; Anterior</button>
           <button onClick={irParaHoje} className="btn-nav">Hoje</button>
           <button onClick={proximaSemana} className="btn-nav" aria-label="Próxima semana">Próxima &gt;</button>
+          
+          {/* Seletor de Data (Calendário) */}
+          <input 
+            type="date" 
+            className="input-data-nav"
+            value={getDataISO()}
+            onChange={handleDataChange}
+            title="Ir para uma data específica"
+          />
+
+          {/* Botão de Imprimir */}
+          <button onClick={handlePrint} className="btn-nav" title="Imprimir Agenda Semanal">
+            🖨️ Imprimir
+          </button>
+
           {loading && <span className="loading-badge">↻</span>}
         </div>
       </div>
@@ -412,7 +565,7 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
           onChange={(e) => setMobileDayIndex(parseInt(e.target.value, 10))}
         >
           {dias.map((dia, index) => (
-            <option key={dia.key} value={index}>{dia.label}</option>
+            <option key={dia.key} value={index}>{dia.label} - {formatarDataCabecalho(dia.key)}</option>
           ))}
         </select>
         <button 
@@ -475,6 +628,9 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                   className={`coluna-dia ${index === mobileDayIndex ? 'mobile-active' : ''}`}
                 >
                   {dia.label}
+                  <div className="data-cabecalho">
+                    {formatarDataCabecalho(dia.key)}
+                  </div>
                 </th>
               ))}
             </tr>
@@ -508,7 +664,7 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                               className={`paciente-tag status-${p.status}`}
                               draggable
                               onDragStart={(e) => handleDragStart(e, p.id)}
-                              title={`${p.nome_paciente} (${p.servico_tipo}) - ${p.status}`}
+                              title={`${p.nome_paciente} (${p.servico_tipo}) - ${p.status}${p.status === 'Cancelado' && p.observacoes ? `\nMotivo: ${p.observacoes}` : ''}`}
                             >
                               {(p.status === 'concluido' || p.status === 'Realizado') && '✓ '}
                               {p.nome_paciente} <small>({p.servico_tipo})</small>
@@ -582,6 +738,23 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                         onClick={() => handleStatusChange(p.id, 'Realizado')}
                       >
                         ✓
+                      </button>
+                    )}
+                    {/* Botão de Cancelar (Novo) */}
+                    {p.status !== 'Cancelado' && p.status !== 'Realizado' && (
+                      <button 
+                        className="btn-icon btn-cancel" 
+                        title="Cancelar Agendamento (Mantém no histórico)"
+                        onClick={() => {
+                          const motivo = window.prompt(`Deseja cancelar o agendamento de ${p.nome_paciente}?\n\nSe sim, informe o motivo (opcional):`);
+                          // Se o usuário clicar em "OK" (mesmo com o campo vazio), o prompt retorna uma string.
+                          // Se clicar em "Cancelar", retorna null.
+                          if (motivo !== null) {
+                            handleStatusChange(p.id, 'Cancelado', motivo);
+                          }
+                        }}
+                      >
+                        🚫
                       </button>
                     )}
                     <button type="button" className="btn-remove-sm" onClick={() => handleRemover(p.id)}>✕</button>
