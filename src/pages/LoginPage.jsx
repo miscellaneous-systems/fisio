@@ -64,6 +64,16 @@ const LoginPage = () => {
                         required
                     />
 
+                    <div style={{ width: '100%', textAlign: 'right', marginBottom: '15px' }}>
+                        <button 
+                            type="button" 
+                            onClick={() => navigate('/forgot-password')}
+                            style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', fontSize: '0.85rem', textDecoration: 'underline', padding: 0 }}
+                        >
+                            Esqueci minha senha
+                        </button>
+                    </div>
+
                     {erro && <p className={styles.loginError}>{erro}</p>} 
                     <button 
                         type="submit" 
@@ -72,6 +82,14 @@ const LoginPage = () => {
                     >
                         {loading ? 'Entrando...' : 'Entrar'}
                     </button>
+                    <button 
+                        type="button" 
+                        className={styles.loginButton} 
+                        onClick={() => navigate('/register')}
+                        style={{ marginTop: '0px', backgroundColor: 'rgb(5, 40, 1)' }}
+                    >
+                        Registre-se
+                    </button>
                 </form>
             </div>
         </div>

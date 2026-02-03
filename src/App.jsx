@@ -14,6 +14,9 @@ import PacotesPage from './pages/PacotesPage';
 import ProntuarioPage from './pages/ProntuarioPage'; 
 import DetalheAgendamentoPage from './pages/DetalheAgendamentoPage'; 
 import TabelaAgendamento from './components/TabelaAgendamento';
+import RegisterPage from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 // 💡 1. IMPORTAÇÃO DA NOVA PÁGINA
 import PilatesPage from './pages/PilatesPage'; 
 import RelatoriosPage from './pages/RelatoriosPage';
@@ -34,6 +37,11 @@ function App() {
             <Routes>
                 {/* Rota Pública */}
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/redefinir-senha" element={<ResetPasswordPage />} />
+
+
 
                 {/* Rotas Privadas: Usando Layout como rota PARENTE */}
                 <Route element={<PrivateRoute><Layout /></PrivateRoute>}>

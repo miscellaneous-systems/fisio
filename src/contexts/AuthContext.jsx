@@ -46,6 +46,23 @@ function AuthProvider({ children }) {
         }
     }
 
+    async function signUp(nome, email, senha) {
+        try {
+            // A rota para registro pode variar (ex: /users, /register, /auth/register)
+            // Estou usando /auth/register para manter o padrão do login.
+            // O backend deve esperar um objeto com { nome, email, senha }.
+            await api.post('/auth/register', { nome, email, senha });
+            // A função não precisa retornar nada em caso de sucesso,
+            // pois a RegisterPage irá redirecionar o usuário.
+        } catch (error) {
+            // Se o backend retornar uma mensagem de erro (ex: e-mail já existe),
+            // ela estará em error.response.data.message.
+            // Lançar o erro permite que o componente RegisterPage o capture e exiba.
+            console.error("Falha no registro:", error.response?.data?.message || error.message);
+            throw error; // Lança o erro para ser tratado no componente
+        }
+    }
+
     function signOut() {
         localStorage.removeItem('@FisioToken');
         localStorage.removeItem('@FisioUser');
@@ -58,7 +75,7 @@ function AuthProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ signed: !!usuario, usuario, signIn, signOut }}>
+        <AuthContext.Provider value={{ signed: !!usuario, usuario, signIn, signOut, signUp }}>
             {children}
         </AuthContext.Provider>
     );
