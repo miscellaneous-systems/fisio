@@ -26,6 +26,8 @@ const ForgotPasswordPage = () => {
             // Exibe mensagem de erro vinda do backend ou genérica
             if (err.response?.status === 404) {
                 setError('Erro 404: Rota não encontrada. Se estiver usando a URL do Render, faça o DEPLOY do backend.');
+            } else if (err.response?.status === 500) {
+                setError('Erro 500: Falha interna no servidor. Verifique os logs do Render (provavelmente erro no envio de e-mail ou variáveis de ambiente).');
             } else {
                 setError(err.response?.data?.message || 'Erro ao solicitar recuperação. Tente novamente.');
             }
