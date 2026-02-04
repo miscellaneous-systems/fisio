@@ -136,7 +136,9 @@ const PacotesPage = () => {
         return <div className={styles.container}><p className={styles.errorMessage}>Erro: Você precisa estar autenticado. Faça login para continuar.</p></div>;
     }
 
-    if (loading) return <div className={styles.container}><p className={styles.loadingMessage}>Carregando dados dos pacotes...</p></div>;
+    if (loading) {
+        return <div className={styles.centeredMessage} role="status">Carregando dados dos pacotes...</div>;
+    }
     if (error) return <div className={styles.container}><p className={styles.errorMessage}>Erro: {error}</p></div>;
 
     return (

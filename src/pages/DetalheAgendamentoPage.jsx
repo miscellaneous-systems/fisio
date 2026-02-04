@@ -141,7 +141,7 @@ const DetalheAgendamentoPage = () => {
 
     // SEGURANÇA: Evita erro de "null" no render
     if (loading || !agendamento) {
-        return <div className={styles.loading}>Carregando...</div>;
+        return <div className={styles.centeredMessage} role="status">Carregando...</div>;
     }
 
     const isSessionFinished = agendamento?.status === 'Realizado' || agendamento?.status === 'Cancelado';

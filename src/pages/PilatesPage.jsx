@@ -135,7 +135,7 @@ const PilatesPage = () => {
 
 
     if (loading) {
-        return <h2 className={styles.loadingMessage}>Carregando agenda de {SERVICE_TYPE} para {dataDisplay}...</h2>;
+        return <div className={styles.centeredMessage} role="status">Carregando agenda de {SERVICE_TYPE} para {dataDisplay}...</div>;
     }
 
     if (error) {

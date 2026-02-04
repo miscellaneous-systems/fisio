@@ -122,7 +122,7 @@ const PacientesPage = () => {
     }, [searchTerm]);
 
     if (loading) {
-        return <h2 className={commonClasses.loading}>Carregando lista de pacientes...</h2>;
+        return <div className={styles.centeredMessage} role="status">Carregando lista de pacientes...</div>;
     }
 
     if (error) {

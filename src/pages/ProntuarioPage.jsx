@@ -116,6 +116,38 @@ const ProntuarioPage = () => {
         }
     };
 
+    // 5. FUNÇÃO PARA IMPRIMIR NOTA INDIVIDUAL
+    const handlePrintNota = (nota) => {
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Imprimir Nota - ${nota.titulo || 'Evolução'}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; color: #333; }
+                        h1 { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+                        .meta { margin-bottom: 20px; color: #555; font-size: 14px; }
+                        .content { white-space: pre-wrap; line-height: 1.6; font-size: 14px; background: #f9f9f9; padding: 20px; border-radius: 8px; }
+                        .footer { margin-top: 40px; font-size: 12px; color: #999; text-align: center; border-top: 1px solid #eee; padding-top: 10px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>${nota.titulo || 'Evolução Clínica'}</h1>
+                    <div class="meta">
+                        <strong>Paciente:</strong> ${paciente?.nome || 'N/A'}<br>
+                        <strong>Data da Nota:</strong> ${formatarData(nota.data_nota)}<br>
+                        <strong>Profissional:</strong> ${nota.nome_fisioterapeuta || 'N/A'}
+                    </div>
+                    <div class="content">${nota.conteudo}</div>
+                    <div class="footer">Documento gerado pelo sistema FisioApp</div>
+                    <script>
+                        window.onload = function() { window.print(); }
+                    </script>
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+    };
 
     // Executa a busca ao carregar o componente
     useEffect(() => {
@@ -123,7 +155,9 @@ const ProntuarioPage = () => {
     }, [pacienteId]);
 
 
-    if (loading) return <h2 className={styles.loadingMessage}>Carregando prontuário...</h2>;
+    if (loading) {
+        return <div className={styles.centeredMessage} role="status">Carregando prontuário...</div>;
+    }
     if (error) return <h2 className={styles.errorMessage}>{error}</h2>;
     if (!paciente) return <h2 className={styles.errorMessage}>Paciente não encontrado.</h2>;
 
@@ -188,13 +222,22 @@ const ProntuarioPage = () => {
                                     <p className={styles.noteAuthor}>
                                         Fisioterapeuta: <strong>{nota.nome_fisioterapeuta}</strong>
                                     </p>
-                                    {/* Botão de Edição - Agora chama a função de edição */}
-                                    <button 
-                                        onClick={() => handleEditNota(nota)}
-                                        className={styles.buttonEdit}
-                                    >
-                                        ✏️ Editar
-                                    </button>
+                                    
+                                    {/* Ações da Nota */}
+                                    <div style={{ display: 'flex', gap: '10px' }}>
+                                        <button 
+                                            onClick={() => handlePrintNota(nota)}
+                                            className={styles.buttonPrint}
+                                        >
+                                            🖨️ Imprimir
+                                        </button>
+                                        <button 
+                                            onClick={() => handleEditNota(nota)}
+                                            className={styles.buttonEdit}
+                                        >
+                                            ✏️ Editar
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>

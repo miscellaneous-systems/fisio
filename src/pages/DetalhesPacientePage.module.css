@@ -1,10 +1,13 @@
 /* src/pages/DetalhesPacientePage.css */
 
 /* --- Elementos de Carregamento/Erro --- */
-.loading {
-    color: #3498db;
+.centeredMessage {
     text-align: center;
+    padding: 50px;
+    font-size: 1rem;
+    color: #555;
 }
+
 .error {
     color: #e74c3c;
     text-align: center;

@@ -60,7 +60,7 @@ const RelatoriosPage = () => {
     fetchRelatorios();
   }, []);
 
-  /** 🔥 TRANSFORMA OS DADOS DO STATUS PARA O PADRÃO DO RECHARTS */
+  /* TRANSFORMA OS DADOS DO STATUS PARA O PADRÃO DO RECHARTS */
   const dadosStatusFormatados = useMemo(() => {
     return dadosStatus.map((item) => ({
       name: item.status || item.name,
@@ -77,7 +77,7 @@ const RelatoriosPage = () => {
     }).format(value);
 
   if (loading) {
-    return <p style={{ textAlign: "center", padding: 20 }}>Carregando...</p>;
+    return <div className={styles.centeredMessage} role="status">Carregando relatórios...</div>;
   }
 
   if (error) {
@@ -131,7 +131,7 @@ const RelatoriosPage = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* 🔥 PIZZA – AGORA FUNCIONA */}
+        {/* PIZZA */}
         <div className={styles.chartContainer}>
           <h3 className={styles.chartHeader}>Distribuição por Status</h3>
 

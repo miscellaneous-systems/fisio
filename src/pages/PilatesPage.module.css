@@ -8,11 +8,13 @@
     font-family: 'Arial', sans-serif;
 }
 
-.loading-message {
+.centeredMessage {
     text-align: center;
-    margin-top: 50px;
-    color: #3498db;
+    padding: 50px;
+    font-size: 1rem;
+    color: #555;
 }
+
 
 .error-message {
     text-align: center;

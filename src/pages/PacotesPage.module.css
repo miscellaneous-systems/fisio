@@ -29,11 +29,13 @@
 }
 
 /* --- Mensagens de Estado --- */
-.loading-message {
+.centeredMessage {
     text-align: center;
-    color: #3498db;
-    font-size: 1.2em;
+    padding: 50px;
+    font-size: 1rem;
+    color: #555;
 }
+
 
 .error-message {
     text-align: center;

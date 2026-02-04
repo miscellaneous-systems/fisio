@@ -53,7 +53,7 @@ const DetalhesPacientePage = () => {
 
     // Componente de carregamento e erro
     if (loading) {
-        return <h2 className={styles.loading}>Carregando Prontuário...</h2>;
+        return <div className={styles.centeredMessage} role="status">Carregando Prontuário...</div>;
     }
 
     if (error) {

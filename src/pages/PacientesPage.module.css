@@ -21,6 +21,14 @@
     padding-bottom: 10px;
 }
 
+/* Mensagem de carregamento centralizada */
+.centeredMessage {
+    text-align: center;
+    padding: 50px;
+    font-size: 1rem;
+    color: #555;
+}
+
 /* Botão de Adicionar Paciente */
 .addButton {
     padding: 10px 20px;

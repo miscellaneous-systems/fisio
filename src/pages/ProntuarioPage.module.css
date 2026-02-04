@@ -10,10 +10,11 @@
     font-family: Arial, sans-serif;
 }
 
-.loading-message {
-    color: #3498db;
-    padding: 20px;
+.centeredMessage {
     text-align: center;
+    padding: 50px;
+    font-size: 1rem;
+    color: #555;
 }
 
 .error-message {
@@ -214,4 +215,20 @@
 
 .button-edit:hover {
     background-color: #e67e22;
+}
+
+.button-print {
+    padding: 5px 10px;
+    background-color: #1565C0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.button-print:hover {
+    background-color: #0d47a1;
 }

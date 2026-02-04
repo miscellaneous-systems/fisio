@@ -111,11 +111,11 @@
     background-color: #27ae60;
 }
 
-.loading {
+.centeredMessage {
     text-align: center;
     padding: 50px;
-    color: #3498db;
-    font-size: 1.2rem;
+    font-size: 1rem;
+    color: #555;
 }
 
 @media (max-width: 450px) {
