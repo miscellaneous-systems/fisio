@@ -1,21 +1,43 @@
 // src/pages/ResetPasswordPage.jsx
-import React, { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import api from '../api/api';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient'; // Certifique-se que o caminho está correto
 import styles from './LoginPage.module.css';
 
 const ResetPasswordPage = () => {
-    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     
-    // Captura o token da URL (ex: http://localhost:3000/redefinir-senha?token=XYZ)
-    const token = searchParams.get('token');
-
     const [novaSenha, setNovaSenha] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('');
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const [sessaoValida, setSessaoValida] = useState(false);
+    const [verificando, setVerificando] = useState(true);
+
+    useEffect(() => {
+        // O Supabase processa o hash da URL (#access_token=...) automaticamente.
+        // Aqui verificamos se isso resultou em uma sessão válida.
+        const verificarSessao = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session) {
+                setSessaoValida(true);
+            } else {
+                // Tenta ouvir a mudança de estado caso o processamento do hash seja lento
+                const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+                    if (session) {
+                        setSessaoValida(true);
+                    }
+                    setVerificando(false);
+                });
+                return () => subscription.unsubscribe();
+            }
+            setVerificando(false);
+        };
+
+        verificarSessao();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,36 +58,50 @@ const ResetPasswordPage = () => {
         }
 
         try {
-            await api.post('/auth/reset-password', { 
-                token, 
-                novaSenha 
+            // Com o usuário logado pelo link, apenas atualizamos o usuário
+            const { error } = await supabase.auth.updateUser({
+                password: novaSenha
             });
+
+            if (error) throw error;
             
             setMessage('Senha redefinida com sucesso! Redirecionando para o login...');
             
-            // Redireciona após 3 segundos
+            // Opcional: Deslogar o usuário após trocar a senha para forçar novo login
+            // await supabase.auth.signOut();
+
             setTimeout(() => {
                 navigate('/login');
             }, 3000);
 
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.message || 'O link é inválido ou expirou.');
+            setError(err.message || 'Erro ao redefinir a senha.');
         } finally {
             setLoading(false);
         }
     };
 
-    if (!token) {
+    if (verificando) {
         return (
             <div className={styles.loginContainer}>
                 <div className={styles.loginCard}>
-                    <h2 style={{color: '#e74c3c'}}>Link Inválido</h2>
+                    <p style={{textAlign: 'center'}}>Verificando link de segurança...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!sessaoValida) {
+        return (
+            <div className={styles.loginContainer}>
+                <div className={styles.loginCard}>
+                    <h2 style={{color: '#e74c3c'}}>Link Inválido ou Expirado</h2>
                     <p style={{textAlign: 'center', marginBottom: '20px'}}>
-                        O link de recuperação é inválido ou está ausente.
+                        O link de recuperação já foi utilizado ou expirou. Por favor, solicite uma nova redefinição.
                     </p>
                     <button onClick={() => navigate('/login')} className={styles.loginButton}>
-                        Ir para Login
+                        Voltar para Login
                     </button>
                 </div>
             </div>
@@ -77,7 +113,7 @@ const ResetPasswordPage = () => {
             <div className={styles.loginCard}>
                 <h2>Redefinir Senha</h2>
                 <p style={{ textAlign: 'center', marginBottom: '20px', color: '#666', fontSize: '0.9rem' }}>
-                    Crie uma nova senha para sua conta.
+                    Digite sua nova senha abaixo.
                 </p>
 
                 <form onSubmit={handleSubmit} className={styles.loginForm}>
