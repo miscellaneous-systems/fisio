@@ -22,14 +22,15 @@
   font-size: 16px;
   font-weight: 600;
 
-  background-color: #dcedc8;
+  background-color: #007A4D;
   padding: 4px 8px;
   border-radius: 6px;
   margin: 5px 0px;
+  color: #fff;
 
   display: flex;
   align-items: center;
-  justify-content: center; /* 👈 isso aqui */
+  justify-content: center;
   gap: 4px;
 }
 
@@ -485,6 +486,40 @@
   color: #1565c0;
 }
 
+@media (max-width: 1164px) {
+  .controles-navegacao {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+  }
+
+  /* Linha 1: Anterior, Hoje, Próxima (3 itens) */
+  .controles-navegacao > :nth-child(1),
+  .controles-navegacao > :nth-child(2),
+  .controles-navegacao > :nth-child(3) {
+    grid-column: span 2;
+  }
+
+  /* Linha 2: Data e Imprimir (2 itens) */
+  .controles-navegacao > :nth-child(4),
+  .controles-navegacao > :nth-child(5) {
+    grid-column: span 3;
+  }
+
+  .btn-nav {
+    width: 100%;
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+
+  .input-data-nav {
+    width: 100%;
+    padding: 6px;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+}
+
 /* ========================================= */
 /* ESTILOS MOBILE (RESPONSIVIDADE AVANÇADA) */
 /* ========================================= */
@@ -563,7 +598,7 @@
     .agendamento-btn.today:hover {
       background: #388e3c;
     }
-    
+
     /* Responsividade */
     @media (max-width: 600px) {
       .agendamento-container {
@@ -617,7 +652,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f5f5f5;
+    background-color: #007A4D;
     padding: 10px;
     border-radius: 8px;
     margin-bottom: 15px;
@@ -813,6 +848,12 @@
     justify-content: center;
     padding: 8px 4px;
   }
+
+  .mobile-day-controls {
+    display: flex;
+    justify-content: center;
+    margin: 5px 0px;
+}
 }
 
 /* --- Animação Ripple (Efeito de Onda) --- */

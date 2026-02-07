@@ -830,7 +830,6 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                   >
                     <option value="Fisioterapia">Fisioterapia</option>
                     <option value="Pilates">Pilates</option>
-                    <option value="Avaliacao">Avaliação</option>
                     <option value="Outro">Outro</option>
                   </select>
 
