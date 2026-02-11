@@ -100,7 +100,8 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
             nome_paciente: agendamento.nome_paciente || 'Sem Nome',
             servico_tipo: agendamento.servico_tipo, 
             status: agendamento.status || 'Pendente',
-            observacoes: agendamento.observacoes
+            observacoes: agendamento.observacoes,
+            data_hora: agendamento.data_hora // Necessário para a duplicação
           });
         });
       });
@@ -519,6 +520,48 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
     printWindow.document.close();
   };
 
+  // Função para Duplicar a Semana Atual para a Próxima
+  const handleDuplicarSemana = async () => {
+    if (!window.confirm("Deseja copiar todos os agendamentos desta semana para a PRÓXIMA semana?")) return;
+
+    setLoading(true);
+    try {
+      const agendamentosAtuais = Object.values(agendamentos).flat();
+      // Filtra apenas agendamentos ativos (ignora cancelados)
+      const validos = agendamentosAtuais.filter(a => a.status !== 'Cancelado');
+
+      if (validos.length === 0) {
+        alert("Não há agendamentos ativos nesta semana para copiar.");
+        setLoading(false);
+        return;
+      }
+
+      const promises = validos.map(item => {
+        const dataOriginal = new Date(item.data_hora);
+        const novaData = new Date(dataOriginal);
+        novaData.setDate(novaData.getDate() + 7); // Soma 7 dias
+
+        return api.post('/agendamentos', {
+          paciente_id: item.paciente_id,
+          data_hora: novaData.toISOString(),
+          status: 'Pendente', // Reseta status para Pendente
+          servico_tipo: item.servico_tipo,
+          duracao_minutos: 60,
+          observacoes: item.observacoes
+        });
+      });
+
+      await Promise.all(promises);
+      alert("Agenda duplicada com sucesso para a próxima semana!");
+      proximaSemana(); // Navega para a próxima semana para conferir
+    } catch (error) {
+      console.error("Erro ao duplicar agenda:", error);
+      alert("Ocorreu um erro ao duplicar alguns agendamentos. Verifique se já existem agendamentos no destino.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="agendamento-container">
       <div className="header-agenda">
@@ -543,6 +586,11 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
           {/* Botão de Imprimir */}
           <button onClick={handlePrint} className="btn-nav" title="Imprimir Agenda Semanal">
             🖨️ Imprimir
+          </button>
+
+          {/* Botão de Duplicar Semana */}
+          <button onClick={handleDuplicarSemana} className="btn-duplicar" title="Copiar agendamentos para a próxima semana">
+            📑 Replicar Semana
           </button>
 
           {loading && <span className="loading-badge">↻</span>}

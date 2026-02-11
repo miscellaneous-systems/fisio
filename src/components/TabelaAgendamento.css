@@ -63,6 +63,27 @@
   box-shadow: none;
 }
 
+.btn-duplicar {
+  background-color: #007A4D; /* Roxo para destacar a ação */
+  color: white;
+  border: 1px solid #007A4D;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  margin-left: 4px;
+}
+
+.btn-duplicar:hover {
+  background-color: #005f3c;
+  border-color: #005f3c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 .input-data-nav {
   background-color: #fff;
   border: 1px solid #e0e0e0;
@@ -508,6 +529,12 @@
     grid-column: span 3;
   }
 
+  .controles-navegacao > :nth-child(6) {
+    grid-column: span 6;
+  }
+
+
+
   .btn-nav {
     width: 100%;
     padding: 8px;
@@ -856,6 +883,13 @@
     justify-content: center;
     margin: 5px 0px;
 }
+  .btn-duplicar {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0px;
+    display: flex;
+    justify-content: center;
+  }
 }
 
 /* --- Animação Ripple (Efeito de Onda) --- */
