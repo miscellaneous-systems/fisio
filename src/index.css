@@ -229,7 +229,7 @@ th, td {
     padding: 10px;
   }
 
-  /* As linhas do card (antigas células 'td') */
+  /* As linhas do card */
   td {
     border: none;
     border-bottom: 1px solid #f0f0f0;

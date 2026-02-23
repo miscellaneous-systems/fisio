@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import styles from './LoginPage.module.css'; // Reutilizando estilos para consistência
+import styles from './LoginPage.module.css'; 
 
 const RegisterPage = () => {
     const [nome, setNome] = useState('');
@@ -11,7 +11,6 @@ const RegisterPage = () => {
     const [erro, setErro] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // Supondo que seu AuthContext tenha uma função 'signUp'
     const { signUp } = useAuth(); 
     const navigate = useNavigate();
 

@@ -1,4 +1,3 @@
-/* src/pages/ProntuarioPage.css */
 
 /* --- Layout Geral e Mensagens --- */
 .prontuario-container {
@@ -161,7 +160,7 @@
     padding: 15px;
     border-radius: 6px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    border-left: 4px solid #3498db; /* Cor primária para destaque */
+    border-left: 4px solid #3498db;
     position: relative;
 }
 
@@ -189,7 +188,7 @@
     margin-top: 5px;
     margin-bottom: 10px;
     line-height: 1.4;
-    white-space: pre-wrap; /* Preserva quebras de linha/espaços do textarea */
+    white-space: pre-wrap;
     color: #333;
 }
 
@@ -203,7 +202,7 @@
 
 .button-edit {
     padding: 5px 10px;
-    background-color: #f39c12; /* Laranja para Edição */
+    background-color: #f39c12; 
     color: white;
     border: none;
     border-radius: 4px;
@@ -247,7 +246,6 @@
         font-size: 1.5rem;
     }
 
-    /* Ajusta o cabeçalho da nota para não espremer a data */
     .note-header {
         flex-direction: column;
         align-items: flex-start;

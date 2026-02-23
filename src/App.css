@@ -1,6 +1,3 @@
-/* ====================================================================== */ /* LAYOUT E ALINHAMENTO DO CONTEÚDO PRINCIPAL (REGRAS #ROOT) */ /* ====================================================================== */
 #root {
-  /* REMOVEMOS: max-width, margin: 0 auto, padding, e text-align */ /* Deixe o #root sem regras de largura e padding para que o Layout possa se expandir */
   min-height: 100vh; /* Opcional, mas pode garantir que o #root cubra a tela */
-} /* Regras que parecem ser específicas de algum exemplo (mantidas, se necessário) */
-/* REMOVEMOS TODAS AS REGRAS DUPLICADAS DE MODAL, FORMULÁRIO E BOTÃO daqui. */
+} 

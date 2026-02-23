@@ -74,7 +74,6 @@ const ProntuarioPage = () => {
                 paciente_id: parseInt(pacienteId),
                 titulo: novaNotaTitulo,
                 conteudo: novaNotaConteudo,
-                // data_nota e agendamento_id opcionais
             };
 
             await api.post('/prontuario', novaNota);

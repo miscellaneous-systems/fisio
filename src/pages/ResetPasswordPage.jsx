@@ -66,9 +66,6 @@ const ResetPasswordPage = () => {
             if (error) throw error;
             
             setMessage('Senha redefinida com sucesso! Redirecionando para o login...');
-            
-            // Opcional: Deslogar o usuário após trocar a senha para forçar novo login
-            // await supabase.auth.signOut();
 
             setTimeout(() => {
                 navigate('/login');
