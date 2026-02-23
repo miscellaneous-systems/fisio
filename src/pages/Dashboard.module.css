@@ -1,8 +1,4 @@
-/* ====================================================================== */
-/* LAYOUT E ESTRUTURA DA PÁGINA (Dashboard.module.css) */
-/* ====================================================================== */
 .pageContainer {
-    /* padding: 20px; */ /* Removido para que o padding venha do Layout.module.css */
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
@@ -12,7 +8,6 @@
 
 /* Ajuste para telas muito pequenas */
 @media (max-width: 480px) {
-    /* O padding já é ajustado no Layout.module.css */
 }
 
 .subtitle {

@@ -1,5 +1,3 @@
-// src/components/VenderPacoteModal.jsx (CÓDIGO CORRIGIDO)
-
 import React, { useState, useEffect } from 'react';
 import api from '../api/api';
 import styles from './VenderPacoteModal.module.css'; // Importa estilos modulares

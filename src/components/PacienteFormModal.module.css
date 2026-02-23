@@ -1,9 +1,3 @@
-/* O fundo escuro (Overlay) */
-/* As classes .modalOverlay e .modalContent foram movidas para o index.css */
-
-/* O Container do Formulário (Content) */
-
-/* Animação para o modal aparecer de forma mais agradável */
 @keyframes fadeIn {
     from {
         opacity: 0;

@@ -33,8 +33,6 @@ const RegisterPage = () => {
         }
 
         try {
-            // A função signUp deve ser implementada no seu AuthContext
-            // e deve retornar sucesso/falha ou lançar um erro.
             await signUp(nome, email, senha);
             
             alert('Conta criada com sucesso! Você será redirecionado para a página de login.');
