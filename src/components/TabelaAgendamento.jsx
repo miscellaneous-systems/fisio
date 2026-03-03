@@ -17,7 +17,6 @@ const DIAS_SEMANA = [
   { key: 'sex', label: 'Sexta' },
   { key: 'sab', label: 'Sábado' }
 ];
-
 export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORARIOS_PADRAO }) {
   const navigate = useNavigate();
   const [agendamentos, setAgendamentos] = useState({});
