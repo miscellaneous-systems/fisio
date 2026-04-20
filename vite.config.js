@@ -32,7 +32,6 @@ export default defineConfig({
       }
     })
   ],
-  
   // MANTENDO SUA CONFIGURAÇÃO DE CSS EXPLICITADA
   css: {
     modules: {
