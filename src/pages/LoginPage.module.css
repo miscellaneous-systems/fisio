@@ -1,5 +1,5 @@
 /* --- Container Principal --- */
-.login-container {
+.loginContainer {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,7 +8,7 @@
 }
 
 /* --- Cartão de Login --- */
-.login-card {
+.loginCard {
     background-color: #fff;
     padding: 40px;
     border-radius: 8px;
@@ -18,12 +18,12 @@
     max-width: 400px;
 }
 
-.login-card h2 {
-    color: #094601ff; /* Cor principal da clínica */
+.loginCard h2 {
+    color: #094601ff;
     margin-bottom: 5px;
 }
 
-.login-card h3 {
+.loginCard h3 {
     color: #555;
     font-weight: normal;
     font-size: 1.1em;
@@ -31,14 +31,14 @@
 }
 
 /* --- Formulário --- */
-.login-form {
+.loginForm {
     display: flex;
     flex-direction: column;
     gap: 15px;
     margin-top: 20px;
 }
 
-.login-input {
+.loginInput {
     padding: 12px;
     border-radius: 4px;
     border: 1px solid #ccc;
@@ -46,18 +46,18 @@
     transition: border-color 0.3s;
 }
 
-.login-input:focus {
+.loginInput:focus {
     border-color: #094601ff;
     outline: none;
     box-shadow: 0 0 0 1px #094601ff;
 }
 
-/* --- Botão --- */
-.login-button {
+/* --- Botões --- */
+.loginButton {
     padding: 12px;
     border-radius: 4px;
     border: none;
-    background-color: #094601ff;
+    background-color: #3f603d;
     color: white;
     font-size: 16px;
     cursor: pointer;
@@ -65,18 +65,43 @@
     font-weight: bold;
 }
 
-.login-button:hover:not(:disabled) {
+.loginButton:hover:not(:disabled) {
     background-color: #052c00; 
 }
 
-.login-button:disabled {
+.loginButton:disabled {
     background-color: #a0a0a0;
     cursor: not-allowed;
 }
 
-/* --- Mensagem de Erro --- */
-.login-error {
-    color: #e74c3c; /* Vermelho forte para erro */
+.registerButton {
+    background-color: #8a795e;
+    margin-top: 0px;
+}
+
+.registerButton:hover {
+    background-color: #7a644d !important;
+}
+
+/* --- Auxiliares --- */
+.forgotPasswordContainer {
+    width: 100%;
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.textLink {
+    background: none;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.loginError {
+    color: #e74c3c;
     font-size: 14px;
-    margin: -5px 0 0; /* Ajusta o espaçamento */
+    margin: -5px 0 0;
 }
