@@ -8,6 +8,23 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,png,svg,ico}'], // Salva tudo para uso off
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://fonts.gstatic.com',
+            handler: 'CacheFirst', 
+            options: {
+              cacheName: 'google-fonts',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 ano
+              }
+            }
+          }
+        ]
+      },
+      // ---------------------------------
       manifest: {
         name: 'Sistema de Gestão Clínica Integrada',
         short_name: 'Fisio System',
