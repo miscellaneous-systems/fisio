@@ -224,6 +224,18 @@ const DetalheAgendamentoPage = () => {
                             <h2>Paciente: {agendamento?.nome_paciente}</h2>
                             <p><strong>Serviço:</strong> {agendamento?.servico_tipo}</p>
                             <p><strong>Data:</strong> {new Date(agendamento?.data_hora).toLocaleString('pt-BR')}</p>
+                            
+                            {agendamento?.status === 'Realizado' && (
+                                <p>
+                                    <strong>Forma de Cobrança:</strong>{' '}
+                                    <span className={(agendamento.pacote_debitado || agendamento.pacote_id_usado || agendamento.pacote_id || agendamento.pacote_vendido_id) ? styles.badgePackage : styles.badgeAvulso}>
+                                        { (agendamento.pacote_debitado || agendamento.pacote_id_usado || agendamento.pacote_id || agendamento.pacote_vendido_id)
+                                            ? 'Sessão debitada do Pacote de Créditos ✓' 
+                                            : 'Atendimento Avulso (Sem pacote)' 
+                                        }
+                                    </span>
+                                </p>
+                            )}
                         </div>
                     </div>
                 </>

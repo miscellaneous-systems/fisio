@@ -42,23 +42,26 @@
 }
 
 .pilates-header h1 {
-    color: #9b59b6; /* Roxo para Pilates */
+    color: #333333;
     font-size: 2em;
 }
 
 .button-add {
     padding: 10px 15px;
-    background-color: #9b59b6; 
+    background-color: #007a4d; 
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
-    transition: background-color 0.3s;
+    transition: all 0.2s ease;
 }
 
 .button-add:hover {
-    background-color: #8e44ad;
+  background-color: #005f3c;
+  border-color: #005f3c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 /* --- Controles de Filtro --- */
@@ -107,7 +110,7 @@
 }
 
 .pilates-table thead tr {
-    background-color: #34495e;
+    background-color: #007a4d
 }
 
 .pilates-table .th {

@@ -145,12 +145,13 @@
 }
 
 .saveButton {
-    background-color: #28a745;
+    background-color: #007A4D;
     color: white;
 }
 .saveButton { font-weight: 600; } /* Mantém o botão principal com mais destaque */
 .saveButton:hover:not(:disabled) {
-    background-color: #218838;
+    background-color: #005f3c;
+    transform: translateY(-1px);
 }
 
 .cancelButton {

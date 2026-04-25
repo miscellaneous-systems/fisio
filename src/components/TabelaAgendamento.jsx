@@ -317,11 +317,19 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
   };
 
   // Atualizar Status (Ex: Realizado, Cancelado)
-  const handleStatusChange = async (agendamentoId, novoStatus, motivo = '') => {
+  const handleStatusChange = async (agendamentoId, novoStatus, motivo = '', nomePaciente = '', servicoTipo = '') => {
     try {
       // Se for concluir, usa a rota específica para garantir débito de pacote e consistência
       if (novoStatus === 'Realizado') {
-        await api.put(`/agendamentos/${agendamentoId}/concluir`, { status: 'Realizado' });
+        const confirmar = window.confirm(
+          `Deseja marcar o atendimento de ${nomePaciente || 'este paciente'} como REALIZADO?\n\n` +
+          `Isso debitará automaticamente 1 sessão do pacote de ${servicoTipo || 'créditos'} (caso o paciente possua um ativo deste tipo).`
+        );
+        
+        if (!confirmar) return;
+
+        // Chamada para a rota que centraliza a regra de negócio do débito
+        await api.put(`/agendamentos/${agendamentoId}/concluir`);
       } else {
         // Busca os dados completos antes de atualizar para evitar erro de campos obrigatórios
         const response = await api.get(`/agendamentos/${agendamentoId}`);
@@ -788,6 +796,15 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                   </div>
                   
                   <div className="actions-p">
+                    {/* Botão de Detalhes - Visível para todos os agendamentos */}
+                    <button 
+                      className="btn-icon" 
+                      title="Ver Detalhes do Agendamento"
+                      onClick={() => navigate(`/agendamentos/${p.id}`)}
+                    >
+                      🔍
+                    </button>
+
                     {/* Botão de Evolução / Prontuário */}
                     <button 
                       className="btn-icon" 
@@ -807,7 +824,7 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                       <button 
                         className="btn-icon btn-check" 
                         title="Marcar como Realizado"
-                        onClick={() => handleStatusChange(p.id, 'Realizado')}
+                        onClick={() => handleStatusChange(p.id, 'Realizado', '', p.nome_paciente, p.servico_tipo)}
                       >
                         ✓
                       </button>
