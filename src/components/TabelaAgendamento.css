@@ -53,7 +53,7 @@
 .btn-nav:hover {
   background-color: #f8f9fa;
   border-color: #ccc;
-  color: #1565c0;
+  color: #2e7d32;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
