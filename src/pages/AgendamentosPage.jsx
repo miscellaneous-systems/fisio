@@ -169,31 +169,30 @@ const AgendamentosPage = () => {
                     <table className={styles.agendaTable}>
                         <thead>
                             <tr>
-                                <th>Hora</th>
-                                <th>Paciente</th>
-                                <th>Tipo</th>
-                                <th>Data</th> 
-                                <th>Status</th>
-                                <th>Ações</th>
+                                <th className={styles.th}>Hora</th>
+                                <th className={styles.th}>Paciente</th>
+                                <th className={styles.th}>Tipo</th>
+                                <th className={styles.th}>Data</th> 
+                                <th className={styles.th}>Status</th>
+                                <th className={styles.th}>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             {agendamentos.map((agenda) => (
                                 <tr key={agenda.id} className={styles.tableRow}>
-                                    <td>{formatarHora(agenda.data_hora)}</td> 
-                                    <td><strong>{agenda.nome_paciente || 'N/A'}</strong></td>
-                                    <td>{agenda.servico_tipo}</td>
-                                    <td>{formatarDataExibicao(agenda.data_hora)}</td> 
-                                    <td><span className={getStatusClassName(agenda.status)}>{agenda.status}</span></td>
-                                    <td>
-                                        {['Realizado', 'Cancelado'].includes(agenda.status) ? (
-                                            <span className={styles.finalizedText}>Finalizado</span>
-                                        ) : (
-                                            <div className={styles.tableActions}>
-                                                <button onClick={() => handleDetalhes(agenda.id)} className={`${styles.actionButton} ${styles.detailButton}`}>Detalhes</button>
+                                    <td className={styles.td}>{formatarHora(agenda.data_hora)}</td> 
+                                    <td className={styles.td}><strong>{agenda.nome_paciente || 'N/A'}</strong></td>
+                                    <td className={styles.td}>{agenda.servico_tipo}</td>
+                                    <td className={styles.td}>{formatarDataExibicao(agenda.data_hora)}</td> 
+                                    <td className={styles.td}><span className={getStatusClassName(agenda.status)}>{agenda.status}</span></td>
+                                    <td className={styles.td}>
+                                        <div className={styles.tableActions}>
+                                            <button onClick={() => handleDetalhes(agenda.id)} className={`${styles.actionButton} ${styles.detailButton}`}>Detalhes</button>
+                                            
+                                            {agenda.status !== 'Realizado' && agenda.status !== 'Cancelado' && (
                                                 <button onClick={() => handleConcluirSessao(agenda.id, agenda.nome_paciente)} className={`${styles.actionButton} ${styles.concludeButton}`}>Concluir</button>
-                                            </div>
-                                        )}
+                                            )}
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

@@ -124,6 +124,7 @@ const VenderPacoteModal = ({ isOpen, onClose, onVenda, modelosPacotes }) => {
               const payload = {
                    paciente_id: parseInt(formData.pacienteId, 10),
                 nome_pacote: modeloParaEnvio.nome,
+                tipo_sessao: modeloParaEnvio.tipo_sessao, // Adicionado para vincular o serviço ao pacote
                 total_sessoes: modeloParaEnvio.total_sessoes,
                 valor_total: valorEmCentavos, // O backend espera 'valor_total'
                 data_vencimento: formData.dataValidade || null,

@@ -102,7 +102,7 @@ const PilatesPage = () => {
     };
 
     const handleConcluirSessao = async (agendamentoId, pacienteNome) => {
-        if (!window.confirm(`Tem certeza que deseja CONCLUIR a sessão de ${pacienteNome}? Isso debitará uma sessão do pacote ativo, se houver.`)) {
+        if (!window.confirm(`Tem certeza que deseja CONCLUIR a sessão de ${pacienteNome}? Isso debitará uma sessão do pacote de ${SERVICE_TYPE} ativo, se houver.`)) {
             return;
         }
 
@@ -145,7 +145,7 @@ const PilatesPage = () => {
     return (
         <div className={styles.pilatesContainer}>
             <div className={styles.pilatesHeader}>
-                <h1>🧘 Agenda de {SERVICE_TYPE}</h1>
+                <h1>Agenda de {SERVICE_TYPE}</h1>
                 <button onClick={handleAddAgendamento} className={styles.buttonAdd}>
                     + Novo Agendamento de {SERVICE_TYPE}
                 </button>
@@ -199,23 +199,19 @@ const PilatesPage = () => {
                                     </span>
                                 </td>
                                 <td className={`${styles.td} ${styles.actionColumn}`}>
-                                    {agenda.status === 'Realizado' || agenda.status === 'Cancelado' ? (
-                                        <span className={styles.sessionFinalizedText}>Sessão Finalizada</span>
-                                    ) : (
-                                        <>
-                                            <button 
-                                                onClick={() => handleDetalhes(agenda.id)} 
-                                                className={`${styles.actionButton} ${styles.buttonDetails}`}
-                                            >
-                                                Detalhes
-                                            </button>
+                                    <button 
+                                        onClick={() => handleDetalhes(agenda.id)} 
+                                        className={`${styles.actionButton} ${styles.buttonDetails}`}
+                                    >
+                                        Detalhes
+                                    </button>
+                                    {agenda.status !== 'Realizado' && agenda.status !== 'Cancelado' && (
                                             <button 
                                                 onClick={() => handleConcluirSessao(agenda.id, agenda.nome_paciente)} 
                                                 className={`${styles.actionButton} ${styles.buttonConclude}`}
                                             >
                                                 Concluir Sessão
                                             </button>
-                                        </>
                                     )}
                                 </td>
                             </tr> 

@@ -28,18 +28,21 @@
 /* Botão de Adicionar Paciente */
 .addButton {
   padding: 10px 20px;
-  background-color: #28A745; /* Verde - Sucesso/Adicionar */
+  background-color: #007a4d; /* Verde - Sucesso/Adicionar */
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
-  transition: background-color 0.3s;
+  transition: all 0.2s ease;
 }
 
 .addButton:hover {
-  background-color: #3daa6a;
+  background-color: #005f3c;
+  border-color: #005f3c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 /* ====================================================================== */
@@ -128,9 +131,8 @@
 .tableHeader {
   padding: 12px;
   text-align: left;
-  background-color: #34495e; /* Cinza escuro/Azul Marinho */
+  background-color: #007a4d; /* Cinza escuro/Azul Marinho */
   color: white;
-  border-bottom: 2px solid #2c3e50;
 }
 
 .tableData {
