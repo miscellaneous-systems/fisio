@@ -78,7 +78,7 @@
     background: rgba(0,0,0,0.05);
 }
 
-/* --- BOTÃO FECHAR (X) CORRIGIDO --- */
+/* --- BOTÃO FECHAR (X) --- */
 .closeButton {
     display: none; /* Oculto no Desktop */
     position: absolute;

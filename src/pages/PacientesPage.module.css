@@ -28,7 +28,7 @@
 /* Botão de Adicionar Paciente */
 .addButton {
   padding: 10px 20px;
-  background-color: #2ecc71; /* Verde - Sucesso/Adicionar */
+  background-color: #28A745; /* Verde - Sucesso/Adicionar */
   color: white;
   border: none;
   border-radius: 4px;
@@ -39,7 +39,7 @@
 }
 
 .addButton:hover {
-  background-color: #27ae60;
+  background-color: #3daa6a;
 }
 
 /* ====================================================================== */
