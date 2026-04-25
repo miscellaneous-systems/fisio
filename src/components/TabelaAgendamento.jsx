@@ -447,77 +447,102 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
     return `${formatarData(inicio)} a ${formatarData(fim)}`;
   };
 
-  // Função para gerar e imprimir a visualização da semana
   const handlePrint = () => {
-    const printWindow = window.open('', '_blank');
-    
-    // Prepara os cabeçalhos com datas
-    const headers = dias.map(dia => ({
-      label: dia.label,
-      data: formatarDataCabecalho(dia.key)
-    }));
+  // 1. Criar o elemento Iframe (invisível para o usuário)
+  const iframe = document.createElement('iframe');
+  iframe.style.position = 'fixed';
+  iframe.style.right = '0';
+  iframe.style.bottom = '0';
+  iframe.style.width = '0';
+  iframe.style.height = '0';
+  iframe.style.border = 'none';
+  document.body.appendChild(iframe);
 
-    const intervalo = getIntervaloExibicao();
+  const headers = dias.map(dia => ({
+    label: dia.label,
+    data: formatarDataCabecalho(dia.key)
+  }));
 
-    let htmlContent = `
-      <html>
-        <head>
-          <title>Agenda Semanal - ${intervalo}</title>
-          <style>
-            body { font-family: Arial, sans-serif; padding: 20px; color: #333; }
-            h1 { text-align: center; margin-bottom: 10px; font-size: 1.5rem; }
-            .subtitle { text-align: center; margin-bottom: 20px; color: #666; }
-            table { width: 100%; border-collapse: collapse; font-size: 12px; }
-            th, td { border: 1px solid #ccc; padding: 6px; text-align: center; vertical-align: top; }
-            th { background-color: #f5f5f5; font-weight: bold; }
-            .time-col { background-color: #fafafa; font-weight: bold; width: 50px; }
-            .paciente-card { 
-              background: #e3f2fd; border: 1px solid #90caf9; 
-              border-radius: 4px; padding: 4px; margin-bottom: 4px; text-align: left; 
-            }
-            .paciente-card.cancelado { background: #ffebee; border-color: #ef9a9a; text-decoration: line-through; color: #c62828; }
-            .paciente-card.realizado { background: #e8f5e9; border-color: #a5d6a7; }
-            .p-nome { font-weight: bold; display: block; }
-            .p-servico { font-size: 0.9em; color: #555; }
-            @media print { @page { size: landscape; } }
-          </style>
-        </head>
-        <body>
-          <h1>Agenda Semanal</h1>
-          <div class="subtitle">${intervalo}</div>
-          <table>
-            <thead>
+  const intervalo = getIntervaloExibicao();
+
+  // O seu layout EXATO, sem alterações
+  let htmlContent = `
+    <html>
+      <head>
+        <title>Agenda Semanal - ${intervalo}</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; color: #333; }
+          h1 { text-align: center; margin-bottom: 10px; font-size: 1.5rem; }
+          .subtitle { text-align: center; margin-bottom: 20px; color: #666; }
+          table { width: 100%; border-collapse: collapse; font-size: 12px; }
+          th, td { border: 1px solid #ccc; padding: 6px; text-align: center; vertical-align: top; }
+          th { background-color: #f5f5f5; font-weight: bold; }
+          .time-col { background-color: #fafafa; font-weight: bold; width: 50px; }
+          .paciente-card {
+            background: #e3f2fd; border: 1px solid #90caf9;
+            border-radius: 4px; padding: 4px; margin-bottom: 4px; text-align: left;
+          }
+          .paciente-card.cancelado { background: #ffebee; border-color: #ef9a9a; text-decoration: line-through; color: #c62828; }
+          .paciente-card.realizado { background: #e8f5e9; border-color: #a5d6a7; }
+          .p-nome { font-weight: bold; display: block; }
+          .p-servico { font-size: 0.9em; color: #555; }
+          @media print { 
+             @page { size: landscape; } 
+             /* Força cores no PDF */
+             .paciente-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Agenda Semanal</h1>
+        <div class="subtitle">${intervalo}</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Horário</th>
+              ${headers.map(h => `<th>${h.label}<br><small>${h.data}</small></th>`).join('')}
+            </tr>
+          </thead>
+          <tbody>
+            ${horarios.map(horario => `
               <tr>
-                <th>Horário</th>
-                ${headers.map(h => `<th>${h.label}<br><small>${h.data}</small></th>`).join('')}
+                <td class="time-col">${horario}</td>
+                ${dias.map(dia => {
+                  const key = `${dia.key}-${horario}`;
+                  const lista = agendamentos[key] || [];
+                  return `<td>${lista.map(p => `
+                    <div class="paciente-card ${p.status === 'Cancelado' ? 'cancelado' : p.status === 'Realizado' ? 'realizado' : ''}">
+                      <span class="p-nome">${p.nome_paciente}</span>
+                      <span class="p-servico">${p.servico_tipo}</span>
+                    </div>
+                  `).join('')}</td>`;
+                }).join('')}
               </tr>
-            </thead>
-            <tbody>
-              ${horarios.map(horario => `
-                <tr>
-                  <td class="time-col">${horario}</td>
-                  ${dias.map(dia => {
-                    const key = `${dia.key}-${horario}`;
-                    const lista = agendamentos[key] || [];
-                    return `<td>${lista.map(p => `
-                      <div class="paciente-card ${p.status === 'Cancelado' ? 'cancelado' : p.status === 'Realizado' ? 'realizado' : ''}">
-                        <span class="p-nome">${p.nome_paciente}</span>
-                        <span class="p-servico">${p.servico_tipo}</span>
-                      </div>
-                    `).join('')}</td>`;
-                  }).join('')}
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-          <script>window.onload = function() { window.print(); }</script>
-        </body>
-      </html>
-    `;
+            `).join('')}
+          </tbody>
+        </table>
+      </body>
+    </html>
+  `;
 
-    printWindow.document.write(htmlContent);
-    printWindow.document.close();
-  };
+  const doc = iframe.contentWindow.document;
+  doc.write(htmlContent);
+  doc.close();
+
+  // 2. A lógica para imprimir SEM sair da página e SEM deslogar
+  iframe.contentWindow.focus();
+  
+  // Pequeno delay para garantir que o navegador renderizou o HTML antes de chamar a impressora
+  setTimeout(() => {
+    iframe.contentWindow.print();
+    
+    // Remove o iframe do DOM depois que a caixa de diálogo fechar 
+    // para manter a página limpa
+    setTimeout(() => {
+      document.body.removeChild(iframe);
+    }, 1000);
+  }, 500);
+};
 
   // Função para Duplicar a Semana Atual para a Próxima
   const handleDuplicarSemana = async () => {
