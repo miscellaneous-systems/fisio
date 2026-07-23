@@ -4,8 +4,17 @@ import api from "../api/api";
 import { useAuth } from "../contexts/AuthContext";
 import PacienteFormModal from "../components/PacienteFormModal";
 import styles from "./PacientesPage.module.css";
+import { 
+  Search, 
+  UserPlus, 
+  ChevronUp, 
+  ChevronDown, 
+  FileText, 
+  Edit, 
+  UserX 
+} from "lucide-react";
 
-// Classes globais/comuns (Assumindo que estão no seu App.css)
+// Classes globais/comuns
 const commonClasses = {
   error: "errorMsg",
   loading: "loadingText",
@@ -16,7 +25,7 @@ const PacientesPage = () => {
   const [pacientes, setPacientes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar o MODAL
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [pacienteToEdit, setPacienteToEdit] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,7 +38,6 @@ const PacientesPage = () => {
   const navigate = useNavigate();
   const { signOut } = useAuth();
 
-  // FUNÇÕES DE LÓGICA
   const formatarData = (dataString) => {
     if (!dataString) return "N/A";
     const data = new Date(dataString);
@@ -44,7 +52,6 @@ const PacientesPage = () => {
     try {
       const response = await api.get("/pacientes");
       const lista = response.data.pacientes || [];
-      // Ordena a lista alfabeticamente pelo nome
       lista.sort((a, b) => a.nome.localeCompare(b.nome));
       setPacientes(lista);
       setError(null);
@@ -63,24 +70,19 @@ const PacientesPage = () => {
   };
 
   const handleAddPaciente = () => {
-    setPacienteToEdit(null); // Modo de Adição
+    setPacienteToEdit(null);
     setIsModalOpen(true);
   };
 
   const handleEditPaciente = (paciente) => {
-    // 💡 CORREÇÃO: Formata a data para YYYY-MM-DD para que o input type="date" do modal a reconheça corretamente.
-    // Isso evita que o campo venha vazio e cause erro ao salvar.
     const pacienteFormatado = { ...paciente };
-
     if (pacienteFormatado.data_nascimento) {
       pacienteFormatado.data_nascimento =
         pacienteFormatado.data_nascimento.split("T")[0];
     } else if (pacienteFormatado.nascimento) {
-      // Fallback caso o backend retorne como 'nascimento'
       pacienteFormatado.data_nascimento =
         pacienteFormatado.nascimento.split("T")[0];
     }
-
     setPacienteToEdit(pacienteFormatado);
     setIsModalOpen(true);
   };
@@ -115,7 +117,7 @@ const PacientesPage = () => {
   const handlePatientFormClosed = () => {
     setIsModalOpen(false);
     setPacienteToEdit(null);
-    fetchPacientes(); // Atualiza a lista após fechar o modal (adicionar/editar)
+    fetchPacientes();
   };
 
   const handleViewPaciente = (pacienteId) => {
@@ -126,7 +128,6 @@ const PacientesPage = () => {
     fetchPacientes();
   }, []);
 
-  // Reseta para a primeira página quando a pesquisa muda
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
@@ -143,7 +144,6 @@ const PacientesPage = () => {
     return <h2 className={commonClasses.error}>{error}</h2>;
   }
 
-  // Filtra os pacientes
   const filteredPacientes = pacientes.filter((paciente) => {
     const term = searchTerm.toLowerCase();
     const nome = paciente.nome ? paciente.nome.toLowerCase() : "";
@@ -154,16 +154,13 @@ const PacientesPage = () => {
     );
   });
 
-  // Lógica de Ordenação
   const sortedPacientes = [...filteredPacientes].sort((a, b) => {
     let valueA = a[sortConfig.key];
     let valueB = b[sortConfig.key];
 
-    // Tratamento para evitar erros com null/undefined
     if (valueA == null) valueA = "";
     if (valueB == null) valueB = "";
 
-    // Tratamento para strings (case insensitive)
     if (typeof valueA === "string") valueA = valueA.toLowerCase();
     if (typeof valueB === "string") valueB = valueB.toLowerCase();
 
@@ -176,7 +173,6 @@ const PacientesPage = () => {
     return 0;
   });
 
-  // Lógica de Paginação
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentPacientes = sortedPacientes.slice(
@@ -185,19 +181,28 @@ const PacientesPage = () => {
   );
   const totalPages = Math.ceil(sortedPacientes.length / itemsPerPage);
 
+  const renderSortIcon = (key) => {
+    if (sortConfig.key !== key) return null;
+    return sortConfig.direction === "asc" ? (
+      <ChevronUp size={16} style={{ display: "inline", verticalAlign: "middle", marginLeft: "4px" }} />
+    ) : (
+      <ChevronDown size={16} style={{ display: "inline", verticalAlign: "middle", marginLeft: "4px" }} />
+    );
+  };
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.pageHeader}>
         <h1>Gestão de Pacientes</h1>
         <button onClick={handleAddPaciente} className={styles.addButton}>
-          + Adicionar Novo Paciente
+          <UserPlus size={18} /> Adicionar Novo Paciente
         </button>
       </div>
 
       {/* BARRA DE PESQUISA */}
       <div className={styles.searchBar}>
         <div className={styles.searchInputContainer}>
-          <span className={styles.searchIcon}>🔍</span>
+          <Search className={styles.searchIcon} size={18} />
           <input
             type="text"
             placeholder="Buscar paciente por nome, telefone ou e-mail..."
@@ -207,152 +212,123 @@ const PacientesPage = () => {
           />
         </div>
       </div>
+
       {/* TABELA DE PACIENTES */}
       {filteredPacientes.length === 0 ? (
         <p>
-          Nenhum paciente ativo encontrado com o termo de busca **"{searchTerm}
-          "**.
+          Nenhum paciente ativo encontrado com o termo de busca **"{searchTerm}"**.
         </p>
       ) : (
-        <table className={styles.pacientesTable}>
-          <thead>
-            <tr>
-              <th
-                className={styles.tableHeader}
-                onClick={() => handleSort("id")}
-                style={{ cursor: "pointer" }}
-              >
-                ID{" "}
-                {sortConfig.key === "id" &&
-                  (sortConfig.direction === "asc" ? "▲" : "▼")}
-              </th>
-              <th
-                className={styles.tableHeader}
-                onClick={() => handleSort("nome")}
-                style={{ cursor: "pointer" }}
-              >
-                Nome{" "}
-                {sortConfig.key === "nome" &&
-                  (sortConfig.direction === "asc" ? "▲" : "▼")}
-              </th>
-              <th
-                className={styles.tableHeader}
-                onClick={() => handleSort("telefone")}
-                style={{ cursor: "pointer" }}
-              >
-                Telefone{" "}
-                {sortConfig.key === "telefone" &&
-                  (sortConfig.direction === "asc" ? "▲" : "▼")}
-              </th>
-              <th
-                className={styles.tableHeader}
-                onClick={() => handleSort("criado_em")}
-                style={{ cursor: "pointer" }}
-              >
-                Data Cadastro{" "}
-                {sortConfig.key === "criado_em" &&
-                  (sortConfig.direction === "asc" ? "▲" : "▼")}
-              </th>
-              <th className={styles.tableHeader}>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentPacientes.map((paciente) => (
-              <tr key={paciente.id}>
-                <td className={styles.tableData} data-label="ID">
-                  {paciente.id}
-                </td>
-                <td className={styles.tableData} data-label="Nome">
-                  {paciente.nome}
-                </td>
-                <td className={styles.tableData} data-label="Telefone">
-                  {paciente.telefone}
-                </td>
-                <td className={styles.tableData} data-label="Cadastro">
-                  {formatarData(paciente.criado_em)}
-                </td>
-                <td className={styles.tableDataActions} data-label="Ações">
-                  <div className="table-actions">
-                    <button
-                      onClick={() => handleViewPaciente(paciente.id)}
-                      className={styles.viewButton}
-                    >
-                      Prontuário
-                    </button>
-                    <button
-                      onClick={() => handleEditPaciente(paciente)}
-                      className={styles.editButton}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleInativarPaciente(paciente.id, paciente.nome)
-                      }
-                      className={styles.inactivateButton}
-                    >
-                      Inativar
-                    </button>
-                  </div>
-                </td>
+        <div className={styles.tableResponsive}>
+          <table className={styles.pacientesTable}>
+            <thead>
+              <tr>
+                <th
+                  className={styles.tableHeader}
+                  onClick={() => handleSort("id")}
+                  style={{ cursor: "pointer" }}
+                >
+                  ID {renderSortIcon("id")}
+                </th>
+                <th
+                  className={styles.tableHeader}
+                  onClick={() => handleSort("nome")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Nome {renderSortIcon("nome")}
+                </th>
+                <th
+                  className={styles.tableHeader}
+                  onClick={() => handleSort("telefone")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Telefone {renderSortIcon("telefone")}
+                </th>
+                <th
+                  className={styles.tableHeader}
+                  onClick={() => handleSort("criado_em")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Data Cadastro {renderSortIcon("criado_em")}
+                </th>
+                <th className={styles.tableHeader}>Ações</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentPacientes.map((paciente) => (
+                <tr key={paciente.id}>
+                  <td className={styles.tableData} data-label="ID">
+                    {paciente.id}
+                  </td>
+                  <td className={styles.tableData} data-label="Nome">
+                    {paciente.nome}
+                  </td>
+                  <td className={styles.tableData} data-label="Telefone">
+                    {paciente.telefone}
+                  </td>
+                  <td className={styles.tableData} data-label="Cadastro">
+                    {formatarData(paciente.criado_em)}
+                  </td>
+                  <td className={styles.tableDataActions} data-label="Ações">
+                    <div className="table-actions">
+                      <button
+                        onClick={() => handleViewPaciente(paciente.id)}
+                        className={styles.viewButton}
+                      >
+                        <FileText size={15} /> Prontuário
+                      </button>
+                      <button
+                        onClick={() => handleEditPaciente(paciente)}
+                        className={styles.editButton}
+                      >
+                        <Edit size={15} /> Editar
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleInativarPaciente(paciente.id, paciente.nome)
+                        }
+                        className={styles.inactivateButton}
+                      >
+                        <UserX size={15} /> Inativar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {/* CONTROLES DE PAGINAÇÃO */}
-
       {filteredPacientes.length > itemsPerPage && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "20px",
-            gap: "10px",
-          }}
-        >
+        <div className={styles.paginationContainer}>
           <button
+            type="button"
+            className={styles.paginationButton}
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            style={{
-              padding: "8px 16px",
-              borderRadius: "6px",
-              border: "none",
-              backgroundColor: currentPage === 1 ? "#ccc" : "#28a745",
-              color: "white",
-              cursor: currentPage === 1 ? "not-allowed" : "pointer",
-              transition: "0.2s",
-            }}
           >
-            ← Anterior
+            &larr; Anterior
           </button>
 
-          <span style={{ alignSelf: "center", fontWeight: "bold" }}>
-            Página {currentPage} de {totalPages}
+          <span className={styles.paginationInfo}>
+            Página <strong>{currentPage}</strong> de <strong>{totalPages}</strong>
           </span>
 
           <button
+            type="button"
+            className={styles.paginationButton}
             onClick={() =>
               setCurrentPage((prev) => Math.min(prev + 1, totalPages))
             }
             disabled={currentPage === totalPages}
-            style={{
-              padding: "8px 16px",
-              borderRadius: "6px",
-              border: "none",
-              backgroundColor: currentPage === totalPages ? "#ccc" : "#28a745",
-              color: "white",
-              cursor: currentPage === totalPages ? "not-allowed" : "pointer",
-              transition: "0.2s",
-            }}
           >
-            Próxima →
+            Próxima &rarr;
           </button>
         </div>
       )}
 
-      {/* CHAMADA CORRETA DO MODAL - ÚNICA INSTÂNCIA DO FORMULÁRIO */}
       <PacienteFormModal
         isOpen={isModalOpen}
         onClose={() => handlePatientFormClosed()}
@@ -362,4 +338,5 @@ const PacientesPage = () => {
     </div>
   );
 };
+
 export default PacientesPage;
