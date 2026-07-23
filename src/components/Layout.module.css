@@ -1,12 +1,20 @@
 /* ====================================================================== */
-/* 1. VARIÁVEIS E RESET */
+/* 1. VARIÁVEIS GLOBAIS E RESET */
 /* ====================================================================== */
 :root {
-    --primary-green: #007A4D;
+    --primary-green: #007A4D; 
     --secondary-green: #00B050;
+    
+    /* 💡 SIDEBAR EM VERDE ESCURO SOFISTICADO */
+    --sidebar-bg: #0f2c1b;        /* Verde escuro fechado e elegante */
+    --sidebar-text: #a3b8ad;      /* Verde-acinzentado claro para links inativos */
+    --sidebar-text-hover: #ffffff;/* Branco puro ao passar o mouse */
+    --sidebar-border: #183e29;    /* Linhas divisórias sutis um pouco mais claras */
+    --light-green: rgba(0, 176, 80, 0.25); /* Fundo translúcido para o item ativo */
+    
     --danger-red: #c0392b;
     --danger-hover: #a93226;
-    --text-main: #333;
+    --text-main: #1a202c; 
     --text-muted: #777;
     --white: #ffffff;
     --sidebar-width: 250px;
@@ -16,16 +24,16 @@
     display: flex;
     min-height: 100vh;
     width: 100%;
-    background-color: #f9f9f9;
+    background-color: #f8fafc; /* Fundo geral off-white levemente acinzentado */
 }
 
 /* ====================================================================== */
-/* 2. SIDEBAR (Navegação) */
+/* 2. SIDEBAR (Navegação Verde Escuro) */
 /* ====================================================================== */
 .sidebar {
     width: var(--sidebar-width);
-    background-color: var(--primary-green);
-    color: var(--white);
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -34,20 +42,26 @@
     height: 100%;
     z-index: 1000;
     transition: transform 0.3s ease-in-out;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    border-right: 1px solid var(--sidebar-border);
 }
 
+/* --- LOGO --- */
 .logo {
     font-size: 1.8rem;
     font-weight: 800;
     text-align: center;
     padding: 25px 20px;
     margin: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--white); /* Logo em destaque branco */
+    border-bottom: 1px solid var(--sidebar-border);
 }
 
-.logoHighlight { font-weight: 300; }
+.logoHighlight { 
+    font-weight: 800;
+    color: var(--secondary-green); /* Verde vibrante para o "APP" */
+}
 
+/* --- LINKS DO MENU --- */
 .nav {
     flex-grow: 1;
     padding: 15px 0;
@@ -57,11 +71,25 @@
 .navLink {
     display: flex;
     align-items: center;
-    padding: 12px 20px;
-    color: var(--white);
+    padding: 12px 15px; 
+    color: var(--sidebar-text);
     text-decoration: none;
     font-weight: 500;
     transition: all 0.2s;
+    border-radius: 8px; 
+    margin: 4px 12px; 
+}
+
+.navLink:hover {
+    background-color: rgba(255, 255, 255, 0.08); /* Hover sutil claro */
+    color: var(--sidebar-text-hover);
+}
+
+/* --- ITEM ATIVO --- */
+.active {
+    background-color: var(--light-green) !important;
+    color: var(--white) !important; /* Texto branco no item ativo */
+    font-weight: 600 !important;
 }
 
 .navIcon {
@@ -69,18 +97,30 @@
     font-size: 1.2rem;
     width: 24px;
     text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
+/* --- RODAPÉ DA SIDEBAR --- */
 .sidebarFooter {
     padding: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
     font-size: 0.85rem;
-    background: rgba(0,0,0,0.05);
+    border-top: 1px solid var(--sidebar-border);
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
 }
 
-/* --- BOTÃO FECHAR (X) --- */
+.userInfoSidebar {
+    margin: 0;
+    line-height: 1.4;
+    color: var(--white); /* Nome do usuário logado bem legível em branco */
+    font-weight: 500;
+}
+
+/* --- BOTÃO FECHAR (X) - MOBILE --- */
 .closeButton {
-    display: none; /* Oculto no Desktop */
+    display: none; 
     position: absolute;
     top: 10px;
     right: 15px;
@@ -94,7 +134,7 @@
 }
 
 /* ====================================================================== */
-/* 3. ÁREA PRINCIPAL */
+/* 3. ÁREA PRINCIPAL E CABEÇALHO */
 /* ====================================================================== */
 .mainContent {
     margin-left: var(--sidebar-width);
@@ -138,9 +178,13 @@
     white-space: nowrap;
     flex-shrink: 0;
     transition: background 0.2s;
+    display: flex;
+    align-items: center;
 }
 
-.logoutButton:hover { background-color: var(--danger-hover); }
+.logoutButton:hover { 
+    background-color: var(--danger-hover); 
+}
 
 .pageContent {
     padding: 30px;
@@ -157,16 +201,22 @@
         width: 280px;
     }
 
-    .mobileOpen { transform: translateX(0); }
+    .mobileOpen { 
+        transform: translateX(0); 
+    }
 
     .mainContent {
         margin-left: 0;
         width: 100%;
     }
 
-    .header { padding-left: 70px; } /* Espaço para o botão hambúrguer */
+    .header { 
+        padding-left: 20px; 
+    }
 
-    .closeButton { display: block; }
+    .closeButton { 
+        display: block; 
+    }
 
     .overlay {
         position: fixed;
@@ -185,21 +235,16 @@
         height: 60px;
         padding: 0 15px;
         display: flex;
-        flex-direction: row !important; /* Garante que fiquem na mesma linha */
+        flex-direction: row !important;
         align-items: center;
-        justify-content: space-between; /* Um em cada ponta */
+        justify-content: space-between;
     }
 
-    .userInfo { display: none; } /* Esconde o texto longo no mobile para não apertar o botão */
+    .userInfo { 
+        display: none; 
+    } 
 
-    .pageContent { padding: 15px; }
-
-    /* Estilização para o Select Centralizado */
-    .mobileDaySelect {
-        width: auto;
-        text-align: center;
-        text-align-last: center;
-        padding: 6px 12px;
-        border-radius: 8px;
+    .pageContent { 
+        padding: 15px; 
     }
 }
