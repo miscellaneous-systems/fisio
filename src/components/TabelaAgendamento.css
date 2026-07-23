@@ -53,7 +53,7 @@
 .btn-nav:hover {
   background-color: #f8f9fa;
   border-color: #ccc;
-  color: #2e7d32;
+  color: #005f3c;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -182,12 +182,12 @@
 
 .celula-agendamento.livre:hover {
   background-color: #e8f5e9; /* Verde claro ao passar o mouse */
-  color: #2e7d32;
+  color: #005f3c;
 }
 
 /* Status: Parcial (1 ou 2 pessoas) */
 .celula-agendamento.parcial {
-  background-color: #e3f2fd;
+  background-color: #e8f5e9;
 }
 
 /* Status: Lotado (3 pessoas) */
@@ -216,7 +216,7 @@
 /* Cores das tags na tabela */
 .paciente-tag.status-concluido {
   background-color: #dcedc8; /* Verde claro */
-  color: #33691e;
+  color: #005f3c;
   border-color: #c5e1a5;
   text-decoration: line-through; /* Riscado levemente */
 }
@@ -302,10 +302,10 @@
 }
 
 .btn-salvar {
-  background-color: #1565c0;
+  background-color: #007A4D;
   color: white;
 }
-.btn-salvar:hover { background-color: #0d47a1; }
+.btn-salvar:hover { background-color: #005f3c; }
 
 .btn-cancelar {
   margin: 8px;
@@ -350,8 +350,8 @@
 }
 
 .item-paciente-modal:hover {
-  border-color: #3498db;
-  background-color: #f0f7ff;
+  border-color: #007A4D;
+  background-color: #f1f8e9;
 }
 
 .item-paciente-modal:last-child {
@@ -403,15 +403,15 @@
 
 .btn-icon:hover {
   background: #f1f2f6;
-  border-color: #2f3542;
-  color: #2f3542;
+  border-color: #005f3c;
+  color: #005f3c;
 }
 
 /* Botão de Check/Concluir específico */
 .btn-check:hover {
   background: #e8f5e9;
-  color: #2e7d32;
-  border-color: #2e7d32;
+  color: #005f3c;
+  border-color: #005f3c;
 }
 
 /* Botão de Cancelar específico */
@@ -469,7 +469,7 @@
 }
 
 .tabs-criacao button.active {
-  background: #1565c0;
+  background: #007A4D;
   color: white;
   font-weight: 600;
 }
@@ -505,8 +505,8 @@
 }
 
 .sugestoes-lista li:hover {
-  background-color: #f0f7ff;
-  color: #1565c0;
+  background-color: #f1f8e9;
+  color: #005f3c;
 }
 
 @media (max-width: 1164px) {
@@ -597,7 +597,7 @@
     }
     
     .agendamento-table tr:hover {
-      background: #f0f8ff;
+      background: #f1f8e9;
     }
     
     .agendamento-actions {
@@ -606,7 +606,7 @@
     }
     
     .agendamento-btn {
-      background: #1976d2;
+      background: #007A4D;
       color: #fff;
       border: none;
       border-radius: 6px;
@@ -617,15 +617,15 @@
     }
     
     .agendamento-btn:hover {
-      background: #1565c0;
+      background: #005f3c;
     }
     
     .agendamento-btn.today {
-      background: #43a047;
+      background: #007A4D;
     }
     
     .agendamento-btn.today:hover {
-      background: #388e3c;
+      background: #005f3c;
     }
 
     /* Responsividade */
@@ -702,7 +702,7 @@
   
   .btn-mobile-nav {
     background: #fff;
-    border: 1px solid #0f5001;
+    border: 1px solid #005f3c;
     border-radius: 50%; /* Botão circular */
     width: 32px; /* Tamanho reduzido */
     height: 32px;
@@ -719,7 +719,7 @@
 
   .btn-mobile-nav:hover {
     background-color: #f0f0f0;
-    color: #1565c0;
+    color: #005f3c;
   }
 
   /* Lógica de Exibição de Colunas */
@@ -805,7 +805,7 @@
 
   .mobile-card-names {
     font-weight: 600;
-    color: #1565c0;
+    color: #005f3c;
     font-size: 1rem;
     line-height: 1.4;
   }
@@ -826,9 +826,9 @@
     border-radius: 50%;
     flex-shrink: 0;
   }
-  .service-indicator.fisioterapia { background-color: #1976d2; } /* Azul */
-  .service-indicator.pilates { background-color: #e91e63; } /* Rosa/Magenta */
-  .service-indicator.avaliacao { background-color: #ff9800; } /* Laranja */
+  .service-indicator.fisioterapia { background-color: #007A4D; } /* Verde */
+  .service-indicator.pilates { background-color: #2e7d32; } /* Verde escuro */
+  .service-indicator.avaliacao { background-color: #81c784; } /* Verde claro */
   .service-indicator.outro { background-color: #9e9e9e; } /* Cinza */
 
   .mobile-card-vagas {
