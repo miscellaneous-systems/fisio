@@ -1,4 +1,3 @@
-// src/pages/PacotesPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import PacoteBaseFormModal from '../components/PacoteBaseFormModal';
@@ -6,6 +5,17 @@ import VenderPacoteModal from '../components/VenderPacoteModal';
 import api from '../api/api';
 // ⚠️ Importa o arquivo de estilos
 import styles from './PacotesPage.module.css'; 
+
+// 💡 Imports do Lucide para botões e seções
+import { 
+    ShoppingBag, 
+    PlusCircle, 
+    CheckCircle, 
+    BookOpen, 
+    Edit, 
+    Trash2, 
+    XCircle 
+} from 'lucide-react';
 
 const PacotesPage = () => {
     const { signed } = useAuth(); // Verifica se está autenticado
@@ -150,19 +160,24 @@ const PacotesPage = () => {
                     onClick={handleOpenVendaModal} 
                     className={`${styles.button} ${styles.buttonPrimary}`}
                 >
+                    <ShoppingBag size={18} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
                     Vender Novo Pacote
                 </button>
                 <button 
                     onClick={handleOpenCreateModal} 
                     className={`${styles.button} ${styles.buttonSecondary}`}
                 >
-                    + Novo Modelo Base
+                    <PlusCircle size={18} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+                    Novo Modelo Base
                 </button>
             </div>
 
             {/* Créditos Ativos (Pacotes Vendidos) */}
             <div className={styles.section}>
-                <h2>✅ Créditos Ativos (Pacientes)</h2>
+                <h2>
+                    <CheckCircle size={20} style={{ marginRight: '8px', verticalAlign: 'middle', color: '#007A4D' }} />
+                    Créditos Ativos (Pacientes)
+                </h2>
                 {creditosAtivos?.length === 0 ? (
                     <p className={styles.infoMessage}>Nenhum pacote ativo encontrado.</p>
                 ) : (
@@ -184,7 +199,6 @@ const PacotesPage = () => {
                                     <td className={styles.tableCell}>{pacoteAtivo.nome_pacote} ({pacoteAtivo.total_sessoes} sessões)</td>
                                     <td className={styles.tableCell}>R$ {parseFloat(pacoteAtivo.valor_total_centavos / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                     <td className={`${styles.tableCell} ${styles.tableCenter}`}>
-                                        {/* Aplica a classe condicionalmente */}
                                         <span className={pacoteAtivo.sessoes_restantes > 0 ? styles.saldoPositivo : styles.saldoNegativo}>
                                             {pacoteAtivo.sessoes_restantes}
                                         </span>
@@ -198,9 +212,9 @@ const PacotesPage = () => {
                                                 onClick={() => handleDeleteCredito(pacoteAtivo.id)} 
                                                 className={`${styles.actionButton} ${styles.buttonDelete}`}
                                             >
+                                                <XCircle size={16} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
                                                 Cancelar
                                             </button>
-                                            {/* Futuramente: Botão de Registrar Sessão */}
                                         </div>
                                     </td>
                                 </tr>
@@ -214,7 +228,10 @@ const PacotesPage = () => {
 
             {/* Modelos Base (Catálogo) */}
             <div className={styles.section}>
-                <h2>📚 Modelos de Pacotes Base (Catálogo)</h2>
+                <h2>
+                    <BookOpen size={20} style={{ marginRight: '8px', verticalAlign: 'middle', color: '#007A4D' }} />
+                    Modelos de Pacotes Base (Catálogo)
+                </h2>
                 {modelosPacotes?.length === 0 ? (
                     <p className={styles.infoMessage}>Nenhum modelo de pacote base cadastrado.</p>
                 ) : (
@@ -236,17 +253,19 @@ const PacotesPage = () => {
                                     <td className={styles.tableCell}>R$ {parseFloat(modelo.valor_centavos / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                     <td className={styles.tableCell}>{modelo.duracao_dias === 0 ? 'Ilimitado' : modelo.duracao_dias}</td>
                                     <td className={`${styles.tableCell} ${styles.actionCell}`}>
-                                        <div className="table-actions">
+                                        <div className="table-actions" style={{ display: 'flex', gap: '8px' }}>
                                             <button 
                                                 onClick={() => handleOpenEditModal(modelo)} 
                                                 className={`${styles.actionButton} ${styles.buttonEdit}`}
                                             >
+                                                <Edit size={16} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
                                                 Editar
                                             </button>
                                             <button 
                                                 onClick={() => handleDeleteModelo(modelo.id)} 
                                                 className={`${styles.actionButton} ${styles.buttonDanger}`}
                                             >
+                                                <Trash2 size={16} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
                                                 Deletar
                                             </button>
                                         </div>

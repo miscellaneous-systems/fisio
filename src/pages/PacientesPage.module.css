@@ -27,15 +27,20 @@
 
 /* Botão de Adicionar Paciente */
 .addButton {
-  padding: 10px 20px;
-  background-color: #007a4d; /* Verde - Sucesso/Adicionar */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #007A4D; 
   color: white;
-  border: none;
-  border-radius: 4px;
+  border: 1px solid #007A4D;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
   transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  margin-left: 4px;
 }
 
 .addButton:hover {
@@ -46,47 +51,41 @@
 }
 
 /* ====================================================================== */
-/* BARRA DE PESQUISA E FILTROS 🔍 */
+/* BARRA DE PESQUISA E FILTROS */
 /* ====================================================================== */
 
 .searchBar {
   margin-bottom: 20px;
   display: flex;
   align-items: center;
-  gap: 15px; /* Espaço entre a pesquisa e possíveis filtros futuros */
+  gap: 15px;
 }
 
-/* O container principal do campo de busca para estilizar a "caixa da lupa" */
 .searchInputContainer {
-  position: relative; /* Essencial para posicionar o ícone da lupa */
-  width: 350px; /* Largura definida para a caixa de pesquisa */
+  position: relative;
+  width: 400px;
 }
 
-/* O ícone da Lupa (Para usar com <span> ou <i> no HTML) */
 .searchIcon {
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 12px;
   transform: translateY(-50%);
-  color: #95a5a6; /* Cor do ícone cinza */
-  font-size: 18px; /* Tamanho do ícone */
+  color: #007a4d;
 }
 
-/* O campo de input de texto em si */
 .searchInput {
   width: 100%;
-  padding: 10px 10px 10px 40px; /* Padding esquerdo aumentado para acomodar o ícone */
-  border: 1px solid #bdc3c7; /* Cor cinza claro */
+  padding: 10px 10px 10px 40px;
+  border: 1px solid #bdc3c7;
   border-radius: 6px;
   font-size: 16px;
-  transition:
-    border-color 0.3s,
-    box-shadow 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .searchInput:focus {
-  border-color: #3498db; /* Azul ao focar */
-  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5); /* Sombra suave ao focar */
+  border-color: #007a4d;
+  box-shadow: 0 0 5px rgba(0, 122, 77, 0.25);
   outline: none;
 }
 
@@ -102,12 +101,9 @@
   }
 
   .searchIcon {
-    position: absolute;
-    top: 38% !important; /* Sobe a lupinha */
+    top: 48% !important;
     left: 8px !important;
     font-size: 16px !important;
-    color: #95a5a6;
-    transform: translateY(-50%);
   }
 
   .searchInput {
@@ -118,21 +114,28 @@
 }
 
 /* ====================================================================== */
-/* ESTILOS DE TABELA */
+/* ESTILOS DE TABELA (Com Borda Arredondada Externa) */
 /* ====================================================================== */
+
+.tableResponsive {
+  margin-top: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;        
+  overflow: hidden;          
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
 
 .pacientesTable {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .tableHeader {
-  padding: 12px;
+  padding: 14px 12px;
   text-align: left;
-  background-color: #007a4d; /* Cinza escuro/Azul Marinho */
+  background-color: #007a4d; 
   color: white;
+  font-weight: 600;
 }
 
 .tableData {
@@ -140,7 +143,10 @@
   border-bottom: 1px solid #ecf0f1;
 }
 
-/* Impede que os botões de ação quebrem linha */
+.pacientesTable tbody tr:last-child .tableData {
+  border-bottom: none; 
+}
+
 .tableDataActions {
   composes: tableData;
   white-space: nowrap;
@@ -154,47 +160,105 @@
 /* BOTÕES DE AÇÃO NA TABELA */
 /* ====================================================================== */
 
-/* Botão Base */
 .actionButton {
-  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;          
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;         
   cursor: pointer;
   margin-right: 5px;
-  transition: background-color 0.2s;
-  font-size: 13px;
-  font-weight: bold;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;          
+  font-weight: 600;           
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
 }
 
-/* Variações de cor (composes) */
 .viewButton {
   composes: actionButton;
-  background-color: #3498db; /* Azul - Prontuário */
+  background-color: #3498db;
 }
 
 .viewButton:hover {
   background-color: #2980b9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .editButton {
   composes: actionButton;
-  background-color: #f39c12; /* Laranja - Editar */
+  background-color: #f39c12;
 }
 
 .editButton:hover {
   background-color: #e67e22;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .inactivateButton {
   composes: actionButton;
-  background-color: #e74c3c; /* Vermelho - Inativar */
-  margin-right: 0; /* Remove a margem do último botão */
+  background-color: #e74c3c;
+  margin-right: 0;
 }
 
 .inactivateButton:hover {
   background-color: #c0392b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
+/* ====================================================================== */
+/* CONTROLES DE PAGINAÇÃO 📄 */
+/* ====================================================================== */
+
+.paginationContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.paginationButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: #007a4d;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #005f3c;
+  transform: translateY(-1px);
+}
+
+.paginationButton:disabled {
+  background-color: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.paginationInfo {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+/* ====================================================================== */
+/* RESPONSIVIDADE (MOBILE) */
+/* ====================================================================== */
 
 @media (max-width: 725px) {
   html,
@@ -207,6 +271,13 @@
   }
   .searchInput {
     font-size: 16px !important;
+  }
+
+  .tableResponsive {
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+    box-shadow: none;
   }
 
   .pacientesTable,
@@ -270,7 +341,7 @@
   .inactivateButton {
     width: 100% !important;
     margin: 0 !important;
-    padding: 12px !important;
+    padding: 10px 12px !important;
     text-align: center;
     justify-content: center;
   }

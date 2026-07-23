@@ -65,7 +65,9 @@
 }
 
 .formLabel {
-    display: block;
+    display: flex;             
+    align-items: center;       
+    gap: 3px;                  
     margin-bottom: 0.5rem;
     font-weight: 600;
     color: #555;
@@ -81,11 +83,6 @@
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.formInput:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
 
 .formInput:disabled {
     background-color: #e9ecef;

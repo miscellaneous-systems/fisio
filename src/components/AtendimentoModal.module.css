@@ -164,14 +164,15 @@
 .saveBtn {
   padding: 10px 20px;
   border: none;
-  background: #1565c0;
+  background: #007A4D;
   color: white;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
 }
 .saveBtn:hover {
-  background: #0d47a1;
+  transition: all 0.3s ease;
+  background: #005a33;
 }
 
 .printBtn {

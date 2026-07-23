@@ -788,7 +788,7 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                     <span className={`badge-status ${p.status}`}>{p.status}</span>
                     <strong 
                       onClick={() => handleAbrirAtendimento(p)}
-                      style={{ cursor: 'pointer', color: '#1565c0', textDecoration: 'underline' }}
+                      style={{ cursor: 'pointer', color: '#007A4D', textDecoration: 'underline' }}
                       title="Clique para iniciar Avaliação ou Evolução"
                     >
                       {p.nome_paciente}

@@ -99,8 +99,12 @@ button, input, select, textarea {
   margin-bottom: 10px; /* Espaçamento padrão entre inputs */
 }
 
-.formInput:focus {
-  border-color: #3498db;
+.formInput:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #007a4d;                               /* Cor verde padrão do sistema */
+  box-shadow: 0 0 5px rgba(0, 122, 77, 0.25);          /* Sombra verde suave em volta */
   outline: none;
 }
 
