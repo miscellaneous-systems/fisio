@@ -12,6 +12,15 @@
     margin-bottom: 40px;
 }
 
+/* Alinhamento dos ícones com o texto dos títulos H2 */
+.section h2 {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    font-size: 1.25rem;
+    color: #333;
+}
+
 .hr {
     margin: 30px 0;
     border: 0;
@@ -20,7 +29,7 @@
 
 .info-message {
     padding: 15px;
-    background-color: #f0f8ff; /* Light blue background */
+    background-color: #f0f8ff;
     border: 1px solid #b0e0e6;
     border-radius: 4px;
     color: #333;
@@ -34,8 +43,7 @@
     color: #555;
 }
 
-
-.error-message {
+.errorMessage {
     text-align: center;
     color: #e74c3c;
     font-weight: bold;
@@ -51,7 +59,11 @@
     padding-bottom: 20px;
 }
 
+/* Alinhamento do ícone dentro dos botões principais */
 .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
@@ -62,7 +74,7 @@
 }
 
 .button-primary {
-    background-color: #3498db; /* Azul para Venda */
+    background-color: #3498db;
     color: white;
 }
 .button-primary:hover {
@@ -70,7 +82,7 @@
 }
 
 .button-secondary {
-    background-color: #f39c12; /* Laranja para Novo Modelo */
+    background-color: #f39c12;
     color: white;
 }
 .button-secondary:hover {
@@ -80,9 +92,8 @@
 /* --- Tabela --- */
 .table {
     width: 100%;
-    border-collapse: collapse; /* 💡 ADICIONADO: Une as bordas das células. */
+    border-collapse: collapse;
     margin-top: 15px;
-    /* 💡 REMOVIDO: A borda externa é desnecessária se as células já têm borda. */
 }
 
 .table th {
@@ -108,12 +119,12 @@
 
 /* Estilos Condicionais para Saldo */
 .saldo-positivo {
-    color: #27ae60; /* Verde */
+    color: #27ae60;
     font-weight: bold;
 }
 
 .saldo-negativo {
-    color: #c0392b; /* Vermelho escuro */
+    color: #c0392b;
     font-weight: bold;
 }
 
@@ -123,11 +134,15 @@
     gap: 8px;
     justify-content: center;
     align-items: center;
-    /* Ajuste para que o padding da célula não interfira */
     padding: 10px;
 }
 
+/* Alinhamento do ícone dentro dos botões da tabela */
 .action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
     padding: 6px 10px;
     color: white;
     border: none;
@@ -139,21 +154,21 @@
 }
 
 .button-edit {
-    background-color: #f39c12; /* Laranja para Editar */
+    background-color: #f39c12;
 }
 .button-edit:hover {
     background-color: #e67e22;
 }
 
 .button-delete {
-    background-color: #e74c3c; /* Vermelho para Cancelar Crédito Ativo */
+    background-color: #e74c3c;
 }
 .button-delete:hover {
     background-color: #c0392b;
 }
 
 .button-danger {
-    background-color: #c0392b; /* Vermelho mais forte para Deletar Modelo Base */
+    background-color: #c0392b;
 }
 .button-danger:hover {
     background-color: #a02d20;
