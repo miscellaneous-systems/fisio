@@ -8,7 +8,7 @@ const PacienteFormModal = ({ isOpen, onClose, onSave, paciente }) => {
 
     // Estado inicial do formulário
     const getInitialState = () => {
-        // Tenta ler data_nascimento (frontend) ou nascimento (backend)
+        // Ler data_nascimento (frontend) ou nascimento (backend)
         const dataRaw = paciente?.data_nascimento || paciente?.nascimento || '';
         
         return {
@@ -48,7 +48,7 @@ const PacienteFormModal = ({ isOpen, onClose, onSave, paciente }) => {
             return;
         }
 
-        // 💡 PREPARAÇÃO DOS DADOS: Mapeia 'data_nascimento' para 'nascimento' (esperado pelo backend)
+        // Mapeia 'data_nascimento' para 'nascimento' (esperado pelo backend)
         const dadosParaEnviar = {
             ...formData,
             nascimento: formData.data_nascimento
@@ -59,7 +59,6 @@ const PacienteFormModal = ({ isOpen, onClose, onSave, paciente }) => {
         try {
             let response;
             if (isEditing) {
-                // 💡 CORREÇÃO: Backend usa PATCH, não PUT
                 response = await api.patch(`/pacientes/${paciente.id}`, dadosParaEnviar);
             } else {
                 // Cria novo paciente
@@ -80,8 +79,6 @@ const PacienteFormModal = ({ isOpen, onClose, onSave, paciente }) => {
     if (!isOpen) return null;
 
     return (
-        // 💡 CORREÇÃO: Usa classes globais ("modalOverlay", "modalContent") para garantir o estilo flutuante (fixed).
-        // Isso alinha com o NotaFormModal e corrige o problema de aparecer abaixo da lista.
         <div className="modalOverlay" onClick={onClose}>
             <div className="modalContent" onClick={(e) => e.stopPropagation()}>
                 
