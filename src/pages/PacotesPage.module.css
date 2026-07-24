@@ -173,3 +173,52 @@
 .button-danger:hover {
     background-color: #a02d20;
 }
+
+/* --- Media Query para Telas de 620px ou menos --- */
+@media screen and (max-width: 620px) {
+  .container {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 4px;
+  }
+
+  /* Empilha os botões do topo para não estourarem a tela */
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .button {
+    width: 100%;
+    justify-content: center;
+    font-size: 15px;
+    padding: 12px 15px;
+  }
+
+  /* Transforma a tabela em um bloco com scroll horizontal suave */
+  .table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  /* Ajusta o espaçamento interno das células para mobile */
+  .table-cell {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  /* Melhora o conforto visual dos botões de ação na tabela mobile */
+  .action-cell {
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .action-button {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}

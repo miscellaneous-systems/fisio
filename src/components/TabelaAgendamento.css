@@ -40,6 +40,9 @@
   border: 1px solid #e0e0e0;
   color: #444;
   padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   border-radius: 6px;
   font-size: 0.9rem;
   font-weight: 600;
@@ -68,6 +71,9 @@
   color: white;
   border: 1px solid #007A4D;
   padding: 8px 16px;
+  gap: 4px;
+  display: flex;
+  align-items: center;
   border-radius: 6px;
   font-size: 0.9rem;
   font-weight: 600;

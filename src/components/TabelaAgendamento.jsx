@@ -3,6 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import './TabelaAgendamento.css';
 import api from '../api/api'; // Importação da instância do Axios configurada
 import AtendimentoModal from './AtendimentoModal';
+import { 
+  Printer, 
+  Copy, 
+  Search, 
+  Clipboard, 
+  Check, 
+  Ban, 
+  X, 
+  AlertTriangle 
+} from 'lucide-react';
 
 const HORARIOS_PADRAO = [
   '07:00', '08:00', '09:00', '10:00', '11:00', 
@@ -617,12 +627,12 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
 
           {/* Botão de Imprimir */}
           <button onClick={handlePrint} className="btn-nav" title="Imprimir Agenda Semanal">
-            🖨️ Imprimir
+            <Printer size={18} /> Imprimir
           </button>
 
           {/* Botão de Duplicar Semana */}
           <button onClick={handleDuplicarSemana} className="btn-duplicar" title="Copiar agendamentos para a próxima semana">
-            📑 Replicar Semana
+            <Copy size={18} /> Replicar Semana
           </button>
 
           {loading && <span className="loading-badge">↻</span>}
@@ -746,7 +756,7 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                               onDragStart={(e) => handleDragStart(e, p.id)}
                               title={`${p.nome_paciente} (${p.servico_tipo}) - ${p.status}${p.status === 'Cancelado' && p.observacoes ? `\nMotivo: ${p.observacoes}` : ''}`}
                             >
-                              {(p.status === 'concluido' || p.status === 'Realizado') && '✓ '}
+                              {(p.status === 'concluido' || p.status === 'Realizado') && <Check size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '2px' }} />}
                               {p.nome_paciente} <small>({p.servico_tipo})</small>
                             </div>
                           ))}
@@ -802,7 +812,7 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                       title="Ver Detalhes do Agendamento"
                       onClick={() => navigate(`/agendamentos/${p.id}`)}
                     >
-                      🔍
+                      <Search size={16} />
                     </button>
 
                     {/* Botão de Evolução / Prontuário */}
@@ -817,7 +827,7 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                         }
                       }}
                     >
-                      📋
+                      <Clipboard size={16} />
                     </button>
                     {/* Botão de Concluir (Check) */}
                     {p.status !== 'Realizado' && (
@@ -826,7 +836,7 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                         title="Marcar como Realizado"
                         onClick={() => handleStatusChange(p.id, 'Realizado', '', p.nome_paciente, p.servico_tipo)}
                       >
-                        ✓
+                        <Check size={16} />
                       </button>
                     )}
                     {/* Botão de Cancelar (Novo) */}
@@ -836,17 +846,17 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                         title="Cancelar Agendamento (Mantém no histórico)"
                         onClick={() => {
                           const motivo = window.prompt(`Deseja cancelar o agendamento de ${p.nome_paciente}?\n\nSe sim, informe o motivo (opcional):`);
-                          // Se o usuário clicar em "OK" (mesmo com o campo vazio), o prompt retorna uma string.
-                          // Se clicar em "Cancelar", retorna null.
                           if (motivo !== null) {
                             handleStatusChange(p.id, 'Cancelado', motivo);
                           }
                         }}
                       >
-                        🚫
+                        <Ban size={16} />
                       </button>
                     )}
-                    <button type="button" className="btn-remove-sm" onClick={() => handleRemover(p.id)}>✕</button>
+                    <button type="button" className="btn-remove-sm" title="Remover" onClick={() => handleRemover(p.id)}>
+                      <X size={16} />
+                    </button>
                   </div>
                 </div>
               ))}
@@ -923,12 +933,15 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                   </select>
 
                   <button type="submit" className="btn-salvar full-width">Agendar Paciente</button>
-              </form>
+                </form>
               </div>
             )}
 
             {vagasDisponiveis === 0 && (
-              <div className="alerta-lotado">⚠️ Horário Lotado</div>
+              <div className="alerta-lotado">
+                <AlertTriangle size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} /> 
+                Horário Lotado
+              </div>
             )}
 
               <div className="modal-actions">
