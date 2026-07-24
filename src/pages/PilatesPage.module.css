@@ -24,10 +24,10 @@
 .no-data-message {
     margin-top: 20px;
     padding: 15px;
-    background-color: #ffe0b2; /* Laranja suave */
-    border: 1px solid #ffcc80;
+    background-color: #8a795e; /* Laranja suave */
+    border: 1px solid #7a644d;
     border-radius: 4px;
-    color: #5d4037;
+    color: rgb(252, 249, 248);
     font-weight: bold;
 }
 
@@ -96,7 +96,7 @@
 
 .date-input:focus,
 .status-select:focus {
-    border-color: #9b59b6;
+    border-color: #007a4d;
     outline: none;
 }
 
