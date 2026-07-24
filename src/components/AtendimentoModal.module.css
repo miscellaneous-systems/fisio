@@ -87,8 +87,16 @@
   transition: all 0.2s;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
   font-size: 1.1rem;
+}
+
+.menuBtnHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.1rem;
+  color: #333;
   font-weight: 600;
 }
 
@@ -96,6 +104,7 @@
   font-size: 0.85rem;
   font-weight: 400;
   color: #777;
+  padding-left: 34px;
 }
 
 .menuBtn:hover {
@@ -104,8 +113,8 @@
 }
 
 .btnAvaliacao:hover {
-  border-color: #3498db;
-  color: #2980b9;
+  border-color: #2ecc71;
+  color: #27ae60;
 }
 .btnEvolucao:hover {
   border-color: #2ecc71;
@@ -160,6 +169,10 @@
   background: #fff;
   border-radius: 6px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 .saveBtn {
   padding: 10px 20px;
@@ -183,8 +196,37 @@
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
+
 .printBtn:hover {
   background: #e2e6ea;
   border-color: #adb5bd;
+}
+
+/* Media Query para telas de 486px para baixo */
+@media (max-width: 486px) {
+  .actions {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .rightActions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .backBtn, 
+  .printBtn, 
+  .saveBtn {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 10px;
+  }
 }
