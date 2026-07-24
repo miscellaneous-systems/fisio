@@ -236,6 +236,11 @@ const DetalheAgendamentoPage = () => {
                                     </span>
                                 </p>
                             )}
+                            {agendamento?.status === 'Cancelado' && (
+                                <p>
+                                    <strong>Motivo do Cancelamento:</strong> {agendamento?.observacoes || 'Não informado'}
+                                </p>
+                            )}
                         </div>
                     </div>
                 </>

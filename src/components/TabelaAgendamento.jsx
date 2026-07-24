@@ -1,33 +1,46 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './TabelaAgendamento.css';
-import api from '../api/api'; // Importação da instância do Axios configurada
-import AtendimentoModal from './AtendimentoModal';
-import { 
-  Printer, 
-  Copy, 
-  Search, 
-  Clipboard, 
-  Check, 
-  Ban, 
-  X, 
-  AlertTriangle 
-} from 'lucide-react';
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import "./TabelaAgendamento.css";
+import api from "../api/api"; // Importação da instância do Axios configurada
+import AtendimentoModal from "./AtendimentoModal";
+import {
+  Printer,
+  Copy,
+  Search,
+  Clipboard,
+  Check,
+  Ban,
+  X,
+  AlertTriangle,
+} from "lucide-react";
 
 const HORARIOS_PADRAO = [
-  '07:00', '08:00', '09:00', '10:00', '11:00', 
-  '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'  
+  "07:00",
+  "08:00",
+  "09:00",
+  "10:00",
+  "11:00",
+  "12:00",
+  "13:00",
+  "14:00",
+  "15:00",
+  "16:00",
+  "17:00",
+  "18:00",
 ];
 
 const DIAS_SEMANA = [
-  { key: 'seg', label: 'Segunda' },
-  { key: 'ter', label: 'Terça' },
-  { key: 'qua', label: 'Quarta' },
-  { key: 'qui', label: 'Quinta' },
-  { key: 'sex', label: 'Sexta' },
-  { key: 'sab', label: 'Sábado' }
+  { key: "seg", label: "Segunda" },
+  { key: "ter", label: "Terça" },
+  { key: "qua", label: "Quarta" },
+  { key: "qui", label: "Quinta" },
+  { key: "sex", label: "Sexta" },
+  { key: "sab", label: "Sábado" },
 ];
-export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORARIOS_PADRAO }) {
+export default function TabelaAgendamento({
+  dias = DIAS_SEMANA,
+  horarios = HORARIOS_PADRAO,
+}) {
   const navigate = useNavigate();
   const [agendamentos, setAgendamentos] = useState({});
   const [loading, setLoading] = useState(false);
@@ -36,21 +49,30 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
   // Estados para o Modal de Agendamento
   const [modalAberto, setModalAberto] = useState(false);
   const [slotSelecionado, setSlotSelecionado] = useState(null); // { key, diaKey, horario }
-  
+
   // Estados do Formulário dentro do Modal
-  const [nomePaciente, setNomePaciente] = useState('');
+  const [nomePaciente, setNomePaciente] = useState("");
   const [pacienteSelecionado, setPacienteSelecionado] = useState(null); // { id, nome }
   const [sugestoes, setSugestoes] = useState([]); // Lista de pacientes para busca
-  const [modoCriacao, setModoCriacao] = useState('existente'); // 'existente' ou 'novo'
-  const [novoPacienteDados, setNovoPacienteDados] = useState({ nome: '', telefone: '', email: '', data_nascimento: '' });
-  const [tipoSessao, setTipoSessao] = useState('Fisioterapia'); // Estado para o tipo de sessão
+  const [modoCriacao, setModoCriacao] = useState("existente"); // 'existente' ou 'novo'
+  const [novoPacienteDados, setNovoPacienteDados] = useState({
+    nome: "",
+    telefone: "",
+    email: "",
+    data_nascimento: "",
+  });
+  const [tipoSessao, setTipoSessao] = useState("Fisioterapia"); // Estado para o tipo de sessão
   const [mobileDayIndex, setMobileDayIndex] = useState(0); // Índice do dia selecionado no mobile
   const [atendimentoModalOpen, setAtendimentoModalOpen] = useState(false); // Estado do Modal de Atendimento
-  const [agendamentoEmAtendimento, setAgendamentoEmAtendimento] = useState(null); // Agendamento selecionado para atendimento
+  const [agendamentoEmAtendimento, setAgendamentoEmAtendimento] =
+    useState(null); // Agendamento selecionado para atendimento
 
   // Função para formatar data (exibição)
   const formatarData = (date) => {
-    return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    return date.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+    });
   };
 
   // --- INTEGRAÇÃO COM API ---
@@ -72,45 +94,50 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
       for (let i = 0; i < 7; i++) {
         const diaCorrente = new Date(inicioSemana);
         diaCorrente.setDate(inicioSemana.getDate() + i);
-        const diaFormatado = diaCorrente.toISOString().split('T')[0];
-        
+        const diaFormatado = diaCorrente.toISOString().split("T")[0];
+
         // A rota /agendamentos/dia, usada em outras partes do app, retorna o paciente_id
-        promessas.push(api.get('/agendamentos/dia', { params: { data: diaFormatado } }));
+        promessas.push(
+          api.get("/agendamentos/dia", { params: { data: diaFormatado } }),
+        );
       }
 
       // Executa todas as requisições em paralelo
       const results = await Promise.allSettled(promessas);
-      
+
       const mapaAgendamentos = {};
-      
+
       // Processa a resposta de cada dia
-      results.forEach(result => {
+      results.forEach((result) => {
         // Se a requisição falhou, ignoramos apenas aquele dia, mantendo o resto da agenda
-        if (result.status !== 'fulfilled') return;
+        if (result.status !== "fulfilled") return;
 
         const listaDoDia = result.value.data.agendamentos || [];
-        listaDoDia.forEach(agendamento => {
+        listaDoDia.forEach((agendamento) => {
           const dataObj = new Date(agendamento.data_hora);
-          
-          const diasKeys = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+
+          const diasKeys = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"];
           const diaKey = diasKeys[dataObj.getDay()];
-          const hora = dataObj.getHours().toString().padStart(2, '0') + ':00';
-          
+          const hora = dataObj.getHours().toString().padStart(2, "0") + ":00";
+
           const key = `${diaKey}-${hora}`;
 
           if (!mapaAgendamentos[key]) {
             mapaAgendamentos[key] = [];
           }
-          
+
           // Adiciona o agendamento ao mapa, agora com o paciente_id correto
           mapaAgendamentos[key].push({
             id: agendamento.id,
-            paciente_id: agendamento.paciente_id || agendamento.paciente?.id || agendamento.pacienteId,
-            nome_paciente: agendamento.nome_paciente || 'Sem Nome',
-            servico_tipo: agendamento.servico_tipo, 
-            status: agendamento.status || 'Pendente',
+            paciente_id:
+              agendamento.paciente_id ||
+              agendamento.paciente?.id ||
+              agendamento.pacienteId,
+            nome_paciente: agendamento.nome_paciente || "Sem Nome",
+            servico_tipo: agendamento.servico_tipo,
+            status: agendamento.status || "Pendente",
             observacoes: agendamento.observacoes,
-            data_hora: agendamento.data_hora // Necessário para a duplicação
+            data_hora: agendamento.data_hora, // Necessário para a duplicação
           });
         });
       });
@@ -132,7 +159,7 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
   useEffect(() => {
     const hoje = new Date();
     const diaSemana = hoje.getDay(); // 0=Dom, 1=Seg, ..., 6=Sab
-// Mapeia: Dom(0)->0(Seg), Seg(1)->0(Seg), ..., Sab(6)->5(Sab)
+    // Mapeia: Dom(0)->0(Seg), Seg(1)->0(Seg), ..., Sab(6)->5(Sab)
     let index = diaSemana === 0 ? 0 : diaSemana - 1;
     if (index >= dias.length) index = 0;
     setMobileDayIndex(index);
@@ -159,7 +186,7 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
   const handleDataChange = (e) => {
     const dataValue = e.target.value;
     if (dataValue) {
-      const [ano, mes, dia] = dataValue.split('-').map(Number);
+      const [ano, mes, dia] = dataValue.split("-").map(Number);
       // Cria a data preservando o dia selecionado (evita problemas de fuso horário)
       const novaData = new Date(ano, mes - 1, dia);
       setDataReferencia(novaData);
@@ -170,24 +197,24 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
   const getDataISO = () => {
     const d = new Date(dataReferencia);
     const offset = d.getTimezoneOffset();
-    const local = new Date(d.getTime() - (offset * 60 * 1000));
-    return local.toISOString().split('T')[0];
+    const local = new Date(d.getTime() - offset * 60 * 1000);
+    return local.toISOString().split("T")[0];
   };
 
   // Helper para calcular a data correta baseada no dia da semana da tabela
   const getDataParaDiaSemana = (diaKey, horarioStr) => {
-    const diasMap = { 'dom': 0, 'seg': 1, 'ter': 2, 'qua': 3, 'qui': 4, 'sex': 5, 'sab': 6 };
+    const diasMap = { dom: 0, seg: 1, ter: 2, qua: 3, qui: 4, sex: 5, sab: 6 };
     const targetDiaIndex = diasMap[diaKey];
-    
+
     // Usa dataReferencia em vez de new Date() para respeitar a semana visualizada
     const hoje = new Date(dataReferencia);
     hoje.setHours(0, 0, 0, 0); // Zera a hora para evitar erros de cálculo de dias
     const diaAtualIndex = hoje.getDay();
-    
+
     const diff = targetDiaIndex - diaAtualIndex; // Diferença de dias
     const dataAlvo = new Date(hoje);
     dataAlvo.setDate(hoje.getDate() + diff); // Ajusta para o dia da semana correto na semana atual
-    const [horas, minutos] = horarioStr.split(':').map(Number);
+    const [horas, minutos] = horarioStr.split(":").map(Number);
     dataAlvo.setHours(horas, minutos, 0, 0);
     return dataAlvo;
   };
@@ -206,12 +233,17 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
 
     const key = `${diaKey}-${horario}`;
     setSlotSelecionado({ key, diaKey, horario });
-    setNomePaciente('');
+    setNomePaciente("");
     setPacienteSelecionado(null);
     setSugestoes([]);
-    setModoCriacao('existente');
-    setNovoPacienteDados({ nome: '', telefone: '', email: '', data_nascimento: '' });
-    setTipoSessao('Fisioterapia'); // Reseta o tipo de sessão ao abrir
+    setModoCriacao("existente");
+    setNovoPacienteDados({
+      nome: "",
+      telefone: "",
+      email: "",
+      data_nascimento: "",
+    });
+    setTipoSessao("Fisioterapia"); // Reseta o tipo de sessão ao abrir
     setModalAberto(true);
   };
 
@@ -233,14 +265,14 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
     try {
       // Tenta buscar filtrando (ajuste conforme sua API: ?nome= ou ?q=)
       // Se a API não tiver filtro, buscamos todos e filtramos no front (menos performático mas funcional)
-      const response = await api.get('/pacientes'); 
-      
+      const response = await api.get("/pacientes");
+
       // CORREÇÃO: Garante que pegamos a lista correta, seja array direto ou objeto { pacientes: [] }
       const listaPacientes = response.data.pacientes || response.data || [];
-      
+
       if (Array.isArray(listaPacientes)) {
-        const filtrados = listaPacientes.filter(p => 
-          p.nome && p.nome.toLowerCase().includes(termo.toLowerCase())
+        const filtrados = listaPacientes.filter(
+          (p) => p.nome && p.nome.toLowerCase().includes(termo.toLowerCase()),
         );
         setSugestoes(filtrados.slice(0, 5)); // Limita a 5 sugestões
       }
@@ -257,31 +289,35 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
 
   // Função para formatar a data no cabeçalho (ex: 02/02/2026)
   const formatarDataCabecalho = (diaKey) => {
-    const diasMap = { 'dom': 0, 'seg': 1, 'ter': 2, 'qua': 3, 'qui': 4, 'sex': 5, 'sab': 6 };
+    const diasMap = { dom: 0, seg: 1, ter: 2, qua: 3, qui: 4, sex: 5, sab: 6 };
     const targetDiaIndex = diasMap[diaKey];
-    
+
     const hoje = new Date(dataReferencia);
     hoje.setHours(0, 0, 0, 0);
     const diaAtualIndex = hoje.getDay();
-    
+
     const diff = targetDiaIndex - diaAtualIndex;
     const dataAlvo = new Date(hoje);
     dataAlvo.setDate(hoje.getDate() + diff);
-    
-    return dataAlvo.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+    return dataAlvo.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
   };
 
   // Adicionar Agendamento (Paciente Existente ou Novo)
   const handleAdicionarAgendamento = async (e) => {
     e.preventDefault();
-    
+
     try {
       let pacienteIdFinal = null;
-      let nomeFinal = '';
+      let nomeFinal = "";
 
-      if (modoCriacao === 'novo') {
+      if (modoCriacao === "novo") {
         // 1. Criar Paciente Primeiro
-        const resPaciente = await api.post('/pacientes', novoPacienteDados);
+        const resPaciente = await api.post("/pacientes", novoPacienteDados);
         // CORREÇÃO: Verifica se o paciente vem dentro de uma propriedade 'paciente' ou direto no data
         const pacienteCriado = resPaciente.data.paciente || resPaciente.data;
         pacienteIdFinal = pacienteCriado.id;
@@ -290,52 +326,70 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
         // 2. Usar Paciente Existente (Lógica simplificada: busca por nome ou ID simulado)
         // Num app real, isso seria um Select/Autocomplete com ID
         if (!pacienteSelecionado) {
-          alert("Por favor, selecione um paciente da lista de sugestões para garantir o vínculo do ID.");
+          alert(
+            "Por favor, selecione um paciente da lista de sugestões para garantir o vínculo do ID.",
+          );
           return;
         }
-        
+
         pacienteIdFinal = pacienteSelecionado.id;
         nomeFinal = pacienteSelecionado.nome;
       }
 
-// 3. Criar o Agendamento
+      // 3. Criar o Agendamento
       // Calcula a data ISO completa para o backend
-      const dataHoraISO = getDataParaDiaSemana(slotSelecionado.diaKey, slotSelecionado.horario).toISOString();
+      const dataHoraISO = getDataParaDiaSemana(
+        slotSelecionado.diaKey,
+        slotSelecionado.horario,
+      ).toISOString();
 
       const payload = {
         paciente_id: pacienteIdFinal, // Obrigatório
         data_hora: dataHoraISO, // Envia data completa (ISO)
-        status: 'Pendente',
+        status: "Pendente",
         servico_tipo: tipoSessao,
         duracao_minutos: 60, // Padrão de 1 hora
-        observacoes: ''
+        observacoes: "",
       };
 
-      await api.post('/agendamentos', payload);
-      
+      await api.post("/agendamentos", payload);
+
       // Recarrega a lista
       await carregarAgendamentos();
-      
-      // Limpa campos
-      setNomePaciente('');
-      setNovoPacienteDados({ nome: '', telefone: '', email: '', data_nascimento: '' });
-      setModoCriacao('existente');
 
+      // Limpa campos
+      setNomePaciente("");
+      setNovoPacienteDados({
+        nome: "",
+        telefone: "",
+        email: "",
+        data_nascimento: "",
+      });
+      setModoCriacao("existente");
     } catch (error) {
-      alert('Erro ao criar agendamento: ' + (error.response?.data?.message || error.message));
+      alert(
+        "Erro ao criar agendamento: " +
+          (error.response?.data?.message || error.message),
+      );
     }
   };
 
   // Atualizar Status (Ex: Realizado, Cancelado)
-  const handleStatusChange = async (agendamentoId, novoStatus, motivo = '', nomePaciente = '', servicoTipo = '') => {
+  const handleStatusChange = async (
+    agendamentoId,
+    novoStatus,
+    motivo = "",
+    nomePaciente = "",
+    servicoTipo = "",
+  ) => {
     try {
       // Se for concluir, usa a rota específica para garantir débito de pacote e consistência
-      if (novoStatus === 'Realizado') {
+      if (novoStatus === "Realizado") {
         const confirmar = window.confirm(
-          `Deseja marcar o atendimento de ${nomePaciente || 'este paciente'} como REALIZADO?\n\n` +
-          `Isso debitará automaticamente 1 sessão do pacote de ${servicoTipo || 'créditos'} (caso o paciente possua um ativo deste tipo).`
+          `Deseja marcar o atendimento de ${nomePaciente || "este paciente"} como REALIZADO?\n\n` +
+            `Isso debitará automaticamente 1 sessão do pacote de ${servicoTipo || "créditos"} (caso o paciente possua um ativo deste tipo).`,
         );
-        
+
         if (!confirmar) return;
 
         // Chamada para a rota que centraliza a regra de negócio do débito
@@ -345,15 +399,17 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
         const response = await api.get(`/agendamentos/${agendamentoId}`);
         const agendamentoAtual = response.data.agendamento;
 
-        const payload = { 
-          ...agendamentoAtual, 
-          status: novoStatus 
+        const payload = {
+          ...agendamentoAtual,
+          status: novoStatus,
         };
 
         // Se for um cancelamento e um motivo foi fornecido, adiciona nas observações
-        if (novoStatus === 'Cancelado' && motivo) {
+        if (novoStatus === "Cancelado" && motivo) {
           // Prepend o motivo para não sobrescrever observações existentes
-          const obsOriginal = agendamentoAtual.observacoes ? ` | Obs. Original: ${agendamentoAtual.observacoes}` : '';
+          const obsOriginal = agendamentoAtual.observacoes
+            ? ` | Obs. Original: ${agendamentoAtual.observacoes}`
+            : "";
           payload.observacoes = `Cancelado: ${motivo}${obsOriginal}`;
         }
 
@@ -362,13 +418,16 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
       carregarAgendamentos();
     } catch (error) {
       console.error("Erro ao atualizar status", error);
-      alert("Erro ao atualizar status: " + (error.response?.data?.message || error.message));
+      alert(
+        "Erro ao atualizar status: " +
+          (error.response?.data?.message || error.message),
+      );
     }
   };
 
   // Remover Agendamento
   const handleRemover = async (agendamentoId) => {
-    if (window.confirm('Tem certeza que deseja remover este agendamento?')) {
+    if (window.confirm("Tem certeza que deseja remover este agendamento?")) {
       try {
         await api.delete(`/agendamentos/${agendamentoId}`);
         carregarAgendamentos();
@@ -392,41 +451,52 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
   const handleDrop = async (e, diaKey, horario) => {
     e.preventDefault();
     const agendamentoId = e.dataTransfer.getData("agendamentoId");
-    
+
     if (!agendamentoId) return;
-    
+
     try {
       // 1. Busca os detalhes completos do agendamento para não perder dados no update.
       const response = await api.get(`/agendamentos/${agendamentoId}`);
       const agendamentoCompleto = response.data.agendamento;
 
       if (!agendamentoCompleto) {
-        alert("Erro: Não foi possível encontrar os dados originais do agendamento.");
+        alert(
+          "Erro: Não foi possível encontrar os dados originais do agendamento.",
+        );
         return;
       }
 
       // 2. Calcula a nova data e prepara a confirmação
       const novaDataHora = getDataParaDiaSemana(diaKey, horario);
-      const diaLabel = dias.find(d => d.key === diaKey)?.label || diaKey;
+      const diaLabel = dias.find((d) => d.key === diaKey)?.label || diaKey;
 
-      if (window.confirm(`Deseja mover o agendamento de '${agendamentoCompleto.nome_paciente}' para ${diaLabel} às ${horario}?`)) {
+      if (
+        window.confirm(
+          `Deseja mover o agendamento de '${agendamentoCompleto.nome_paciente}' para ${diaLabel} às ${horario}?`,
+        )
+      ) {
         // 3. Prepara o payload completo para o PUT, atualizando apenas a data/hora
         const payloadCompleto = {
           ...agendamentoCompleto,
-          data_hora: novaDataHora.toISOString()
+          data_hora: novaDataHora.toISOString(),
         };
         await api.put(`/agendamentos/${agendamentoId}`, payloadCompleto);
         carregarAgendamentos();
       }
     } catch (error) {
-      alert("Erro ao mover agendamento: " + (error.response?.data?.message || error.message));
+      alert(
+        "Erro ao mover agendamento: " +
+          (error.response?.data?.message || error.message),
+      );
     }
   };
 
   // --- Lógica de Atendimento (Modal) ---
   const handleAbrirAtendimento = (agendamento) => {
     if (!agendamento.paciente_id) {
-      alert("Erro: Este agendamento não tem um paciente vinculado corretamente.");
+      alert(
+        "Erro: Este agendamento não tem um paciente vinculado corretamente.",
+      );
       return;
     }
     setAgendamentoEmAtendimento(agendamento);
@@ -435,12 +505,12 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
 
   const handleSaveAtendimento = async (titulo, conteudo) => {
     if (!agendamentoEmAtendimento) return;
-    
+
     try {
-      await api.post('/prontuario', {
+      await api.post("/prontuario", {
         paciente_id: agendamentoEmAtendimento.paciente_id,
         titulo: titulo,
-        conteudo: conteudo
+        conteudo: conteudo,
       });
       alert(`${titulo} salva com sucesso!`);
       setAtendimentoModalOpen(false);
@@ -466,25 +536,25 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
   };
 
   const handlePrint = () => {
-  // 1. Criar o elemento Iframe (invisível para o usuário)
-  const iframe = document.createElement('iframe');
-  iframe.style.position = 'fixed';
-  iframe.style.right = '0';
-  iframe.style.bottom = '0';
-  iframe.style.width = '0';
-  iframe.style.height = '0';
-  iframe.style.border = 'none';
-  document.body.appendChild(iframe);
+    // 1. Criar o elemento Iframe (invisível para o usuário)
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "fixed";
+    iframe.style.right = "0";
+    iframe.style.bottom = "0";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
+    iframe.style.border = "none";
+    document.body.appendChild(iframe);
 
-  const headers = dias.map(dia => ({
-    label: dia.label,
-    data: formatarDataCabecalho(dia.key)
-  }));
+    const headers = dias.map((dia) => ({
+      label: dia.label,
+      data: formatarDataCabecalho(dia.key),
+    }));
 
-  const intervalo = getIntervaloExibicao();
+    const intervalo = getIntervaloExibicao();
 
-  // O seu layout EXATO, sem alterações
-  let htmlContent = `
+    // O seu layout EXATO, sem alterações
+    let htmlContent = `
     <html>
       <head>
         <title>Agenda Semanal - ${intervalo}</title>
@@ -518,59 +588,76 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
           <thead>
             <tr>
               <th>Horário</th>
-              ${headers.map(h => `<th>${h.label}<br><small>${h.data}</small></th>`).join('')}
+              ${headers.map((h) => `<th>${h.label}<br><small>${h.data}</small></th>`).join("")}
             </tr>
           </thead>
           <tbody>
-            ${horarios.map(horario => `
+            ${horarios
+              .map(
+                (horario) => `
               <tr>
                 <td class="time-col">${horario}</td>
-                ${dias.map(dia => {
-                  const key = `${dia.key}-${horario}`;
-                  const lista = agendamentos[key] || [];
-                  return `<td>${lista.map(p => `
-                    <div class="paciente-card ${p.status === 'Cancelado' ? 'cancelado' : p.status === 'Realizado' ? 'realizado' : ''}">
+                ${dias
+                  .map((dia) => {
+                    const key = `${dia.key}-${horario}`;
+                    const lista = agendamentos[key] || [];
+                    return `<td>${lista
+                      .map(
+                        (p) => `
+                    <div class="paciente-card ${p.status === "Cancelado" ? "cancelado" : p.status === "Realizado" ? "realizado" : ""}">
                       <span class="p-nome">${p.nome_paciente}</span>
                       <span class="p-servico">${p.servico_tipo}</span>
                     </div>
-                  `).join('')}</td>`;
-                }).join('')}
+                  `,
+                      )
+                      .join("")}</td>`;
+                  })
+                  .join("")}
               </tr>
-            `).join('')}
+            `,
+              )
+              .join("")}
           </tbody>
         </table>
       </body>
     </html>
   `;
 
-  const doc = iframe.contentWindow.document;
-  doc.write(htmlContent);
-  doc.close();
+    const doc = iframe.contentWindow.document;
+    doc.write(htmlContent);
+    doc.close();
 
-  // 2. A lógica para imprimir SEM sair da página e SEM deslogar
-  iframe.contentWindow.focus();
-  
-  // Pequeno delay para garantir que o navegador renderizou o HTML antes de chamar a impressora
-  setTimeout(() => {
-    iframe.contentWindow.print();
-    
-    // Remove o iframe do DOM depois que a caixa de diálogo fechar 
-    // para manter a página limpa
+    // 2. A lógica para imprimir SEM sair da página e SEM deslogar
+    iframe.contentWindow.focus();
+
+    // Pequeno delay para garantir que o navegador renderizou o HTML antes de chamar a impressora
     setTimeout(() => {
-      document.body.removeChild(iframe);
-    }, 1000);
-  }, 500);
-};
+      iframe.contentWindow.print();
+
+      // Remove o iframe do DOM depois que a caixa de diálogo fechar
+      // para manter a página limpa
+      setTimeout(() => {
+        document.body.removeChild(iframe);
+      }, 1000);
+    }, 500);
+  };
 
   // Função para Duplicar a Semana Atual para a Próxima
   const handleDuplicarSemana = async () => {
-    if (!window.confirm("Deseja copiar todos os agendamentos desta semana para a PRÓXIMA semana?")) return;
+    if (
+      !window.confirm(
+        "Deseja copiar todos os agendamentos desta semana para a PRÓXIMA semana?",
+      )
+    )
+      return;
 
     setLoading(true);
     try {
       const agendamentosAtuais = Object.values(agendamentos).flat();
       // Filtra apenas agendamentos ativos (ignora cancelados)
-      const validos = agendamentosAtuais.filter(a => a.status !== 'Cancelado');
+      const validos = agendamentosAtuais.filter(
+        (a) => a.status !== "Cancelado",
+      );
 
       if (validos.length === 0) {
         alert("Não há agendamentos ativos nesta semana para copiar.");
@@ -578,18 +665,18 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
         return;
       }
 
-      const promises = validos.map(item => {
+      const promises = validos.map((item) => {
         const dataOriginal = new Date(item.data_hora);
         const novaData = new Date(dataOriginal);
         novaData.setDate(novaData.getDate() + 7); // Soma 7 dias
 
-        return api.post('/agendamentos', {
+        return api.post("/agendamentos", {
           paciente_id: item.paciente_id,
           data_hora: novaData.toISOString(),
-          status: 'Pendente', // Reseta status para Pendente
+          status: "Pendente", // Reseta status para Pendente
           servico_tipo: item.servico_tipo,
           duracao_minutos: 60,
-          observacoes: item.observacoes
+          observacoes: item.observacoes,
         });
       });
 
@@ -598,7 +685,9 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
       proximaSemana(); // Navega para a próxima semana para conferir
     } catch (error) {
       console.error("Erro ao duplicar agenda:", error);
-      alert("Ocorreu um erro ao duplicar alguns agendamentos. Verifique se já existem agendamentos no destino.");
+      alert(
+        "Ocorreu um erro ao duplicar alguns agendamentos. Verifique se já existem agendamentos no destino.",
+      );
     } finally {
       setLoading(false);
     }
@@ -612,13 +701,27 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
           <span className="intervalo-datas">{getIntervaloExibicao()}</span>
         </div>
         <div className="controles-navegacao">
-          <button onClick={semanaAnterior} className="btn-nav" aria-label="Semana anterior">&lt; Anterior</button>
-          <button onClick={irParaHoje} className="btn-nav">Hoje</button>
-          <button onClick={proximaSemana} className="btn-nav" aria-label="Próxima semana">Próxima &gt;</button>
-          
+          <button
+            onClick={semanaAnterior}
+            className="btn-nav"
+            aria-label="Semana anterior"
+          >
+            &lt; Anterior
+          </button>
+          <button onClick={irParaHoje} className="btn-nav">
+            Hoje
+          </button>
+          <button
+            onClick={proximaSemana}
+            className="btn-nav"
+            aria-label="Próxima semana"
+          >
+            Próxima &gt;
+          </button>
+
           {/* Seletor de Data (Calendário) */}
-          <input 
-            type="date" 
+          <input
+            type="date"
             className="input-data-nav"
             value={getDataISO()}
             onChange={handleDataChange}
@@ -626,41 +729,53 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
           />
 
           {/* Botão de Imprimir */}
-          <button onClick={handlePrint} className="btn-nav" title="Imprimir Agenda Semanal">
+          <button
+            onClick={handlePrint}
+            className="btn-nav"
+            title="Imprimir Agenda Semanal"
+          >
             <Printer size={18} /> Imprimir
           </button>
 
           {/* Botão de Duplicar Semana */}
-          <button onClick={handleDuplicarSemana} className="btn-duplicar" title="Copiar agendamentos para a próxima semana">
+          <button
+            onClick={handleDuplicarSemana}
+            className="btn-duplicar"
+            title="Copiar agendamentos para a próxima semana"
+          >
             <Copy size={18} /> Replicar Semana
           </button>
 
           {loading && <span className="loading-badge">↻</span>}
         </div>
       </div>
-      
+
       {/* Navegação de Dias (Apenas Mobile) */}
       <div className="mobile-day-controls">
-        <button 
-          className="btn-mobile-nav" 
-          onClick={() => setMobileDayIndex(prev => Math.max(0, prev - 1))}
+        <button
+          className="btn-mobile-nav"
+          onClick={() => setMobileDayIndex((prev) => Math.max(0, prev - 1))}
           disabled={mobileDayIndex === 0}
           aria-label="Dia anterior"
         >
           &lt;
         </button>
-        <select 
+        <select
           className="mobile-day-select"
           value={mobileDayIndex}
           onChange={(e) => setMobileDayIndex(parseInt(e.target.value, 10))}
         >
           {dias.map((dia, index) => (
-            <option key={dia.key} value={index}>{dia.label} - {formatarDataCabecalho(dia.key)}</option>
+            <option key={dia.key} value={index}>
+              {dia.label} - {formatarDataCabecalho(dia.key)}
+            </option>
           ))}
         </select>
-        <button 
-          className="btn-mobile-nav" 
-          onClick={() => setMobileDayIndex(prev => Math.min(dias.length - 1, prev + 1))}
+        <button
+          className="btn-mobile-nav"
+          onClick={() =>
+            setMobileDayIndex((prev) => Math.min(dias.length - 1, prev + 1))
+          }
           disabled={mobileDayIndex === dias.length - 1}
           aria-label="Próximo dia"
         >
@@ -670,7 +785,7 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
 
       {/* Visualização Mobile em Lista (Substitui a tabela em telas pequenas) */}
       <div className="mobile-agenda-view">
-        {horarios.map(horario => {
+        {horarios.map((horario) => {
           const dia = dias[mobileDayIndex];
           // Proteção caso o índice do dia esteja fora de sincronia
           if (!dia) return null;
@@ -681,25 +796,30 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
           const vagas = 3 - ocupados;
 
           return (
-            <div 
-              key={key} 
-              className={`mobile-card-slot ${ocupados >= 3 ? 'lotado' : ''}`}
+            <div
+              key={key}
+              className={`mobile-card-slot ${ocupados >= 3 ? "lotado" : ""}`}
               onClick={() => abrirModal(dia.key, horario)}
             >
               <div className="mobile-card-time">{horario}</div>
               <div className="mobile-card-content">
                 <div className="mobile-card-names">
                   {lista.length > 0 ? (
-                    lista.map(p => (
+                    lista.map((p) => (
                       <div key={p.id} className="mobile-patient-row">
-                        <span className={`service-indicator ${p.servico_tipo ? p.servico_tipo.toLowerCase() : 'outro'}`} title={p.servico_tipo}></span>
+                        <span
+                          className={`service-indicator ${p.servico_tipo ? p.servico_tipo.toLowerCase() : "outro"}`}
+                          title={p.servico_tipo}
+                        ></span>
                         <span>{p.nome_paciente}</span>
                       </div>
                     ))
-                  ) : <span className="text-muted">Disponível</span>}
+                  ) : (
+                    <span className="text-muted">Disponível</span>
+                  )}
                 </div>
                 <div className="mobile-card-vagas">
-                  {vagas > 0 ? `${vagas} vaga(s) restante(s)` : 'Lotado'}
+                  {vagas > 0 ? `${vagas} vaga(s) restante(s)` : "Lotado"}
                 </div>
               </div>
             </div>
@@ -713,9 +833,9 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
             <tr>
               <th className="coluna-horario-header">Horário</th>
               {dias.map((dia, index) => (
-                <th 
-                  key={dia.key} 
-                  className={`coluna-dia ${index === mobileDayIndex ? 'mobile-active' : ''}`}
+                <th
+                  key={dia.key}
+                  className={`coluna-dia ${index === mobileDayIndex ? "mobile-active" : ""}`}
                 >
                   {dia.label}
                   <div className="data-cabecalho">
@@ -726,19 +846,24 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
             </tr>
           </thead>
           <tbody>
-            {horarios.map(horario => (
+            {horarios.map((horario) => (
               <tr key={horario}>
                 <td className="coluna-horario">{horario}</td>
                 {dias.map((dia, index) => {
                   const key = `${dia.key}-${horario}`;
                   const lista = getAgendamentosSlot(key);
                   const ocupados = lista.length;
-                  const statusClass = ocupados === 0 ? 'livre' : (ocupados >= 3 ? 'lotado' : 'parcial');
-                  
+                  const statusClass =
+                    ocupados === 0
+                      ? "livre"
+                      : ocupados >= 3
+                        ? "lotado"
+                        : "parcial";
+
                   return (
-                    <td 
-                      key={key} 
-                      className={`celula-agendamento ${statusClass} ${index === mobileDayIndex ? 'mobile-active' : ''}`}
+                    <td
+                      key={key}
+                      className={`celula-agendamento ${statusClass} ${index === mobileDayIndex ? "mobile-active" : ""}`}
                       onClick={() => abrirModal(dia.key, horario)}
                       onDragOver={handleDragOver}
                       onDrop={(e) => handleDrop(e, dia.key, horario)}
@@ -748,23 +873,47 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
                     >
                       {ocupados > 0 ? (
                         <div className="lista-pacientes-celula">
-                          {lista.map(p => (
-                            <div 
-                              key={p.id} 
+                          {lista.map((p) => (
+                            <div
+                              key={p.id}
                               className={`paciente-tag status-${p.status}`}
                               draggable
                               onDragStart={(e) => handleDragStart(e, p.id)}
-                              title={`${p.nome_paciente} (${p.servico_tipo}) - ${p.status}${p.status === 'Cancelado' && p.observacoes ? `\nMotivo: ${p.observacoes}` : ''}`}
+                              title={`${p.nome_paciente} (${p.servico_tipo}) - ${p.status}${p.status === "Cancelado" && p.observacoes ? `\nMotivo: ${p.observacoes}` : ""}`}
                             >
-                              {(p.status === 'concluido' || p.status === 'Realizado') && <Check size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '2px' }} />}
-                              {p.nome_paciente} <small>({p.servico_tipo})</small>
+                              {(p.status === "concluido" ||
+                                p.status === "Realizado") && (
+                                <Check
+                                  size={14}
+                                  style={{
+                                    display: "inline",
+                                    verticalAlign: "middle",
+                                    marginRight: "2px",
+                                  }}
+                                />
+                              )}
+                              {p.status === "Cancelado" && (
+                                <Ban
+                                  size={12}
+                                  style={{
+                                    display: "inline",
+                                    verticalAlign: "middle",
+                                    marginRight: "2px",
+                                  
+                                  }}
+                                />
+                              )}  
+                              {p.nome_paciente}{" "}
+                              <small>({p.servico_tipo})</small>
                             </div>
                           ))}
                         </div>
                       ) : (
                         <span className="livre-label">Disponível</span>
                       )}
-                      <div className="vagas-restantes">{3 - ocupados} vagas</div>
+                      <div className="vagas-restantes">
+                        {3 - ocupados} vagas
+                      </div>
                     </td>
                   );
                 })}
@@ -775,185 +924,278 @@ export default function TabelaAgendamento({ dias = DIAS_SEMANA, horarios = HORAR
       </div>
 
       {/* Modal de Agendamento */}
-      {modalAberto && slotSelecionado && (() => {
-        const listaAtual = getAgendamentosSlot(slotSelecionado.key);
-        const vagasDisponiveis = 3 - listaAtual.length;
+      {modalAberto &&
+        slotSelecionado &&
+        (() => {
+          const listaAtual = getAgendamentosSlot(slotSelecionado.key);
+          const vagasDisponiveis = 3 - listaAtual.length;
 
-        return (
-        <div className="modal-overlay" onClick={fecharModal}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <h3>
-              Gerenciar Horário ({vagasDisponiveis} vagas)
-            </h3>
-            <p className="modal-info">
-              {dias.find(d => d.key === slotSelecionado.diaKey)?.label} às {slotSelecionado.horario}
-            </p>
-            
-            {/* Lista de Pacientes Já Agendados */}
-            <div className="lista-modal">
-              {listaAtual.length === 0 && <p className="text-muted">Nenhum paciente neste horário.</p>}
-              {listaAtual.map(p => (
-                <div key={p.id} className="item-paciente-modal">
-                  <div className="info-p">
-                    <span className={`badge-status ${p.status}`}>{p.status}</span>
-                    <strong 
-                      onClick={() => handleAbrirAtendimento(p)}
-                      style={{ cursor: 'pointer', color: '#007A4D', textDecoration: 'underline' }}
-                      title="Clique para iniciar Avaliação ou Evolução"
-                    >
-                      {p.nome_paciente}
-                    </strong> <span style={{fontSize:'0.8em', color:'#666'}}>({p.servico_tipo})</span>
-                  </div>
-                  
-                  <div className="actions-p">
-                    {/* Botão de Detalhes - Visível para todos os agendamentos */}
-                    <button 
-                      className="btn-icon" 
-                      title="Ver Detalhes do Agendamento"
-                      onClick={() => navigate(`/agendamentos/${p.id}`)}
-                    >
-                      <Search size={16} />
-                    </button>
+          return (
+            <div className="modal-overlay" onClick={fecharModal}>
+              <div
+                className="modal-content"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <h3>Gerenciar Horário ({vagasDisponiveis} vagas)</h3>
+                <p className="modal-info">
+                  {dias.find((d) => d.key === slotSelecionado.diaKey)?.label} às{" "}
+                  {slotSelecionado.horario}
+                </p>
 
-                    {/* Botão de Evolução / Prontuário */}
-                    <button 
-                      className="btn-icon" 
-                      title="Prontuário / Evolução"
-                      onClick={() => {
-                        if (p.paciente_id) {
-                          navigate(`/pacientes/${p.paciente_id}`);
-                        } else {
-                          alert("Erro: ID do paciente não identificado neste agendamento.");
-                        }
-                      }}
-                    >
-                      <Clipboard size={16} />
-                    </button>
-                    {/* Botão de Concluir (Check) */}
-                    {p.status !== 'Realizado' && (
-                      <button 
-                        className="btn-icon btn-check" 
-                        title="Marcar como Realizado"
-                        onClick={() => handleStatusChange(p.id, 'Realizado', '', p.nome_paciente, p.servico_tipo)}
-                      >
-                        <Check size={16} />
-                      </button>
-                    )}
-                    {/* Botão de Cancelar (Novo) */}
-                    {p.status !== 'Cancelado' && p.status !== 'Realizado' && (
-                      <button 
-                        className="btn-icon btn-cancel" 
-                        title="Cancelar Agendamento (Mantém no histórico)"
-                        onClick={() => {
-                          const motivo = window.prompt(`Deseja cancelar o agendamento de ${p.nome_paciente}?\n\nSe sim, informe o motivo (opcional):`);
-                          if (motivo !== null) {
-                            handleStatusChange(p.id, 'Cancelado', motivo);
-                          }
-                        }}
-                      >
-                        <Ban size={16} />
-                      </button>
-                    )}
-                    <button type="button" className="btn-remove-sm" title="Remover" onClick={() => handleRemover(p.id)}>
-                      <X size={16} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Formulário para Adicionar (se houver vaga) */}
-            {vagasDisponiveis > 0 && (
-              <div className="novo-agendamento-box">
-                <div className="tabs-criacao">
-                  <button 
-                    className={modoCriacao === 'existente' ? 'active' : ''} 
-                    onClick={() => setModoCriacao('existente')}
-                  >
-                    Já é Paciente
-                  </button>
-                  <button 
-                    className={modoCriacao === 'novo' ? 'active' : ''} 
-                    onClick={() => setModoCriacao('novo')}
-                  >
-                    Novo Cadastro
-                  </button>
-                </div>
-
-                <form onSubmit={handleAdicionarAgendamento} className="form-adicionar">
-                  {modoCriacao === 'existente' ? (
-                    <div className="form-group" style={{ position: 'relative' }}>
-                      <input 
-                        type="text" 
-                        value={nomePaciente}
-                        onChange={(e) => handleBuscaPaciente(e.target.value)}
-                        placeholder="Buscar nome do paciente..."
-                        autoFocus
-                        className="formInput"
-                        autoComplete="off"
-                      />
-                      {/* Lista de Sugestões */}
-                      {sugestoes.length > 0 && (
-                        <ul className="sugestoes-lista">
-                          {sugestoes.map(s => (
-                            <li key={s.id} onClick={() => selecionarPaciente(s)}>{s.nome}</li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="form-novo-paciente">
-                      <input 
-                        type="text" placeholder="Nome Completo" required className="formInput mb-2"
-                        value={novoPacienteDados.nome}
-                        onChange={e => setNovoPacienteDados({...novoPacienteDados, nome: e.target.value})}
-                      />
-                      <input 
-                        type="date" required className="formInput mb-2"
-                        value={novoPacienteDados.data_nascimento}
-                        onChange={e => setNovoPacienteDados({...novoPacienteDados, data_nascimento: e.target.value})}
-                      />
-                      <input 
-                        type="text" placeholder="Telefone / WhatsApp" className="formInput mb-2"
-                        value={novoPacienteDados.telefone}
-                        onChange={e => setNovoPacienteDados({...novoPacienteDados, telefone: e.target.value})}
-                      />
-                    </div>
+                {/* Lista de Pacientes Já Agendados */}
+                <div className="lista-modal">
+                  {listaAtual.length === 0 && (
+                    <p className="text-muted">Nenhum paciente neste horário.</p>
                   )}
+                  {listaAtual.map((p) => (
+                    <div key={p.id} className="item-paciente-modal">
+                      <div className="info-p">
+                        <span className={`badge-status ${p.status}`}>
+                          {p.status}
+                        </span>
+                        <strong
+                          onClick={() => handleAbrirAtendimento(p)}
+                          style={{
+                            cursor: "pointer",
+                            color: "#007A4D",
+                            textDecoration: "underline",
+                          }}
+                          title="Clique para iniciar Avaliação ou Evolução"
+                        >
+                          {p.nome_paciente}
+                        </strong>
+                        <span
+                          style={{
+                            fontSize: "0.8em",
+                            color: "#666",
+                            marginLeft: "4px",
+                          }}
+                        >
+                          ({p.servico_tipo})
+                        </span>
+                      </div>
 
-                  {/* Campo de Tipo de Sessão (Obrigatório) */}
-                  <select 
-                    className="formInput mb-2" 
-                    value={tipoSessao} 
-                    onChange={(e) => setTipoSessao(e.target.value)}
+                      <div className="actions-p">
+                        {/* Botão de Detalhes - Visível para todos os agendamentos */}
+                        <button
+                          className="btn-icon"
+                          title="Ver Detalhes do Agendamento"
+                          onClick={() => navigate(`/agendamentos/${p.id}`)}
+                        >
+                          <Search size={16} />
+                        </button>
+
+                        {/* Botão de Evolução / Prontuário */}
+                        <button
+                          className="btn-icon"
+                          title="Prontuário / Evolução"
+                          onClick={() => {
+                            if (p.paciente_id) {
+                              navigate(`/pacientes/${p.paciente_id}`);
+                            } else {
+                              alert(
+                                "Erro: ID do paciente não identificado neste agendamento.",
+                              );
+                            }
+                          }}
+                        >
+                          <Clipboard size={16} />
+                        </button>
+
+                        {/* Botão de Concluir (Check) - Oculto se já estiver Realizado ou Cancelado */}
+                        {p.status !== "Realizado" &&
+                          p.status !== "Cancelado" && (
+                            <button
+                              className="btn-icon btn-check"
+                              title="Marcar como Realizado"
+                              onClick={() =>
+                                handleStatusChange(
+                                  p.id,
+                                  "Realizado",
+                                  "",
+                                  p.nome_paciente,
+                                  p.servico_tipo,
+                                )
+                              }
+                            >
+                              <Check size={16} />
+                            </button>
+                          )}
+
+                        {/* Botão de Cancelar */}
+                        {p.status !== "Cancelado" &&
+                          p.status !== "Realizado" && (
+                            <button
+                              className="btn-icon btn-cancel"
+                              title="Cancelar Agendamento (Mantém no histórico)"
+                              onClick={() => {
+                                const motivo = window.prompt(
+                                  `Deseja cancelar o agendamento de ${p.nome_paciente}?\n\nSe sim, informe o motivo (opcional):`,
+                                );
+                                if (motivo !== null) {
+                                  handleStatusChange(p.id, "Cancelado", motivo);
+                                }
+                              }}
+                            >
+                              <Ban size={16} />
+                            </button>
+                          )}
+
+                        <button
+                          type="button"
+                          className="btn-remove-sm"
+                          title="Remover"
+                          onClick={() => handleRemover(p.id)}
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Formulário para Adicionar (se houver vaga) */}
+                {vagasDisponiveis > 0 && (
+                  <div className="novo-agendamento-box">
+                    <div className="tabs-criacao">
+                      <button
+                        className={modoCriacao === "existente" ? "active" : ""}
+                        onClick={() => setModoCriacao("existente")}
+                      >
+                        Já é Paciente
+                      </button>
+                      <button
+                        className={modoCriacao === "novo" ? "active" : ""}
+                        onClick={() => setModoCriacao("novo")}
+                      >
+                        Novo Cadastro
+                      </button>
+                    </div>
+
+                    <form
+                      onSubmit={handleAdicionarAgendamento}
+                      className="form-adicionar"
+                    >
+                      {modoCriacao === "existente" ? (
+                        <div
+                          className="form-group"
+                          style={{ position: "relative" }}
+                        >
+                          <input
+                            type="text"
+                            value={nomePaciente}
+                            onChange={(e) =>
+                              handleBuscaPaciente(e.target.value)
+                            }
+                            placeholder="Buscar nome do paciente..."
+                            autoFocus
+                            className="formInput"
+                            autoComplete="off"
+                          />
+                          {/* Lista de Sugestões */}
+                          {sugestoes.length > 0 && (
+                            <ul className="sugestoes-lista">
+                              {sugestoes.map((s) => (
+                                <li
+                                  key={s.id}
+                                  onClick={() => selecionarPaciente(s)}
+                                >
+                                  {s.nome}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="form-novo-paciente">
+                          <input
+                            type="text"
+                            placeholder="Nome Completo"
+                            required
+                            className="formInput mb-2"
+                            value={novoPacienteDados.nome}
+                            onChange={(e) =>
+                              setNovoPacienteDados({
+                                ...novoPacienteDados,
+                                nome: e.target.value,
+                              })
+                            }
+                          />
+                          <input
+                            type="date"
+                            required
+                            className="formInput mb-2"
+                            value={novoPacienteDados.data_nascimento}
+                            onChange={(e) =>
+                              setNovoPacienteDados({
+                                ...novoPacienteDados,
+                                data_nascimento: e.target.value,
+                              })
+                            }
+                          />
+                          <input
+                            type="text"
+                            placeholder="Telefone / WhatsApp"
+                            className="formInput mb-2"
+                            value={novoPacienteDados.telefone}
+                            onChange={(e) =>
+                              setNovoPacienteDados({
+                                ...novoPacienteDados,
+                                telefone: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      )}
+
+                      {/* Campo de Tipo de Sessão (Obrigatório) */}
+                      <select
+                        className="formInput mb-2"
+                        value={tipoSessao}
+                        onChange={(e) => setTipoSessao(e.target.value)}
+                      >
+                        <option value="Fisioterapia">Fisioterapia</option>
+                        <option value="Pilates">Pilates</option>
+                        <option value="Outro">Outro</option>
+                      </select>
+
+                      <button type="submit" className="btn-salvar full-width">
+                        Agendar Paciente
+                      </button>
+                    </form>
+                  </div>
+                )}
+
+                {vagasDisponiveis === 0 && (
+                  <div className="alerta-lotado">
+                    <AlertTriangle
+                      size={16}
+                      style={{
+                        display: "inline",
+                        verticalAlign: "middle",
+                        marginRight: "4px",
+                      }}
+                    />
+                    Horário Lotado
+                  </div>
+                )}
+
+                <div className="modal-actions">
+                  <button
+                    type="button"
+                    className="btn-cancelar"
+                    onClick={fecharModal}
                   >
-                    <option value="Fisioterapia">Fisioterapia</option>
-                    <option value="Pilates">Pilates</option>
-                    <option value="Outro">Outro</option>
-                  </select>
-
-                  <button type="submit" className="btn-salvar full-width">Agendar Paciente</button>
-                </form>
+                    Fechar
+                  </button>
+                </div>
               </div>
-            )}
-
-            {vagasDisponiveis === 0 && (
-              <div className="alerta-lotado">
-                <AlertTriangle size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} /> 
-                Horário Lotado
-              </div>
-            )}
-
-              <div className="modal-actions">
-                <button type="button" className="btn-cancelar" onClick={fecharModal}>Fechar</button>
-              </div>
-          </div>
-        </div>
-        );
-      })()}
+            </div>
+          );
+        })()}
 
       {/* Modal de Atendimento (Avaliação/Evolução) */}
-      <AtendimentoModal 
+      <AtendimentoModal
         isOpen={atendimentoModalOpen}
         onClose={() => setAtendimentoModalOpen(false)}
         onSave={handleSaveAtendimento}
