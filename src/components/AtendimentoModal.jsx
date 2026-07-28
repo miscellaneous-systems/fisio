@@ -21,7 +21,6 @@ const AtendimentoModal = ({ isOpen, onClose, onSave, pacienteNome }) => {
   // Funções auxiliares para gerar o conteúdo formatado
   const getAvaliacaoContent = () =>
     `
-[AVALIAÇÃO INICIAL]
 Queixa Principal: ${avaliacaoData.queixa}
 HMA: ${avaliacaoData.hma}
 Exame Físico: ${avaliacaoData.exame}
@@ -30,7 +29,6 @@ Diagnóstico/Hipótese: ${avaliacaoData.diagnostico}
 
   const getEvolucaoContent = () =>
     `
-[EVOLUÇÃO DE SESSÃO]
 Relato: ${evolucaoData.relato}
 Conduta: ${evolucaoData.conduta}
     `.trim();

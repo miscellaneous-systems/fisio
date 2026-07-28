@@ -1,31 +1,37 @@
 // src/pages/ProntuarioPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { 
+    Printer, 
+    Edit, 
+    ArrowLeft, 
+    FileText, 
+    User, 
+    Calendar, 
+    Phone, 
+    Stethoscope,
+    PlusCircle 
+} from 'lucide-react';
 import api from '../api/api';
 import NotaFormModal from '../components/NotaFormModal'; 
-// ⚠️ Importa o arquivo de estilos
 import styles from './ProntuarioPage.module.css';
 
 const ProntuarioPage = () => {
     const { pacienteId } = useParams();
     const navigate = useNavigate();
 
-    // Estados de dados e carregamento
     const [paciente, setPaciente] = useState(null);
     const [notas, setNotas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Estados do Formulário de Nova Nota
     const [novaNotaConteudo, setNovaNotaConteudo] = useState('');
     const [novaNotaTitulo, setNovaNotaTitulo] = useState('Evolução Clínica');
     const [submitting, setSubmitting] = useState(false);
 
-    // ESTADOS PARA EDIÇÃO COM MODAL
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [notaToEdit, setNotaToEdit] = useState(null); 
 
-    // Função auxiliar de formatação de data
     const formatarData = (dataString) => {
         if (!dataString) return 'N/A';
         const data = new Date(dataString);
@@ -33,15 +39,12 @@ const ProntuarioPage = () => {
         return data.toLocaleString('pt-BR');
     };
 
-    // 1. Função de Busca de Dados (Paciente e Notas)
     const fetchDados = async () => {
         setLoading(true);
         try {
-            // A. Buscar Dados do Paciente
             const pacienteResponse = await api.get(`/pacientes/${pacienteId}`);
             setPaciente(pacienteResponse.data.paciente);
 
-            // B. Buscar Notas do Prontuário
             const notasResponse = await api.get(`/prontuario/${pacienteId}`);
             setNotas(notasResponse.data.notas);
 
@@ -58,7 +61,6 @@ const ProntuarioPage = () => {
         }
     };
 
-    // 2. Função de Criação de Nova Nota
     const handleSubmitNota = async (e) => {
         e.preventDefault();
         setSubmitting(true);
@@ -81,7 +83,7 @@ const ProntuarioPage = () => {
             alert("Nota salva com sucesso!");
             setNovaNotaConteudo(''); 
             setNovaNotaTitulo('Evolução Clínica');
-            fetchDados(); // Recarrega a lista
+            fetchDados(); 
             
         } catch (err) {
             console.error("Erro ao salvar nota:", err);
@@ -91,13 +93,11 @@ const ProntuarioPage = () => {
         }
     };
     
-    // 3. FUNÇÃO PARA ABRIR O MODAL DE EDIÇÃO
     const handleEditNota = (nota) => {
-        setNotaToEdit(nota); // Define qual nota será editada
-        setIsEditModalOpen(true); // Abre o modal
+        setNotaToEdit(nota);
+        setIsEditModalOpen(true);
     };
 
-    // 4. FUNÇÃO PARA SALVAR A EDIÇÃO (Passada ao Modal)
     const handleSaveEdicao = async (notaEditada) => {
         try {
             await api.put(`/prontuario/${notaEditada.id}`, {
@@ -115,7 +115,6 @@ const ProntuarioPage = () => {
         }
     };
 
-    // 5. FUNÇÃO PARA IMPRIMIR NOTA INDIVIDUAL
     const handlePrintNota = (nota) => {
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`
@@ -123,7 +122,7 @@ const ProntuarioPage = () => {
                 <head>
                     <title>Imprimir Nota - ${nota.titulo || 'Evolução'}</title>
                     <style>
-                        body { font-family: Arial, sans-serif; padding: 40px; color: #333; }
+                        body { font-family: 'Poppins', Arial, sans-serif; padding: 40px; color: #333; }
                         h1 { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
                         .meta { margin-bottom: 20px; color: #555; font-size: 14px; }
                         .content { white-space: pre-wrap; line-height: 1.6; font-size: 14px; background: #f9f9f9; padding: 20px; border-radius: 8px; }
@@ -148,11 +147,9 @@ const ProntuarioPage = () => {
         printWindow.document.close();
     };
 
-    // Executa a busca ao carregar o componente
     useEffect(() => {
         fetchDados();
     }, [pacienteId]);
-
 
     if (loading) {
         return <div className={styles.centeredMessage} role="status">Carregando prontuário...</div>;
@@ -160,24 +157,35 @@ const ProntuarioPage = () => {
     if (error) return <h2 className={styles.errorMessage}>{error}</h2>;
     if (!paciente) return <h2 className={styles.errorMessage}>Paciente não encontrado.</h2>;
 
-
     return (
         <div className={styles.prontuarioContainer}>
             <button onClick={() => navigate('/pacientes')} className={styles.buttonBack}>
-                &larr; Voltar para Pacientes
+                <ArrowLeft size={16} />
+                Voltar para Pacientes
             </button>
             
             <header className={styles.prontuarioHeader}>
-                <h1>Prontuário de {paciente.nome}</h1>
-                <p>Telefone: <strong>{paciente.telefone}</strong></p>
-                <p>Nascimento: {(paciente.data_nascimento || paciente.nascimento) ? new Date(paciente.data_nascimento || paciente.nascimento).toLocaleDateString('pt-BR') : 'N/A'}</p>
+                <h1>
+                    <User size={26} />
+                    Prontuário de {paciente.nome}
+                </h1>
+                <p>
+                    <Phone size={14} />
+                    Telefone: <strong>{paciente.telefone}</strong>
+                </p>
+                <p>
+                    <Calendar size={14} />
+                    Nascimento: {(paciente.data_nascimento || paciente.nascimento) ? new Date(paciente.data_nascimento || paciente.nascimento).toLocaleDateString('pt-BR') : 'N/A'}
+                </p>
             </header>
 
             <div className={styles.contentGrid}>
-                
-                {/* -------------------- COLUNA 1: ADICIONAR NOTA -------------------- */}
+                {/* COLUNA 1: ADICIONAR NOTA */}
                 <section className={styles.formSection}>
-                    <h2>✍️ Nova Evolução</h2>
+                    <h2>
+                        <PlusCircle size={20} />
+                        Nova Evolução
+                    </h2>
                     <form onSubmit={handleSubmitNota} className={styles.notaForm}>
                         <label className={styles.formLabel}>Título (Opcional):</label>
                         <input 
@@ -202,9 +210,12 @@ const ProntuarioPage = () => {
                     </form>
                 </section>
 
-                {/* -------------------- COLUNA 2: HISTÓRICO -------------------- */}
+                {/* COLUNA 2: HISTÓRICO */}
                 <section className={styles.historySection}>
-                    <h2>📜 Histórico de Notas ({notas.length})</h2>
+                    <h2>
+                        <FileText size={20} />
+                        Histórico de Notas ({notas.length})
+                    </h2>
                     {notas.length === 0 ? (
                         <p className={styles.noNotesMessage}>Nenhuma nota de prontuário registrada ainda.</p>
                     ) : (
@@ -214,27 +225,30 @@ const ProntuarioPage = () => {
                                     <div className={styles.noteHeader}>
                                         <h3 className={styles.noteTitle}>{nota.titulo || 'Evolução Clínica'}</h3>
                                         <span className={styles.noteDate}>
+                                            <Calendar size={13} />
                                             {formatarData(nota.data_nota)}
                                         </span>
                                     </div>
                                     <p className={styles.noteContent}>{nota.conteudo}</p>
                                     <p className={styles.noteAuthor}>
+                                        <Stethoscope size={14} />
                                         Fisioterapeuta: <strong>{nota.nome_fisioterapeuta}</strong>
                                     </p>
                                     
-                                    {/* Ações da Nota */}
                                     <div style={{ display: 'flex', gap: '10px' }}>
                                         <button 
                                             onClick={() => handlePrintNota(nota)}
                                             className={styles.buttonPrint}
                                         >
-                                            🖨️ Imprimir
+                                            <Printer size={15} />
+                                            Imprimir
                                         </button>
                                         <button 
                                             onClick={() => handleEditNota(nota)}
                                             className={styles.buttonEdit}
                                         >
-                                            ✏️ Editar
+                                            <Edit size={15} />
+                                            Editar
                                         </button>
                                     </div>
                                 </div>
@@ -244,7 +258,6 @@ const ProntuarioPage = () => {
                 </section>
             </div>
             
-            {/* 5. COMPONENTE MODAL DE EDIÇÃO */}
             {isEditModalOpen && (
                 <NotaFormModal
                     isOpen={isEditModalOpen}
@@ -256,4 +269,5 @@ const ProntuarioPage = () => {
         </div>
     );
 };
+
 export default ProntuarioPage;
