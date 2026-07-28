@@ -10,7 +10,8 @@ import {
     Calendar, 
     FileText, 
     X, 
-    Check 
+    Check,
+    Search
 } from 'lucide-react';
 
 // 💡 CONSTANTE MOVIDA PARA FORA: Evita que seja recriada a cada renderização.
@@ -42,6 +43,9 @@ const VenderPacoteModal = ({ isOpen, onClose, onVenda, modelosPacotes }) => {
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState(initialFormData);
+    
+    // 💡 ESTADO PARA O FILTRO DE NOME DO PACIENTE
+    const [filtroPaciente, setFiltroPaciente] = useState('');
   
     const fetchPacientes = async () => {
         setLoadingPacientes(true);
@@ -59,8 +63,9 @@ const VenderPacoteModal = ({ isOpen, onClose, onVenda, modelosPacotes }) => {
   useEffect(() => {
       if (isOpen) {
           fetchPacientes();
-          // Reseta o formulário ao abrir
+          // Reseta o formulário e o filtro ao abrir
           setFormData(initialFormData);
+          setFiltroPaciente('');
           setError(null);
           }
   }, [isOpen, modelosPacotes]);
@@ -150,6 +155,11 @@ const VenderPacoteModal = ({ isOpen, onClose, onVenda, modelosPacotes }) => {
 
       const modeloSelecionado = modelosPacotes.find(m => m.id === parseInt(formData.modeloId, 10));
       
+      // 💡 FILTRAGEM DOS PACIENTES COM BASE NO INPUT DE BUSCA
+      const pacientesFiltrados = pacientes.filter(p => 
+          p.nome.toLowerCase().includes(filtroPaciente.toLowerCase())
+      );
+      
 return (
     <div className={`${styles.modalOverlay} container`} onClick={onClose}>
         <div 
@@ -161,12 +171,29 @@ return (
                  
                  {error && <p className={styles.errorMsg}>⚠️ {error}</p>}
                  
-                 {/* SELEÇÃO DO PACIENTE */}
+                 {/* SELEÇÃO DO PACIENTE COM FILTRO */}
                  <div className={styles.formGroup}>
                      <label className={styles.formLabel} htmlFor="pacienteId">
                          <User size={18} color="#007A4D" />
                          Paciente:
                      </label>
+
+                     {/* 💡 INPUT PARA DIGITAR E FILTRAR O NOME */}
+                     <div style={{ position: 'relative', marginBottom: '8px' }}>
+                         <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center' }}>
+                             <Search size={16} color="#888" />
+                         </span>
+                         <input 
+                             type="text"
+                             placeholder="Digite para filtrar o paciente pelo nome..."
+                             value={filtroPaciente}
+                             onChange={(e) => setFiltroPaciente(e.target.value)}
+                             className={styles.formInput}
+                             style={{ paddingLeft: '34px' }}
+                             disabled={loadingPacientes || submitting}
+                         />
+                     </div>
+
                      <select
                          id="pacienteId"
                          name="pacienteId"
@@ -177,7 +204,7 @@ return (
                          disabled={loadingPacientes || submitting}
                      >
                          <option value="">{loadingPacientes ? 'Carregando...' : 'Selecione o Paciente'}</option>
-                         {pacientes.map(p => (
+                         {pacientesFiltrados.map(p => (
                              <option key={p.id} value={p.id}>{p.nome}</option>
                          ))}
                      </select>
